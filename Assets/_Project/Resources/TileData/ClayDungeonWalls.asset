@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b70f82d4be4d840a9f996eec928d68, type: 3}
+  m_Name: ClayDungeonWalls
+  m_EditorClassIdentifier: 
+  tiles:
+  - {fileID: 11400000, guid: dc2b59966837ed04aa051413e7a52d60, type: 2}
+  - {fileID: 11400000, guid: 87efcd02aaba441489eacb2d90fa1fcd, type: 2}
+  - {fileID: 11400000, guid: a1720468b9bce824abaaf356ce26a829, type: 2}
+  - {fileID: 11400000, guid: 2232487e6f1ee3b46864ea553991e28d, type: 2}
+  - {fileID: 11400000, guid: 098d799606efc334698fbf1c1cb4adfb, type: 2}
+  - {fileID: 11400000, guid: d290cf2133620f942a0d7bf7e27d8b83, type: 2}
+  - {fileID: 11400000, guid: d76be99ce86ac1a458c4daecfef9d1be, type: 2}
+  - {fileID: 11400000, guid: 548f03084001d8245ae7c0d4a9a5a4e8, type: 2}
+  - {fileID: 11400000, guid: 5d5f1294a8a26084992efbe95a9dff4a, type: 2}
+  - {fileID: 11400000, guid: c64991fce30b7e34d98b7af278ab1900, type: 2}
+  - {fileID: 11400000, guid: 97ca6f9f2f3d03b45b73c2069d9c9210, type: 2}
+  - {fileID: 11400000, guid: 0a54cd2cad00d4a43982058247f43b7b, type: 2}
+  - {fileID: 11400000, guid: 29d81796ba8ebc14799baed687d60891, type: 2}
+  destroyable: 0
+  replaceTiles: []
+  isPlaceholder: 0

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b70f82d4be4d840a9f996eec928d68, type: 3}
+  m_Name: ClayPot
+  m_EditorClassIdentifier: 
+  tiles:
+  - {fileID: 11400000, guid: bf37cd8d6ca34e94eb0f574318f189c7, type: 2}
+  destroyable: 1
+  replaceTiles: []
+  isPlaceholder: 0
