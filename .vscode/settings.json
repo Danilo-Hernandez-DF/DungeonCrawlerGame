@@ -56,6 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ThaumicGame.sln",
+    "dotnet.defaultSolution": "DungeonCrawlerGame.sln",
     "dotnet.preferCSharpExtension": true
 }
