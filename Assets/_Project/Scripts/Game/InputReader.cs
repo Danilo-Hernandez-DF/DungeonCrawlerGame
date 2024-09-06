@@ -2,6 +2,7 @@ using static Game.InputControls;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using UtilsModule;
 
 namespace Game {
     [CreateAssetMenu(fileName = "InputReader", menuName = "Utils/Input/InputReader")]
@@ -12,10 +13,12 @@ namespace Game {
         public event UnityAction EnableMouseControlCursor = delegate { };
         public event UnityAction DisableMouseControlCursor = delegate { };
         public event UnityAction<bool> Dash = delegate { };
+        public event UnityAction Attack = delegate { };
 
         InputControls inputActions;
 
         public Vector3 Direction => inputActions.Player.Movement.ReadValue<Vector2>();
+        public Vector3 AimPosition => inputActions.Player.Aim.ReadValue<Vector2>();
 
         void OnEnable() {
             if(inputActions == null) {
@@ -28,7 +31,8 @@ namespace Game {
 
         public void OnAim(InputAction.CallbackContext context)
         {
-            Aim.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+            Vector2 scenePos = CameraManager.Instance.camera.ScreenToWorldPoint(context.ReadValue<Vector2>());
+            Aim.Invoke(scenePos, IsDeviceMouse(context));
         }
 
         public void OnArtifact(InputAction.CallbackContext context)
@@ -38,7 +42,9 @@ namespace Game {
 
         public void OnAttack_Main(InputAction.CallbackContext context)
         {
-            //noop
+            if(context.phase == InputActionPhase.Started) {
+                Attack.Invoke();
+            }
         }
 
         public void OnAttack_Special(InputAction.CallbackContext context)

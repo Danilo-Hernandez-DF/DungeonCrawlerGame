@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 4452841504123923604}
   - component: {fileID: 5299742516593818260}
   - component: {fileID: 8540144676955948400}
+  - component: {fileID: 642384067663306967}
   - component: {fileID: 930437915148375264}
   - component: {fileID: -1716840783558216847}
   - component: {fileID: 4616080999528939473}
   m_Layer: 0
   m_Name: TestEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,6 +54,8 @@ MonoBehaviour:
   playerDetector: {fileID: 8540144676955948400}
   animator: {fileID: 8930217586175598989}
   wanderRadius: 10
+  timeBetweenAttacks: 1
+  attackDamage: 10
 --- !u!114 &8540144676955948400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +72,21 @@ MonoBehaviour:
   detectionRadius: 5.5
   innerDetectionradius: 2.5
   detectionCooldown: 1
+  attackRange: 0.5
+--- !u!114 &642384067663306967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6356083494339734611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b7d2e735e8fc34a8379437afb4997a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  playerHealthChannel: {fileID: 0}
 --- !u!195 &930437915148375264
 NavMeshAgent:
   m_ObjectHideFlags: 0

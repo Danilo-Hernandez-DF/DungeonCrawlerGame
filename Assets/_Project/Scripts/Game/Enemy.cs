@@ -10,11 +10,15 @@ namespace Game {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(PlayerDetector))]
     public class Enemy : Entity {
+        [Header("Behaviour Settings")]
         [SerializeField, Self] NavMeshAgent agent;
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
         [SerializeField] float wanderRadius = 10f;
+
+        [Header("Attack Settings")]
         [SerializeField] float timeBetweenAttacks = 1f;
+        [SerializeField] int attackDamage = 10;
 
         StateMachine stateMachine;
 
@@ -56,7 +60,7 @@ namespace Game {
             if(attackTimer.IsRunning) return;
 
             attackTimer.Start();
-            Debug.Log("Attacking");
+            playerDetector.PlayerHealth.TakeDamage(attackDamage);
         }
     }
 }
