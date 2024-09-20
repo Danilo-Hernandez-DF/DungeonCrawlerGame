@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using UtilsModule;
+using UnityEditor;
 
 namespace Game {
     [CreateAssetMenu(fileName = "InputReader", menuName = "Utils/Input/InputReader")]
@@ -14,6 +15,8 @@ namespace Game {
         public event UnityAction DisableMouseControlCursor = delegate { };
         public event UnityAction<bool> Dash = delegate { };
         public event UnityAction Attack = delegate { };
+        public event UnityAction Pause = delegate { };
+        public event UnityAction OpenMenu = delegate { };
 
         InputControls inputActions;
 
@@ -86,13 +89,20 @@ namespace Game {
 
         public void OnPause(InputAction.CallbackContext context)
         {
-            //noop
+            if(context.phase == InputActionPhase.Started) {
+                Pause.Invoke();
+            }
         }
 
         bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 
         public void OnRefreshMap(InputAction.CallbackContext context) {
             if(context.started) DebugRefresh.Invoke();
+        }
+
+        public void OnOpenMenu(InputAction.CallbackContext context)
+        {
+            if(context.phase == InputActionPhase.Started) OpenMenu.Invoke();
         }
     }
 }

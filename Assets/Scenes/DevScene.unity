@@ -965,11 +965,13 @@ GameObject:
   m_Component:
   - component: {fileID: 622018810}
   - component: {fileID: 622018811}
+  - component: {fileID: 622018817}
+  - component: {fileID: 622018818}
+  - component: {fileID: 622018819}
   - component: {fileID: 622018813}
   - component: {fileID: 622018814}
   - component: {fileID: 622018816}
   - component: {fileID: 622018815}
-  - component: {fileID: 622018817}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Player
@@ -1007,8 +1009,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 622018815}
   animator: {fileID: 622018814}
+  health: {fileID: 622018817}
+  inventoryHolder: {fileID: 622018818}
   vCam: {fileID: 1913633280}
-  input: {fileID: 11400000, guid: ec71ab41467a3ca42b47dce5fd3c8523, type: 2}
   moveSpeed: 300
   smoothTime: 0.2
   dashForce: 2
@@ -1167,6 +1170,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   playerHealthChannel: {fileID: 11400000, guid: 171481090803e2340badab80a706a49f, type: 2}
+--- !u!114 &622018818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622018809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 057c1d88ce360e542bde97629662cf50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySize: 30
+  inventoryChannel: {fileID: 11400000, guid: 894b88c4038223249873c391075b9077, type: 2}
+--- !u!114 &622018819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622018809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8753d8d232a5d0049a3916ab80b0a9f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryHolder: {fileID: 622018818}
+  lootTable: {fileID: 11400000, guid: f8df38553bf49ac4f93a12678597203b, type: 2}
+  rolls: 25
 --- !u!1 &710772502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1327,27 +1359,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1304760932}
-  - component: {fileID: 1304760931}
   - component: {fileID: 1304760933}
   m_Layer: 0
-  m_Name: GameManger
+  m_Name: TilemapManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1304760931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1304760930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9297a6c3c1c2a384ca4a2f77c9fec3e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1304760932
 Transform:
   m_ObjectHideFlags: 0
@@ -2173,6 +2192,10 @@ PrefabInstance:
     - target: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
       propertyPath: m_Name
       value: TestEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8540144676955948400, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
       propertyPath: attackRange

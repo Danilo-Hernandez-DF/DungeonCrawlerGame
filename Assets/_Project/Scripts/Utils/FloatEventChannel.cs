@@ -1,6 +1,6 @@
 using UnityEngine;
 
 namespace UtilsModule {
-    [CreateAssetMenu(menuName = "Events/FloatEventChannel")]
+    [CreateAssetMenu(menuName = "Events/Float EventChannel")]
     public class FloatEventChannel : EventChannel<float> { }
 }

@@ -4,9 +4,8 @@ using Random = UnityEngine.Random;
 
 
 namespace UtilsModule {
-    [Serializable]
     public class WeightedTable<T> {
-        private HashSet<WeightedT> items;
+        private HashSet<WeightedObject<T>> items;
         int sumWeights = 0;
 
         public WeightedTable(List<T> itemList, List<int> weightList = default) {
@@ -18,15 +17,15 @@ namespace UtilsModule {
                 }
             }
 
-            items = new HashSet<WeightedT>();
+            items = new HashSet<WeightedObject<T>>();
 
             for (int i = 0; i < itemList.Count; i++) {
-                items.Add(new WeightedT {item = itemList[i], weight = weightList[i]});
+                items.Add(new WeightedObject<T> {item = itemList[i], weight = weightList[i]});
             }
         }
 
         public T GetWeightedT(int lowerLimit = 0, uint upperLimit = int.MaxValue, bool seeded = false) {
-            foreach(WeightedT item in items) {
+            foreach(WeightedObject<T> item in items) {
                 if(items.Count == 1) return item.item;
                 if(item.weight < lowerLimit) continue;
                 if(item.weight > upperLimit) continue;
@@ -36,7 +35,7 @@ namespace UtilsModule {
 
             int rand = seeded? SeededRandom.GetRange(0, sumWeights): Random.Range(0, sumWeights);
             int added = 0;
-            foreach(WeightedT item in items) {
+            foreach(WeightedObject<T> item in items) {
                 if(item.weight < lowerLimit) continue;
                 if(item.weight > upperLimit) continue;
 
@@ -46,11 +45,10 @@ namespace UtilsModule {
 
             return default;
         }
+    }
 
-        [Serializable]
-        public struct WeightedT {
-            public T item;
-            public int weight;
-        }
+    public class WeightedObject<T> {
+        public T item;
+        public int weight;
     }
 } 

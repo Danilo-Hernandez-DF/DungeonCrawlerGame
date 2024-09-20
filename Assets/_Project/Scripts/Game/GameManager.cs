@@ -1,5 +1,6 @@
 using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UtilsModule;
 
 namespace Game {
@@ -8,7 +9,12 @@ namespace Game {
         //Variables
         //------------------------------------------------
 
-
+        public ItemData EmptyItem;
+        public EventSystem eventSystem;
+        public GameObject openUI;
+        public GameObject itemDisplayUI;
+        public InputReader input;
+        public bool Paused => openUI != null;
 
         //------------------------------------------------
         //Methods

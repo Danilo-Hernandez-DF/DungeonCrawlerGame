@@ -10,8 +10,10 @@ namespace Game {
         [Header("References")]
         [SerializeField, Self] Rigidbody2D rb;
         [SerializeField, Self] Animator animator;
+        [SerializeField, Self] Health health;
+        [SerializeField, Self] InventoryHolder inventoryHolder;
         [SerializeField, Anywhere] CinemachineVirtualCamera vCam;
-        [SerializeField, Anywhere] InputReader input;
+        InputReader input => GameManager.Instance.input;
 
         [Header("Settings")]
         [SerializeField] float moveSpeed = 4f;
@@ -106,6 +108,7 @@ namespace Game {
         void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
         void OnDash(bool performed) {
+            if(GameManager.Instance.Paused) return;
             if(performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning) {
                 dashTimer.Start();
             } else if(!performed && dashTimer.IsRunning) {
@@ -144,13 +147,14 @@ namespace Game {
         }
 
         void OnAttack() {
+            if(GameManager.Instance.Paused) return;
             if(!attackTimer.IsRunning) {
                 attackTimer.Start();
             }
         }
 
         public void Attack() {
-            Vector2 attackPos = (transform.position + (Vector3)aimDirection) * attackDistance;
+            Vector2 attackPos = transform.position + ((Vector3)aimDirection * attackDistance);
             Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange);
             Debug.DrawLine(attackPos, attackPos + (aimDirection * attackRange), Color.red, 1f);
 
@@ -174,6 +178,10 @@ namespace Game {
         }
 
         public void HandleMovement() {
+            if(GameManager.Instance.Paused) {
+                rb.velocity = Vector2.zero;
+                return;
+            }
             if(movement.magnitude > ZeroF) {
                 HandleHorizontalMovement(movement);
                 SmoothSpeed(movement.magnitude);

@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.Collections;
+using System;
+using Unity.VisualScripting;
+using Game;
 
 namespace UtilsModule {
+    [Serializable]
     public class Item {
         public ItemData data;
         public int count;
@@ -13,9 +16,19 @@ namespace UtilsModule {
             this.data = data;
             this.count = count;
             
-            if(tags == null) tags = new List<Tag>();
+            tags ??= new List<Tag>();
             foreach(var tag in data.inherentTags) {
-                tags.Add(tag.GetTag(true));
+                if(tag.data is TagData<int>) {
+                    tags.Add(((TagData<int>)tag.data).GetTag(Mathf.FloorToInt(tag.value), true));
+                    continue;
+                }
+
+                if(tag.data is TagData<float>) {
+                    tags.Add(((TagData<float>)tag.data).GetTag(tag.value, true));
+                    continue;
+                }
+
+                tags.Add(tag.data.GetTag(true));
             }
             this.tags = tags;
         }
@@ -31,9 +44,10 @@ namespace UtilsModule {
         public bool Matches(Item item) {
             if(data != item.data) return false;
 
+            if(tags.Count != item.tags.Count) return false;
+
             foreach(var tag in tags) { 
-                if(!item.HasTag(tag.data)) return false;
-                if(!tag.Matches(item.tags.Find(x => x.data == tag.data))) return false;
+                if(!item.tags.Exists(x => x.Matches(tag))) return false;
             }
 
             return true;
@@ -43,15 +57,29 @@ namespace UtilsModule {
             if(!tags.Contains(tag)) tags.Add(tag);
         }
 
+        public void AddTag<T>(Tag<T> tag, T value) {
+            if(!tags.Contains(tag)) tags.Add(tag.SetValue(value));
+        }
+
         public void RemoveTag(TagData tag) {
             if(!HasTag(tag)) return;
-            if(!tags.Find(x => x.data == tag).inherent) tags.Remove(tags.Find(x => x.data == tag));
+            Tag foundTag = tags.Find(x => x.data == tag);
+            if(!foundTag.inherent) tags.Remove(foundTag);
         }
 
         public T GetTagValue<T>(TagData tag) {
             if(!HasTag(tag)) return default;
-            if(tags.Find(x => x.data == tag).GetType() != typeof(ValueTag<T>)) return default;
-            return ((ValueTag<T>)tags.Find(x => x.data == tag)).GetValue();
+            Tag foundTag = tags.Find(x => x.data == tag);
+            if(foundTag.GetType() != typeof(Tag<T>)) return default;
+            return ((Tag<T>)foundTag).GetValue();
         }
+
+        public Item Copy() { 
+            var copy = new Item(data, count);
+            copy.tags = new List<Tag>(tags);
+            return copy;
+        }
+
+        public bool IsEmpty => data == GameManager.Instance.EmptyItem;
     }
 }
