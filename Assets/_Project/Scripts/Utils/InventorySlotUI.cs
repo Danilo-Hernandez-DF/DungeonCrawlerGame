@@ -27,6 +27,7 @@ namespace UtilsModule {
         public int offsetIndex => index + indexOffset;
         private Item currentItem;
         bool selected;
+        public bool IsSelected => selected;
 
         public void OnPress() {
             slotIndexChannel.Invoke(index);

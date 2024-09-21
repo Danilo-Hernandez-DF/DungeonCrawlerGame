@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Game;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UtilsModule {
     public class InventoryUI : UIBase {
         [Header("InvUI")]
-        [SerializeField] int maxDisplaySlots = 36;
         [SerializeField] int columns = 6;
+        [SerializeField] int rows = 6;
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] Transform slotHolder;
         [SerializeField] IntEventChannel slotIndexChannel;
         [SerializeField] ItemEventChannel itemDisplayChannel;
+        public int maxDisplaySlots => columns * rows;
         List<InventorySlotUI> slots;
         Inventory targetInventory;
-        int rows => Mathf.CeilToInt((float)maxDisplaySlots / columns);
         int page = 1;
+        int pageCount => Mathf.CeilToInt((float)targetInventory.Size / maxDisplaySlots);
         int pageOffset => (page - 1) * maxDisplaySlots;
         int PageSize => targetInventory.Size - pageOffset > maxDisplaySlots ? maxDisplaySlots : targetInventory.Size - pageOffset;
 
@@ -34,13 +34,14 @@ namespace UtilsModule {
             GameManager.Instance.itemDisplayUI.SetActive(true);
             itemDisplayChannel?.Invoke(null);
             base.Open();
+            OnUpdate(targetInventory);
         }
 
         public override void Close() {
             if(GameManager.Instance.openUI != handledUI) return;
             GameManager.Instance.itemDisplayUI.SetActive(false);
             foreach(var slot in slots) slot.Clear();
-            if(InventorySlotUI.heldItem != null) {
+            if(!InventorySlotUI.heldItem?.IsEmpty ?? false) {
                 targetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 InventorySlotUI.heldItem = null;
             }
@@ -48,7 +49,10 @@ namespace UtilsModule {
         }
 
         void Populate() {
+            GridLayoutGroup grid = slotHolder.GetComponent<GridLayoutGroup>();
             slots = new List<InventorySlotUI>();
+            grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            grid.constraintCount = columns;
                 
             for(int i = 0; i < maxDisplaySlots; i++) {
                 var newSlot = Instantiate(slotPrefab);
@@ -60,7 +64,6 @@ namespace UtilsModule {
         }
 
         public void OnUpdate(Inventory inventory) {
-            Debug.Log(slots.Count);
             if(inventory != targetInventory) targetInventory = inventory;
 
                 if(maxDisplaySlots > targetInventory.Size) {
@@ -95,6 +98,26 @@ namespace UtilsModule {
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
                 targetInventory.SetSlot(index + pageOffset, tempItem, tempItem.count);
             }
+
+            OnUpdate(targetInventory);
+        }
+
+        public bool IsActive() {
+            foreach(var slot in slots) {
+                if(slot.IsSelected) return true;
+            }
+            return false;
+        }
+
+        public void OnPageChange(int direction) {
+            if(!IsActive()) return;
+            if(pageCount == 1) return;
+
+            GameManager.Instance.eventSystem.SetSelectedGameObject(startUI);
+
+            if(page + direction > pageCount) page = 1;
+            else if(page + direction < 1) page = pageCount;
+            else page += direction;
 
             OnUpdate(targetInventory);
         }

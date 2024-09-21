@@ -98,15 +98,18 @@ namespace UtilsModule {
 
         public void SetAtRandom(Item item, int count = 1, bool isSeeded = false) {
             if(items == null) PopulateInventory();
-            if(EmptySlots() == 0) return;
+            if(AvailableCount(item) == 0) return;
 
-            int rand = isSeeded? SeededRandom.GetRange(0, Size): Random.Range(0, Size);
+            int rand;
 
-            while(items[rand].data != GameManager.Instance.EmptyItem) {
+            bool found = false;
+            do {
                 rand = isSeeded? SeededRandom.GetRange(0, Size): Random.Range(0, Size);
-            }
 
-            SetSlot(rand, item, count);
+                if(items[rand].IsEmpty || items[rand].Matches(item)) found = true;
+            } while(!found);
+
+            AddAt(rand, item, count);
         }
 
         public bool TryRemove(Item item, int count = 1) {

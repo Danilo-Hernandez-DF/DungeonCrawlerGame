@@ -17,6 +17,8 @@ namespace Game {
         public event UnityAction Attack = delegate { };
         public event UnityAction Pause = delegate { };
         public event UnityAction OpenMenu = delegate { };
+        
+        [SerializeField] IntEventChannel PageChangeCahnnel;
 
         InputControls inputActions;
 
@@ -87,22 +89,22 @@ namespace Game {
             Move.Invoke(context.ReadValue<Vector2>());
         }
 
-        public void OnPause(InputAction.CallbackContext context)
-        {
-            if(context.phase == InputActionPhase.Started) {
-                Pause.Invoke();
-            }
+        public void OnPause(InputAction.CallbackContext context) {
+            if(context.phase == InputActionPhase.Started) Pause.Invoke();
         }
 
         bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 
         public void OnRefreshMap(InputAction.CallbackContext context) {
-            if(context.started) DebugRefresh.Invoke();
+            if(context.phase == InputActionPhase.Started) DebugRefresh.Invoke();
         }
 
-        public void OnOpenMenu(InputAction.CallbackContext context)
-        {
+        public void OnOpenMenu(InputAction.CallbackContext context) {
             if(context.phase == InputActionPhase.Started) OpenMenu.Invoke();
+        }
+        
+        public void OnPageNavigation(InputAction.CallbackContext context) { 
+            if(context.phase == InputActionPhase.Started) PageChangeCahnnel?.Invoke((int)context.ReadValue<float>());
         }
     }
 }

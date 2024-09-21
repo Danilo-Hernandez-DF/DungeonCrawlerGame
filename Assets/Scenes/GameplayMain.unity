@@ -1071,6 +1071,7 @@ GameObject:
   - component: {fileID: 1277278678}
   - component: {fileID: 1277278677}
   - component: {fileID: 1277278679}
+  - component: {fileID: 1277278680}
   m_Layer: 0
   m_Name: InventoryUI
   m_TagString: Untagged
@@ -1137,11 +1138,11 @@ MonoBehaviour:
   handledUI: {fileID: 1314420134}
   startUI: {fileID: 0}
   maxDisplaySlots: 36
-  columns: 6
+  columns: 5
   slotPrefab: {fileID: 5509897362931311048, guid: 61747458de154304183051d72bee7c07, type: 3}
   slotHolder: {fileID: 604627219}
   slotIndexChannel: {fileID: 11400000, guid: 91ab5456a6ec96d47b95684691265054, type: 2}
-  itemDisplayChannel: {fileID: 0}
+  itemDisplayChannel: {fileID: 11400000, guid: 111b2b73ebf90d34aa4c42ab7cdc6adf, type: 2}
 --- !u!114 &1277278679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1161,6 +1162,34 @@ MonoBehaviour:
       - m_Target: {fileID: 1277278678}
         m_TargetAssemblyTypeName: UtilsModule.InventoryUI, Assembly-CSharp
         m_MethodName: OnSlotPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1277278680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277278673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3225185ce1f2f0d4396874ba32ae720f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: ee9c4c0a2138cea4fa0e67dc67927369, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1277278678}
+        m_TargetAssemblyTypeName: UtilsModule.InventoryUI, Assembly-CSharp
+        m_MethodName: OnPageChange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

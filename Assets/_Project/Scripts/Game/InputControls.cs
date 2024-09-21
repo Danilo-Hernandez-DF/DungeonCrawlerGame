@@ -127,6 +127,15 @@ namespace Game
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PageNavigation"",
+                    ""type"": ""Value"",
+                    ""id"": ""6489fbe7-aa42-434e-9cba-907e735663c4"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -437,6 +446,72 @@ namespace Game
                     ""action"": ""OpenMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""095ce32f-cdb5-4dc7-a9cf-befc73712cb8"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PageNavigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d56feae5-f9f0-4c9b-bc76-eeca7a17f397"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard-Mouse"",
+                    ""action"": ""PageNavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c4ea29f4-a232-4c9f-92bc-cb9d72216e2f"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard-Mouse"",
+                    ""action"": ""PageNavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Controller"",
+                    ""id"": ""4c501a8a-7a2a-4421-ade9-33ebd3ae0d27"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PageNavigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""60f5e5dc-dd6e-46a8-a782-a0b0e6ab2085"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Switch Pro Controller;Controller-Generic"",
+                    ""action"": ""PageNavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""b89167d4-7150-4266-bee0-329f87a99e58"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Switch Pro Controller;Controller-Generic"",
+                    ""action"": ""PageNavigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -789,6 +864,7 @@ namespace Game
             m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
             m_Player_Change_Consumable = m_Player.FindAction("Change_Consumable", throwIfNotFound: true);
             m_Player_OpenMenu = m_Player.FindAction("OpenMenu", throwIfNotFound: true);
+            m_Player_PageNavigation = m_Player.FindAction("PageNavigation", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -869,6 +945,7 @@ namespace Game
         private readonly InputAction m_Player_Pause;
         private readonly InputAction m_Player_Change_Consumable;
         private readonly InputAction m_Player_OpenMenu;
+        private readonly InputAction m_Player_PageNavigation;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -884,6 +961,7 @@ namespace Game
             public InputAction @Pause => m_Wrapper.m_Player_Pause;
             public InputAction @Change_Consumable => m_Wrapper.m_Player_Change_Consumable;
             public InputAction @OpenMenu => m_Wrapper.m_Player_OpenMenu;
+            public InputAction @PageNavigation => m_Wrapper.m_Player_PageNavigation;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -926,6 +1004,9 @@ namespace Game
                 @OpenMenu.started += instance.OnOpenMenu;
                 @OpenMenu.performed += instance.OnOpenMenu;
                 @OpenMenu.canceled += instance.OnOpenMenu;
+                @PageNavigation.started += instance.OnPageNavigation;
+                @PageNavigation.performed += instance.OnPageNavigation;
+                @PageNavigation.canceled += instance.OnPageNavigation;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -963,6 +1044,9 @@ namespace Game
                 @OpenMenu.started -= instance.OnOpenMenu;
                 @OpenMenu.performed -= instance.OnOpenMenu;
                 @OpenMenu.canceled -= instance.OnOpenMenu;
+                @PageNavigation.started -= instance.OnPageNavigation;
+                @PageNavigation.performed -= instance.OnPageNavigation;
+                @PageNavigation.canceled -= instance.OnPageNavigation;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1128,6 +1212,7 @@ namespace Game
             void OnPause(InputAction.CallbackContext context);
             void OnChange_Consumable(InputAction.CallbackContext context);
             void OnOpenMenu(InputAction.CallbackContext context);
+            void OnPageNavigation(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

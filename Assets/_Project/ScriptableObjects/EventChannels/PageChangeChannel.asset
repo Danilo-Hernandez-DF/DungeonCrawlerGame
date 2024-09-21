@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 597886b6e9960164daf1eb3034f87791, type: 3}
-  m_Name: InputReader
+  m_Script: {fileID: 11500000, guid: 904203824b14a274d8165172577dc49c, type: 3}
+  m_Name: PageChangeChannel
   m_EditorClassIdentifier: 
-  PageChangeCahnnel: {fileID: 11400000, guid: ee9c4c0a2138cea4fa0e67dc67927369, type: 2}

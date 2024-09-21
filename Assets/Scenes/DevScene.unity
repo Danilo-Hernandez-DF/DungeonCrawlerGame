@@ -1182,7 +1182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057c1d88ce360e542bde97629662cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySize: 30
+  inventorySize: 40
   inventoryChannel: {fileID: 11400000, guid: 894b88c4038223249873c391075b9077, type: 2}
 --- !u!114 &622018819
 MonoBehaviour:
@@ -1198,7 +1198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryHolder: {fileID: 622018818}
   lootTable: {fileID: 11400000, guid: f8df38553bf49ac4f93a12678597203b, type: 2}
-  rolls: 25
+  rolls: 20
 --- !u!1 &710772502
 GameObject:
   m_ObjectHideFlags: 0
