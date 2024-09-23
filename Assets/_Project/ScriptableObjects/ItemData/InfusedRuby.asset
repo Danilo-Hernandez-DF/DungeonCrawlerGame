@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a14b562553b79214daa42cef5ef0728b, type: 3}
-  m_Name: PyramidRuby
+  m_Name: InfusedRuby
   m_EditorClassIdentifier: 
-  name: Pyramid Ruby
-  description: A pyramid shaped object, carved out of an infused ruby in order to
-    maximize it's elemental properties
+  name: Infused Ruby
+  description: A ruby wich was carved out in order to maximize it's elemental properties
+    after enrichment
   maxCount: 15
-  sprite: {fileID: 21300000, guid: a02a81b04e6cba54da549a8c6e2aaa68, type: 3}
+  sprite: {fileID: 21300000, guid: 2f7c85969bb7c194c89dd45bbdacdd71, type: 3}
   inherentTags:
   - data: {fileID: 11400000, guid: 0a04a5f3b1b9a2640a32ca83e92cf54f, type: 2}
     value: 0

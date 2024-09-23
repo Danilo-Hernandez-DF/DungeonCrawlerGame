@@ -13,9 +13,11 @@ namespace UtilsModule {
         [SerializeField] Transform slotHolder;
         [SerializeField] IntEventChannel slotIndexChannel;
         [SerializeField] ItemEventChannel itemDisplayChannel;
+        [SerializeField] bool isChild = false;
         public int maxDisplaySlots => columns * rows;
         List<InventorySlotUI> slots;
         Inventory targetInventory;
+        public Inventory TargetInventory => targetInventory;
         int page = 1;
         int pageCount => Mathf.CeilToInt((float)targetInventory.Size / maxDisplaySlots);
         int pageOffset => (page - 1) * maxDisplaySlots;
@@ -31,21 +33,33 @@ namespace UtilsModule {
             page = 1;
 
             startUI = slots[0].gameObject;
-            GameManager.Instance.itemDisplayUI.SetActive(true);
-            itemDisplayChannel?.Invoke(null);
-            base.Open();
+
+            if(!isChild) {
+                GameManager.Instance.itemDisplayUI.SetActive(true);
+                itemDisplayChannel?.Invoke(null);
+                base.Open();
+            } else {
+                open = true;
+            }
+
             OnUpdate(targetInventory);
         }
 
         public override void Close() {
             if(GameManager.Instance.openUI != handledUI) return;
-            GameManager.Instance.itemDisplayUI.SetActive(false);
             foreach(var slot in slots) slot.Clear();
-            if(!InventorySlotUI.heldItem?.IsEmpty ?? false) {
-                targetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
-                InventorySlotUI.heldItem = null;
+
+            if(!isChild) {
+                GameManager.Instance.itemDisplayUI.SetActive(false);
+            
+                if(!InventorySlotUI.heldItem?.IsEmpty ?? false) {
+                    targetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+                    InventorySlotUI.heldItem = null;
+                }
+                base.Close();
+            } else {
+                open = false;
             }
-            base.Close();
         }
 
         void Populate() {
@@ -83,17 +97,23 @@ namespace UtilsModule {
                 }
         }
 
+
         public void OnSlotPressed(int index) {
+            if(!open) return;
             if(index < 0 || index >= targetInventory.Size) return;
+            Debug.Log("Pressed: " + index);
             if(InventorySlotUI.heldItem?.IsEmpty ?? true) {
+                Debug.Log("Empty held item");
                 if(targetInventory.items[index + pageOffset].IsEmpty) return;
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
                 targetInventory.SetSlot(index + pageOffset, new Item(GameManager.Instance.EmptyItem), 0);
             } else if(InventorySlotUI.heldItem.Matches(targetInventory.items[index + pageOffset])) {
+                Debug.Log("Matching held item");
                 int remainder = targetInventory.AddAt(index + pageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 if(remainder > 0) InventorySlotUI.heldItem.count = remainder;
                 else InventorySlotUI.heldItem = new Item(GameManager.Instance.EmptyItem);
             } else {
+                Debug.Log("Different held item");
                 var tempItem = InventorySlotUI.heldItem.Copy();
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
                 targetInventory.SetSlot(index + pageOffset, tempItem, tempItem.count);

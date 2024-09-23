@@ -10,7 +10,7 @@ namespace UtilsModule {
         [SerializeField] int rolls = 2;
         public Inventory inventory => inventoryHolder.inventory;
 
-        void Start() {
+        public void Generate() {
             for(int i = 0; i < rolls; i++) {
                 var toAdd = lootTable.GetWeightedItem();
                 inventory.SetAtRandom(toAdd, toAdd.count, true);
@@ -26,6 +26,11 @@ namespace UtilsModule {
 
                 Debug.Log($"{i.data.name}: [Tags: [{tagString}], Count: {i.count}]");
             }
+        }
+
+        public void Init(LootTable lootTable, int rolls) {
+            this.lootTable = lootTable;
+            this.rolls = rolls;
         }
     }
 }

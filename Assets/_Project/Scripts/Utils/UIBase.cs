@@ -5,6 +5,7 @@ namespace UtilsModule {
     public class UIBase : MonoBehaviour {
         [SerializeField] protected GameObject handledUI;
         [SerializeField] protected GameObject startUI;
+        public GameObject StartUI => startUI;
 
         protected bool open = false;
 

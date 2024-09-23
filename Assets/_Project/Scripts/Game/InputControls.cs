@@ -263,7 +263,7 @@ namespace Game
                 {
                     ""name"": """",
                     ""id"": ""0bd71e0d-2614-4998-ab93-5e3db5b70058"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller-Generic;Switch Pro Controller"",
@@ -340,7 +340,7 @@ namespace Game
                 {
                     ""name"": """",
                     ""id"": ""aa94ad32-1514-4c54-86db-0c2fe6ff3d31"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard-Mouse"",
@@ -351,7 +351,7 @@ namespace Game
                 {
                     ""name"": """",
                     ""id"": ""9bed9a46-1397-47d4-9e2a-952bf6987251"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller-Generic;Switch Pro Controller"",

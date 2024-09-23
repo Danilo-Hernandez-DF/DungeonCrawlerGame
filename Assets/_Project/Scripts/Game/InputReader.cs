@@ -17,6 +17,7 @@ namespace Game {
         public event UnityAction Attack = delegate { };
         public event UnityAction Pause = delegate { };
         public event UnityAction OpenMenu = delegate { };
+        public event UnityAction Interact = delegate { };
         
         [SerializeField] IntEventChannel PageChangeCahnnel;
 
@@ -79,13 +80,11 @@ namespace Game {
             }
         }
 
-        public void OnInteract(InputAction.CallbackContext context)
-        {
-            //noop
+        public void OnInteract(InputAction.CallbackContext context) {
+            if(context.phase == InputActionPhase.Started) Interact.Invoke();
         }
 
-        public void OnMovement(InputAction.CallbackContext context)
-        {
+        public void OnMovement(InputAction.CallbackContext context) {
             Move.Invoke(context.ReadValue<Vector2>());
         }
 

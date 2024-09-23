@@ -28,14 +28,19 @@ namespace UtilsModule {
         private Item currentItem;
         bool selected;
         public bool IsSelected => selected;
+        CountdownTimer cooldownTimer;
 
         public void OnPress() {
-            slotIndexChannel.Invoke(index);
+            slotIndexChannel?.Invoke(index);
         }
 
         public void Init(int index, IntEventChannel slotIndexChannel) {
             this.slotIndexChannel = slotIndexChannel;
             this.index = index;
+
+            cooldownTimer = new CountdownTimer(0);
+            cooldownTimer.OnTimerStart += () => GetComponent<Button>().interactable = false;
+            cooldownTimer.OnTimerStop += () => GetComponent<Button>().interactable = true;
         }
 
         public void Refresh(int offset) {
@@ -45,6 +50,11 @@ namespace UtilsModule {
         public void Clear() {
             selected = false;
             DeactivateHeldItem();
+        }
+
+        public void Cooldown(float time) {
+            cooldownTimer.Reset(time);
+            cooldownTimer.Start();
         }
 
         public void OnUpdate(Inventory inventory) {
