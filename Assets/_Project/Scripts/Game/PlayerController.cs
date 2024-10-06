@@ -11,7 +11,6 @@ namespace Game {
         [SerializeField, Self] Rigidbody2D rb;
         [SerializeField, Self] Animator animator;
         [SerializeField, Self] Health health;
-        [SerializeField, Self] InventoryHolder inventoryHolder;
         [SerializeField, Anywhere] CinemachineVirtualCamera vCam;
         InputReader input => GameManager.Instance.input;
 

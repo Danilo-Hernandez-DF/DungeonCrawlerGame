@@ -54,7 +54,7 @@ MonoBehaviour:
         data: {fileID: 11400000, guid: f3e83f5a01a73894ca10a454701edf7e, type: 2}
       value: 1.75
   itemDatas:
-  - data: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
+  - data: {fileID: 11400000, guid: b2992e78ae1d08f458438345ee5ddcac, type: 2}
     countMin: 1
-    countMax: 3
+    countMax: 1
     weight: 100

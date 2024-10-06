@@ -10,19 +10,15 @@ namespace UtilsModule {
 
         public override void Open() {
             if(GameManager.Instance.openUI != null) return;
-            playerInventory.Open();
-            otherInventory.Open();
+            OpenChildrenEvent?.Invoke();
             startUI = playerInventory.StartUI;
             base.Open();
 
-            GameManager.Instance.itemDisplayUI.SetActive(true);
             itemDisplayChannel?.Invoke(null);
         }
 
         public override void Close() {
             if(GameManager.Instance.openUI != handledUI) return;
-
-            GameManager.Instance.itemDisplayUI.SetActive(false);
 
             if(!InventorySlotUI.heldItem?.IsEmpty ?? false) {
                 if(playerInventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
@@ -34,8 +30,7 @@ namespace UtilsModule {
                 InventorySlotUI.heldItem = null;
             }
 
-            playerInventory.Close();
-            otherInventory.Close();
+            CloseChildrenEvent?.Invoke();
 
             base.Close();
         }

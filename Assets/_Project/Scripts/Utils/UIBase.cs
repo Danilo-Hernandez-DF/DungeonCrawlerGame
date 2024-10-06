@@ -1,10 +1,13 @@
 using Game;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace UtilsModule {
     public class UIBase : MonoBehaviour {
         [SerializeField] protected GameObject handledUI;
         [SerializeField] protected GameObject startUI;
+        public UnityAction OpenChildrenEvent = delegate { };
+        public UnityAction CloseChildrenEvent = delegate { };
         public GameObject StartUI => startUI;
 
         protected bool open = false;

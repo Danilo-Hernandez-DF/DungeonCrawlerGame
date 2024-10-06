@@ -12,7 +12,6 @@ namespace Game {
         public ItemData EmptyItem;
         public EventSystem eventSystem;
         public GameObject openUI;
-        public GameObject itemDisplayUI;
         public InputReader input;
         public bool Paused => openUI != null;
 

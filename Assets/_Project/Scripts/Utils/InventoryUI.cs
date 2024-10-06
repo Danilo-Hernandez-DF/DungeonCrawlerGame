@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Game;
+using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace UtilsModule {
@@ -13,7 +15,8 @@ namespace UtilsModule {
         [SerializeField] Transform slotHolder;
         [SerializeField] IntEventChannel slotIndexChannel;
         [SerializeField] ItemEventChannel itemDisplayChannel;
-        [SerializeField] bool isChild = false;
+        [SerializeField] UIBase parent;
+        bool isChild => parent != null;
         public int maxDisplaySlots => columns * rows;
         List<InventorySlotUI> slots;
         Inventory targetInventory;
@@ -27,6 +30,13 @@ namespace UtilsModule {
             Populate();
         }
 
+        void Start() {
+            if(isChild) {
+                parent.OpenChildrenEvent += Open;
+                parent.CloseChildrenEvent += Close;
+            }
+        }
+
         public override void Open() {
             if(targetInventory == null) return;
             if(GameManager.Instance.openUI != null) return;
@@ -35,7 +45,7 @@ namespace UtilsModule {
             startUI = slots[0].gameObject;
 
             if(!isChild) {
-                GameManager.Instance.itemDisplayUI.SetActive(true);
+                OpenChildrenEvent?.Invoke();
                 itemDisplayChannel?.Invoke(null);
                 base.Open();
             } else {
@@ -50,8 +60,7 @@ namespace UtilsModule {
             foreach(var slot in slots) slot.Clear();
 
             if(!isChild) {
-                GameManager.Instance.itemDisplayUI.SetActive(false);
-            
+                CloseChildrenEvent?.Invoke();
                 if(!InventorySlotUI.heldItem?.IsEmpty ?? false) {
                     targetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                     InventorySlotUI.heldItem = null;
@@ -106,7 +115,7 @@ namespace UtilsModule {
                 Debug.Log("Empty held item");
                 if(targetInventory.items[index + pageOffset].IsEmpty) return;
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
-                targetInventory.SetSlot(index + pageOffset, new Item(GameManager.Instance.EmptyItem), 0);
+                targetInventory.ResetSlot(index + pageOffset);
             } else if(InventorySlotUI.heldItem.Matches(targetInventory.items[index + pageOffset])) {
                 Debug.Log("Matching held item");
                 int remainder = targetInventory.AddAt(index + pageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
@@ -116,7 +125,9 @@ namespace UtilsModule {
                 Debug.Log("Different held item");
                 var tempItem = InventorySlotUI.heldItem.Copy();
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
-                targetInventory.SetSlot(index + pageOffset, tempItem, tempItem.count);
+                if(!targetInventory.SetSlot(index + pageOffset, tempItem, tempItem.count)) {
+                    InventorySlotUI.heldItem = tempItem.Copy();
+                }
             }
 
             OnUpdate(targetInventory);

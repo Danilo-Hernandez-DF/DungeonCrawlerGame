@@ -3,12 +3,12 @@ using Unity.Collections;
 using UnityEngine;
 
 namespace UtilsModule {
-    [RequireComponent(typeof(InventoryHolder))]
+    [RequireComponent(typeof(IInventoryHolder))]
     public class InventoryGenrator : ValidatedMonoBehaviour {
         [SerializeField, Self] InventoryHolder inventoryHolder;
         [SerializeField] LootTable lootTable;
         [SerializeField] int rolls = 2;
-        public Inventory inventory => inventoryHolder.inventory;
+        public Inventory inventory => inventoryHolder.heldInventory;
 
         public void Generate() {
             for(int i = 0; i < rolls; i++) {

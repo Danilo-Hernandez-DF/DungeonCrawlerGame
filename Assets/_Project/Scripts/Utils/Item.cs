@@ -28,6 +28,12 @@ namespace UtilsModule {
                     continue;
                 }
 
+                if(tag.data is TagData<EquipmentSlot>) {
+                    var tValue = (EquipmentSlot)Mathf.FloorToInt(tag.value);
+                    tags.Add(((TagData<EquipmentSlot>)tag.data).GetTag(tValue, true));
+                    continue;
+                }
+
                 tags.Add(tag.data.GetTag(true));
             }
             this.tags = tags;
