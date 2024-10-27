@@ -8,15 +8,20 @@ namespace Game {
         [SerializeField] float detectionRadius = 10f;
         [SerializeField] float innerDetectionradius = 5f;
         [SerializeField] float detectionCooldown = 1f;
-        [SerializeField] float attackRange = 2f;
+        float attackRange;
 
         Vector3 facingDirection;
 
         public Transform Player {get; private set;}
+        public PlayerController PlayerComponent => Player.GetComponent<PlayerController>();
         public Health PlayerHealth {get; private set;}
         CountdownTimer detectionTimer;
 
         IDetectionStrategy detectionStrategy;
+
+        public void Init(float attackRange) {
+            this.attackRange = attackRange;
+        }
 
         void Awake() {
             Player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -33,6 +38,10 @@ namespace Game {
         public bool CanDetectPlayer(Vector3 facingDirection = default) {
             this.facingDirection = facingDirection;
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer, facingDirection);
+        }
+
+        public static GameObject GetPlayer() {
+            return GameObject.FindGameObjectWithTag("Player");
         }
 
         public bool CanAttackPlayer() {

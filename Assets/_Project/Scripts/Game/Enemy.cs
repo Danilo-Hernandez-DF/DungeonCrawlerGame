@@ -16,11 +16,12 @@ namespace Game {
         [SerializeField, Child] Animator animator;
         [SerializeField] float wanderRadius = 10f;
 
-        [Header("Attack Settings")]
-        [SerializeField] float timeBetweenAttacks = 1f;
-        [SerializeField] int attackDamage = 10;
+        float timeBetweenAttacks => Stats.AttackCooldown;
+        int attackDamage => Stats.Attack;
 
         StateMachine stateMachine;
+
+        Health health;
 
         CountdownTimer attackTimer;
 
@@ -28,7 +29,16 @@ namespace Game {
 
         void OnValidate() => this.ValidateRefs();
 
+        new protected void Awake() {
+            base.Awake();
+            health = GetComponent<Health>();
+            agent.speed = Stats.Speed;
+        }
+
         void Start() {
+            health.Init(Stats.Health);
+            playerDetector.Init(Stats.AttackRange);
+
             attackTimer = new CountdownTimer(timeBetweenAttacks);
             stateMachine = new StateMachine();
 
@@ -47,7 +57,8 @@ namespace Game {
         void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
         void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
-        void Update() {
+        new void Update() {
+            base.Update();
             stateMachine.Update();
             attackTimer.Tick(Time.deltaTime);
         }
@@ -60,7 +71,11 @@ namespace Game {
             if(attackTimer.IsRunning) return;
 
             attackTimer.Start();
-            playerDetector.PlayerHealth.TakeDamage(attackDamage);
+            playerDetector.PlayerComponent.TakeDamage(attackDamage);
+        }
+
+        public void TakeDamage(int damage) {
+            health.TakeDamage(damage - Stats.Defense);
         }
     }
 }

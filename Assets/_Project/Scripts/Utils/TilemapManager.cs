@@ -29,7 +29,7 @@ namespace UtilsModule {
             Vector3Int gridPos = map.WorldToCell(pos);
             TileBase tile = map.GetTile(gridPos);
 
-            return tile;
+            return tile; 
         }
 
         public TileData GetTileData(TileBase tile) {

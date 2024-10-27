@@ -24,6 +24,12 @@ namespace Game {
             PublishHealthPercentage();
         }
 
+        public void Init(int health) {
+            maxHealth = health;
+            currentHealth = health;
+            PublishHealthPercentage();
+        }
+
         void PublishHealthPercentage() {
             if(playerHealthChannel != null) {
                 playerHealthChannel.Invoke(currentHealth / (float)maxHealth);

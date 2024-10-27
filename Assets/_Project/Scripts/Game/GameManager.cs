@@ -25,4 +25,6 @@ namespace Game {
 
         //------------------------------------------------
     }
+
+    public enum OperatorType {Add, Multiply}
 }

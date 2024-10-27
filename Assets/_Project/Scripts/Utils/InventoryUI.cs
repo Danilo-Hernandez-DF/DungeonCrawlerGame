@@ -16,6 +16,8 @@ namespace UtilsModule {
         [SerializeField] IntEventChannel slotIndexChannel;
         [SerializeField] ItemEventChannel itemDisplayChannel;
         [SerializeField] UIBase parent;
+        [SerializeField] public Entity targetEntity;
+        bool isEquipment => targetEntity != null;
         bool isChild => parent != null;
         public int maxDisplaySlots => columns * rows;
         List<InventorySlotUI> slots;
@@ -30,7 +32,7 @@ namespace UtilsModule {
             Populate();
         }
 
-        void Start() {
+        protected virtual void Start() {
             if(isChild) {
                 parent.OpenChildrenEvent += Open;
                 parent.CloseChildrenEvent += Close;
@@ -116,6 +118,10 @@ namespace UtilsModule {
                 if(targetInventory.items[index + pageOffset].IsEmpty) return;
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
                 targetInventory.ResetSlot(index + pageOffset);
+
+                if(isEquipment) {
+                    EquipmentManager.Instance.OnUnequip(InventorySlotUI.heldItem, targetEntity);
+                }
             } else if(InventorySlotUI.heldItem.Matches(targetInventory.items[index + pageOffset])) {
                 Debug.Log("Matching held item");
                 int remainder = targetInventory.AddAt(index + pageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
@@ -127,6 +133,9 @@ namespace UtilsModule {
                 InventorySlotUI.heldItem = targetInventory.items[index + pageOffset].Copy();
                 if(!targetInventory.SetSlot(index + pageOffset, tempItem, tempItem.count)) {
                     InventorySlotUI.heldItem = tempItem.Copy();
+                } else if(isEquipment) {
+                    EquipmentManager.Instance.OnUnequip(InventorySlotUI.heldItem, targetEntity);
+                    EquipmentManager.Instance.OnEquip(targetInventory.items[index + pageOffset], targetEntity);
                 }
             }
 

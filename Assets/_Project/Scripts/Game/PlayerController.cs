@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using StateMachines;
 
 namespace Game {
-    public class PlayerController : ValidatedSingleton<PlayerController> {
+    public class PlayerController : Entity {
         [Header("References")]
         [SerializeField, Self] Rigidbody2D rb;
         [SerializeField, Self] Animator animator;
@@ -15,19 +15,17 @@ namespace Game {
         InputReader input => GameManager.Instance.input;
 
         [Header("Settings")]
-        [SerializeField] float moveSpeed = 4f;
         [SerializeField] float smoothTime = .2f;
+        float moveSpeed => Stats.Speed * 50f;
 
-        [Header("Dash Settings")]
-        [SerializeField] float dashForce = 10f;
-        [SerializeField] float dashDuration = 1f;
-        [SerializeField] float dashCooldown = 2f;
+        float dashCooldown => Stats.DashCooldown;
+        float dashForce => Stats.DashForce;
+        float dashDuration => Stats.DashDuration;
 
-        [Header("Attack Settings")]
-        [SerializeField] float atatckCooldown = 0.5f;
-        [SerializeField] float attackRange = 1f;
-        [SerializeField] float attackDistance = 1f;
-        [SerializeField] int attackDamage = 10;
+        float atatckCooldown => Stats.AttackCooldown;
+        float attackRange => Stats.AttackRange;
+        float attackDistance => Stats.AttackDistance;
+        int attackDamage => Stats.Attack;
 
         const float ZeroF = 0f;
         Vector2 aimDirection = Vector2.zero;
@@ -50,7 +48,8 @@ namespace Game {
         // Animator Parameters
         // readonly int Speed = Animator.StringToHash("Speed");
 
-        protected override void Awake() {
+        new protected void Awake() {
+            base.Awake();
             mainCam = Camera.main.transform;
             vCam.Follow = transform;
             vCam.LookAt = transform;
@@ -58,6 +57,8 @@ namespace Game {
 
             rb.freezeRotation = true;
             rb.gravityScale = 0f;
+
+            health.Init(Stats.Health);
 
             SetupTimers();
             SetupStateMachine();
@@ -115,7 +116,8 @@ namespace Game {
             }
         }
 
-        void Update() {
+        new void Update() {
+            base.Update();
             movement = new Vector2(input.Direction.x, input.Direction.y);
             stateMachine.Update();
             
@@ -161,7 +163,7 @@ namespace Game {
                 Debug.Log(hit.name);
 
                 if(hit.CompareTag("Enemy")) {
-                    hit.GetComponent<Health>().TakeDamage(attackDamage);
+                    hit.GetComponent<Enemy>().TakeDamage(attackDamage);
                 }
             }
         }
@@ -197,6 +199,10 @@ namespace Game {
 
         void SmoothSpeed(float value) {
             currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
+        }
+
+        public void TakeDamage(int damage) {
+            health.TakeDamage(damage - Stats.Defense);
         }
     }
 }

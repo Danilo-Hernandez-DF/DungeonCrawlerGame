@@ -1005,19 +1005,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80bdde1d37829b419a401c4b6ed9929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseStats: {fileID: 11400000, guid: eff3f4141cdcb114b9fd984d772a9b15, type: 2}
   rb: {fileID: 622018815}
   animator: {fileID: 622018814}
   health: {fileID: 622018817}
   vCam: {fileID: 1913633280}
-  moveSpeed: 300
   smoothTime: 0.2
-  dashForce: 2
-  dashDuration: 0.1
-  dashCooldown: 2
-  atatckCooldown: 0.5
-  attackRange: 1.5
-  attackDistance: 0.75
-  attackDamage: 10
 --- !u!212 &622018813
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2349,11 +2342,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8540144676955948400, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
-      propertyPath: attackRange
-      value: 0.75
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

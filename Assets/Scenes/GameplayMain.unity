@@ -189,8 +189,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -324,8 +324,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -580,8 +580,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -714,8 +714,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -869,8 +869,8 @@ MonoBehaviour:
   itemName: {fileID: 531921154}
   description: {fileID: 60352215}
   tags: {fileID: 1351030878}
-  inherentTagColor: {r: 0.37767556, g: 0.33103418, b: 0.4056604, a: 1}
-  defaultTagColor: {r: 0, g: 0, b: 0, a: 1}
+  inherentTagColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultTagColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &556334125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,8 +891,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -991,8 +991,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1096,8 +1096,8 @@ MonoBehaviour:
   itemName: {fileID: 516530355}
   description: {fileID: 258902946}
   tags: {fileID: 1237794314}
-  inherentTagColor: {r: 0.37767556, g: 0.33103418, b: 0.4056604, a: 1}
-  defaultTagColor: {r: 0, g: 0, b: 0, a: 1}
+  inherentTagColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultTagColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &726639906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,8 +1118,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1146,6 +1146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 765176806}
   - component: {fileID: 765176805}
+  - component: {fileID: 765176807}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1184,6 +1185,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &765176807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765176804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0c12d9ad1962f48a16172d10c6b97a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1034122265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,8 +1745,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1888,6 +1901,8 @@ MonoBehaviour:
   slotIndexChannel: {fileID: 11400000, guid: 91ab5456a6ec96d47b95684691265054, type: 2}
   itemDisplayChannel: {fileID: 11400000, guid: 111b2b73ebf90d34aa4c42ab7cdc6adf, type: 2}
   parent: {fileID: 0}
+  targetEntity: {fileID: 0}
+  equipmentUI: {fileID: 1277278683}
 --- !u!114 &1277278679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2021,6 +2036,7 @@ MonoBehaviour:
   slotIndexChannel: {fileID: 11400000, guid: 2a9be4a5374fdcb4cb7e8feeb69b7082, type: 2}
   itemDisplayChannel: {fileID: 0}
   parent: {fileID: 1277278678}
+  targetEntity: {fileID: 0}
 --- !u!1 &1314420134
 GameObject:
   m_ObjectHideFlags: 0
@@ -2207,8 +2223,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2282,11 +2298,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<color=#5558><size=80%>-----tags-----</size></color><size=30%>
+  m_text: '<size=80%>-----tags-----</size><size=30%>
 
 
-    </size>A
-    tag without a value
+    </size>A tag without a
+    value
 
     An integer tag: 1
 
@@ -2294,10 +2310,10 @@ MonoBehaviour:
 
     <size=30%>
 
-    <color=#5558><size=80%>-----Inherent-tags-----</size></color>
+    <size=80%>-----Inherent-tags-----</size>
 
 
-    </size><color=#5C007F>An
+    </size>An
     inherent tag with no value
 
     An inherent int tag: 1
@@ -2312,8 +2328,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2759,8 +2775,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2859,8 +2875,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2918,6 +2934,7 @@ MonoBehaviour:
   slotIndexChannel: {fileID: 11400000, guid: 541f171df36600e46bb4067b368ace6c, type: 2}
   itemDisplayChannel: {fileID: 0}
   parent: {fileID: 1369089992}
+  targetEntity: {fileID: 0}
 --- !u!114 &2055983072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3099,8 +3116,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 933806ee1f6cf8f459d7602af8a704d1, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3158,6 +3175,7 @@ MonoBehaviour:
   slotIndexChannel: {fileID: 11400000, guid: 91ab5456a6ec96d47b95684691265054, type: 2}
   itemDisplayChannel: {fileID: 0}
   parent: {fileID: 1369089992}
+  targetEntity: {fileID: 0}
 --- !u!114 &2116805600
 MonoBehaviour:
   m_ObjectHideFlags: 0

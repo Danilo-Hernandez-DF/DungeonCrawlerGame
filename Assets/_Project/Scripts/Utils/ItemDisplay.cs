@@ -17,7 +17,7 @@ namespace UtilsModule {
                 sprite.color = Color.clear;
                 itemName.text = "---";
                 description.text = "---\n---\n---\n---";
-                tags.text = "<color=#5558><size=60%>-----Tags-----</size></color><size=30%>\n\n</size>---";
+                tags.text = "<color=#A1A1A1><size=60%>-----Tags-----</size></color><size=30%>\n\n</size>---";
 
                 return;
             }
@@ -37,8 +37,8 @@ namespace UtilsModule {
             tagString += "</color>"; 
             inherentTags += "</color>";
 
-            tags.text = "<color=#5558><size=60%>-----Tags-----</size></color><size=30%>\n\n</size>" +
-                tagString + "<size=30%>\n<color=#5558><size=60%>-----Inherent-----</size></color>\n\n</size>" + inherentTags;
+            tags.text = "<color=#A1A1A1><size=60%>-----Tags-----</size></color><size=30%>\n\n</size>" +
+                tagString + "<size=30%>\n<color=#A1A1A1><size=60%>-----Inherent-----</size></color>\n\n</size>" + inherentTags;
         }
     }
 }
