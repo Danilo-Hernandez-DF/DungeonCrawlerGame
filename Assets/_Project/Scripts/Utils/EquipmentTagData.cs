@@ -11,6 +11,7 @@ namespace UtilsModule {
         Legs,
         Charm,
         Weapon,
+        Pendant,
         Any
     }
 }

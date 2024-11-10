@@ -11,7 +11,8 @@ namespace UtilsModule {
         Attack,
         AttackCooldown,
         AttackRange,
-        AttackDistance
+        AttackDistance,
+        StunDuration
     }
 
     public class Stats {
@@ -90,6 +91,13 @@ namespace UtilsModule {
         public float DashCooldown {
             get {
                 var q = new Query(StatType.DashCooldown, baseStats.DashCooldown);
+                return StatCalculation(q);
+            }
+        }
+
+        public float StunDuration {
+            get {
+                var q = new Query(StatType.StunDuration, baseStats.StunDuration);
                 return StatCalculation(q);
             }
         }

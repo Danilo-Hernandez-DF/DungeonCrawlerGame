@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UtilsModule;
 
 namespace Game {
     public class EnemyAttackState : EnemyBaseSate {

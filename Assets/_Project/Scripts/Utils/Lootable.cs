@@ -5,10 +5,9 @@ using UnityEngine;
 namespace UtilsModule {
     public class Lootable : InventoryHolder, IInteractable {
         [SerializeField, Self] private InventoryGenrator inventoryGenrator;
-        [SerializeField] private float interactRange = 1f;
         [SerializeField] EventChannel lootUIChannel;
         public bool InRange() {
-            var colliders = Physics2D.OverlapCircleAll(transform.position, interactRange);
+            var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
             foreach(var collider in colliders) {
                 if(collider.CompareTag("Player")) {
                     return true;

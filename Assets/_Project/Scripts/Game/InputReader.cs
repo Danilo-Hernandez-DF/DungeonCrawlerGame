@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using UtilsModule;
 using UnityEditor;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Game {
     [CreateAssetMenu(fileName = "InputReader", menuName = "Utils/Input/InputReader")]
@@ -24,7 +26,11 @@ namespace Game {
         InputControls inputActions;
 
         public Vector3 Direction => inputActions.Player.Movement.ReadValue<Vector2>();
-        public Vector3 AimPosition => inputActions.Player.Aim.ReadValue<Vector2>();
+        public Vector2 AimPosition => CameraManager.Instance.camera.ScreenToWorldPoint(inputActions.Player.Aim.ReadValue<Vector2>());
+
+        string GetContolScheme(InputAction.CallbackContext context) {
+            return context.action.actionMap.controlSchemes.First(x => x.SupportsDevice(context.control.device)).name;
+        }
 
         void OnEnable() {
             if(inputActions == null) {
@@ -35,10 +41,8 @@ namespace Game {
             inputActions.Enable();
         }
 
-        public void OnAim(InputAction.CallbackContext context)
-        {
-            Vector2 scenePos = CameraManager.Instance.camera.ScreenToWorldPoint(context.ReadValue<Vector2>());
-            Aim.Invoke(scenePos, IsDeviceMouse(context));
+        public void OnAim(InputAction.CallbackContext context) {
+            Aim.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
         }
 
         public void OnArtifact(InputAction.CallbackContext context)
@@ -81,7 +85,7 @@ namespace Game {
         }
 
         public void OnInteract(InputAction.CallbackContext context) {
-            if(context.phase == InputActionPhase.Started) Interact.Invoke();
+            if(context.phase == InputActionPhase.Canceled) Interact.Invoke();
         }
 
         public void OnMovement(InputAction.CallbackContext context) {
@@ -92,7 +96,7 @@ namespace Game {
             if(context.phase == InputActionPhase.Started) Pause.Invoke();
         }
 
-        bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+        bool IsDeviceMouse(InputAction.CallbackContext context) => GetContolScheme(context) == "Keyboard-Mouse";
 
         public void OnRefreshMap(InputAction.CallbackContext context) {
             if(context.phase == InputActionPhase.Started) DebugRefresh.Invoke();

@@ -7,7 +7,9 @@ using UnityEngine;
 namespace UtilsModule {
     public class EquipmentManager : Singleton<EquipmentManager>, IEffector {
         List<AdditionalTagData> tagData;
+        List<AdditionalItemData> itemData;
         Dictionary<TagData, AdditionalTagData> dataFromTag;
+        Dictionary<ItemData, AdditionalItemData> dataFromItem;
         private ModifierEffect modifierEffect;
         private List<ModifierEffect> queuedEffects;
         private string id;
@@ -21,6 +23,16 @@ namespace UtilsModule {
                 foreach(var tag in data.tags) {
                     dataFromTag.Add(tag, data);
                 }
+            }
+
+            base.Awake();
+
+            itemData = Resources.LoadAll<AdditionalItemData>("AdditionalItemData").ToList();
+
+            dataFromItem = new Dictionary<ItemData, AdditionalItemData>();
+
+            foreach(var data in itemData) {
+                dataFromItem.Add(data.item, data);
             }
 
             base.Awake();
@@ -62,6 +74,13 @@ namespace UtilsModule {
         public void OnUnequip(Item item, Entity entity) {
             id = item.data.name;
             RemoveEffects(entity);
+        }
+
+        public void TriggerItemBehaviour(Inventory source, int indexSource, BehaviourType behaviourType, Entity entitySource = null) {
+            ItemBehaviour[] behaviours = dataFromItem[source.items[indexSource].data].behaviours;
+            foreach(var behaviour in behaviours) {
+                if(behaviour.behaviourType == behaviourType) behaviour.ExecuteBehaviour(source, indexSource, entitySource);
+            }
         }
 
         List<ModifierEffect> GetEffectsFromItem(Item item) {

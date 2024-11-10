@@ -5,7 +5,7 @@ namespace Game {
     public class Health : MonoBehaviour {
 
         [SerializeField] int maxHealth = 100;
-        [SerializeField] FloatEventChannel playerHealthChannel;
+        [SerializeField] FloatEventChannel healthChannel;
 
         int currentHealth;
 
@@ -19,9 +19,14 @@ namespace Game {
             PublishHealthPercentage();
         }
 
-        public void TakeDamage(int damage) { 
+        public bool TakeDamage(int damage) { 
             currentHealth -= damage;
+
+            if(currentHealth <= 0) currentHealth = 0;
+
             PublishHealthPercentage();
+
+            return currentHealth == 0;
         }
 
         public void Init(int health) {
@@ -31,8 +36,8 @@ namespace Game {
         }
 
         void PublishHealthPercentage() {
-            if(playerHealthChannel != null) {
-                playerHealthChannel.Invoke(currentHealth / (float)maxHealth);
+            if(healthChannel != null) {
+                healthChannel.Invoke(currentHealth / (float)maxHealth);
             }
         }
     }

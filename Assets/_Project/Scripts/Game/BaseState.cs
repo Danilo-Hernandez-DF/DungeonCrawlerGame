@@ -27,7 +27,7 @@ namespace Game {
 
         }
 
-        public virtual void OnExtit() {
+        public virtual void OnExit() {
 
         }
     }

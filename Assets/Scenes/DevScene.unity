@@ -910,7 +910,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000cb3369491300adef
+  m_ApplyToSortingLayers: 00000000cb3369491300adef33cef46f
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -970,6 +970,7 @@ GameObject:
   - component: {fileID: 622018814}
   - component: {fileID: 622018816}
   - component: {fileID: 622018815}
+  - component: {fileID: 622018818}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Player
@@ -1006,9 +1007,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStats: {fileID: 11400000, guid: eff3f4141cdcb114b9fd984d772a9b15, type: 2}
-  rb: {fileID: 622018815}
-  animator: {fileID: 622018814}
   health: {fileID: 622018817}
+  animator: {fileID: 622018814}
   vCam: {fileID: 1913633280}
   smoothTime: 0.2
 --- !u!212 &622018813
@@ -1049,9 +1049,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -273874925
-  m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingLayerID: 1878314547
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: -328371455, guid: 9655a9c65df01eb4685d49a2e001ade4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1159,7 +1159,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  playerHealthChannel: {fileID: 11400000, guid: 171481090803e2340badab80a706a49f, type: 2}
+  healthChannel: {fileID: 11400000, guid: 171481090803e2340badab80a706a49f, type: 2}
+--- !u!114 &622018818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622018809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6878361da4bf1c8409e5164e761fac17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: f7e453dc67fb33d46b8af87395a0989d, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 622018811}
+        m_TargetAssemblyTypeName: Game.PlayerController, Assembly-CSharp
+        m_MethodName: UpdateEquipment
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &710772502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,9 +1397,10 @@ GameObject:
   - component: {fileID: 1345131904}
   - component: {fileID: 1345131903}
   - component: {fileID: 1345131906}
+  - component: {fileID: 1345131907}
   m_Layer: 0
-  m_Name: Interactable
-  m_TagString: Untagged
+  m_Name: Lootable
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1390,7 +1419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryHolder: {fileID: 1345131904}
   lootTable: {fileID: 11400000, guid: f8df38553bf49ac4f93a12678597203b, type: 2}
-  rolls: 8
+  rolls: 10
 --- !u!114 &1345131904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,7 +1435,6 @@ MonoBehaviour:
   inventorySize: 12
   inventoryChannel: {fileID: 11400000, guid: aee78890e2549ca4eac0c399445d1bee, type: 2}
   inventoryGenrator: {fileID: 1345131903}
-  interactRange: 1
   lootUIChannel: {fileID: 11400000, guid: 331f92e68473c874db56d7e83cd863b7, type: 2}
 --- !u!4 &1345131905
 Transform:
@@ -1475,6 +1503,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1345131907
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345131902}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1376946179
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,7 +2114,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53563da133c0c1c40899216b74288af8, type: 2}
   - {fileID: 11400000, guid: 7fb961602ffae2945be1d5961748eaba, type: 2}
   - {fileID: 11400000, guid: 069bedb6c18270f4fb705492e2dbac75, type: 2}
-  - {fileID: 11400000, guid: 069bedb6c18270f4fb705492e2dbac75, type: 2}
+  - {fileID: 11400000, guid: 54e179ab20d8fc7449930943fb8a1cd5, type: 2}
   - {fileID: 11400000, guid: 22067218e0d5b6442815854a61d6702e, type: 2}
   inventoryChannel: {fileID: 11400000, guid: f7e453dc67fb33d46b8af87395a0989d, type: 2}
 --- !u!114 &1939728403
@@ -2339,10 +2412,6 @@ PrefabInstance:
     - target: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
       propertyPath: m_Name
       value: TestEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

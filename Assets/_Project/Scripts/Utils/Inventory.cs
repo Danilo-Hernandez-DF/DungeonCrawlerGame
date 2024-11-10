@@ -67,6 +67,12 @@ namespace UtilsModule {
             return count;
         }
 
+        public Item GetItem(int slot) {
+            if(items == null) PopulateInventory();
+            if(slot < 0 || slot >= items.Count) return null;
+            return items[slot];
+        }
+
         public virtual bool SetSlot(int slot, Item item, int count = 1) {
             items[slot] = item.Copy();
             items[slot].count = count;
@@ -138,6 +144,15 @@ namespace UtilsModule {
             }
 
             return false;
+        }
+
+        public bool RemoveAt(int index, int count = 1) {
+            if(items == null) return false;
+            if(items[index].count <= count) return false;
+
+            items[index].count -= count;
+            inventoryChannel?.Invoke(this);
+            return true;
         }
 
         public void ResetSlot(int index) {

@@ -15,13 +15,14 @@ GameObject:
   - component: {fileID: 930437915148375264}
   - component: {fileID: -1716840783558216847}
   - component: {fileID: 4616080999528939473}
+  - component: {fileID: 423722383209126571}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4452841504123923604
 Transform:
   m_ObjectHideFlags: 0
@@ -51,10 +52,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStats: {fileID: 11400000, guid: 82097f39efd5d6e468956a94d5da6601, type: 2}
+  health: {fileID: 0}
   agent: {fileID: 930437915148375264}
   playerDetector: {fileID: 8540144676955948400}
   animator: {fileID: 8930217586175598989}
   wanderRadius: 10
+  tookDamage: 0
 --- !u!114 &8540144676955948400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +74,6 @@ MonoBehaviour:
   detectionRadius: 5.5
   innerDetectionradius: 2.5
   detectionCooldown: 1
-  attackRange: 0.75
 --- !u!114 &642384067663306967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  playerHealthChannel: {fileID: 0}
+  healthChannel: {fileID: 0}
 --- !u!195 &930437915148375264
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -155,6 +157,33 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.013253599}
   serializedVersion: 2
   m_Radius: 0.16203347
+--- !u!50 &423722383209126571
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6356083494339734611}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &6896796262028298640
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MovingPlatform
   - Enemy
+  - Interactable
   layers:
   - Default
   - TransparentFX
@@ -48,4 +49,7 @@ TagManager:
     locked: 0
   - name: Entities
     uniqueID: 4021092371
+    locked: 0
+  - name: Player
+    uniqueID: 1878314547
     locked: 0

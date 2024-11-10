@@ -19,24 +19,24 @@ namespace Game {
         float timeBetweenAttacks => Stats.AttackCooldown;
         int attackDamage => Stats.Attack;
 
-        StateMachine stateMachine;
+        public GameObject lastDamageSource { get; protected set; }
 
-        Health health;
+        StateMachine stateMachine;
 
         CountdownTimer attackTimer;
 
         public Vector3 MovementDirection => agent.velocity.normalized;
 
+        public bool tookDamage = false;
+
         void OnValidate() => this.ValidateRefs();
 
         new protected void Awake() {
             base.Awake();
-            health = GetComponent<Health>();
             agent.speed = Stats.Speed;
         }
 
         void Start() {
-            health.Init(Stats.Health);
             playerDetector.Init(Stats.AttackRange);
 
             attackTimer = new CountdownTimer(timeBetweenAttacks);
@@ -45,11 +45,16 @@ namespace Game {
             var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
             var chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
             var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
+            var damagedState = new EnemyDamagedState(this, animator, agent, playerDetector.Player);
 
             At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer(MovementDirection)));
             At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer(MovementDirection)));
             At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
             At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
+            At(damagedState, wanderState, new FuncPredicate(() => !tookDamage));
+
+            Any(damagedState, new FuncPredicate(() => tookDamage));
+            
 
             stateMachine.SetState(wanderState);
         }
@@ -59,23 +64,41 @@ namespace Game {
 
         new void Update() {
             base.Update();
-            stateMachine.Update();
-            attackTimer.Tick(Time.deltaTime);
+
+            if(!GameManager.Instance.Paused) {
+                if(agent.isStopped) {
+                    agent.isStopped = false;
+                    animator.speed = 1f;
+                }
+                stateMachine.Update();
+                attackTimer.Tick(Time.deltaTime);
+            } else {
+                agent.isStopped = true;
+                animator.speed = 0f;
+            }
         }
 
         void FixedUpdate() {
             stateMachine.FixedUpdate();
+            facingDirection = MovementDirection;
+        }
+
+        protected override void OnDeath() {
+            base.OnDeath();
+            Destroy(gameObject);
+        }
+
+
+        protected override void OnDamage(int damage, GameObject dmgSource = null) {
+            lastDamageSource = dmgSource != null ? dmgSource : lastDamageSource;
+            tookDamage = true;
         }
 
         public void Attack() {
             if(attackTimer.IsRunning) return;
 
             attackTimer.Start();
-            playerDetector.PlayerComponent.TakeDamage(attackDamage);
-        }
-
-        public void TakeDamage(int damage) {
-            health.TakeDamage(damage - Stats.Defense);
+            playerDetector.PlayerComponent.TakeDamage(attackDamage, dmgSource: gameObject);
         }
     }
 }

@@ -3,6 +3,6 @@ namespace StateMachines {
         void OnEnter();
         void Update();
         void FixedUpdate();
-        void OnExtit();
+        void OnExit();
     }
 }

@@ -20,7 +20,5 @@ MonoBehaviour:
   inherentTags:
   - data: {fileID: 11400000, guid: 1938c5ee7542fff40bc3148a5d6a093e, type: 2}
     value: 3
-  - data: {fileID: 11400000, guid: 95192a79b9f393745a9f639645b8560c, type: 2}
-    value: 200
   - data: {fileID: 11400000, guid: 4d0b1ee4633e4b7489b5f8f9c89cfaa4, type: 2}
     value: 2100

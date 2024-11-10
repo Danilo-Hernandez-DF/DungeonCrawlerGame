@@ -8,15 +8,13 @@ using StateMachines;
 namespace Game {
     public class PlayerController : Entity {
         [Header("References")]
-        [SerializeField, Self] Rigidbody2D rb;
         [SerializeField, Self] Animator animator;
-        [SerializeField, Self] Health health;
         [SerializeField, Anywhere] CinemachineVirtualCamera vCam;
         InputReader input => GameManager.Instance.input;
 
         [Header("Settings")]
         [SerializeField] float smoothTime = .2f;
-        float moveSpeed => Stats.Speed * 50f;
+        float moveSpeed => Stats.Speed;
 
         float dashCooldown => Stats.DashCooldown;
         float dashForce => Stats.DashForce;
@@ -28,7 +26,6 @@ namespace Game {
         int attackDamage => Stats.Attack;
 
         const float ZeroF = 0f;
-        Vector2 aimDirection = Vector2.zero;
 
         Transform mainCam;
 
@@ -44,6 +41,8 @@ namespace Game {
         CountdownTimer dashTimer;
         CountdownTimer dashCooldownTimer;
         CountdownTimer attackTimer;
+
+        private Inventory equipmentInv;
 
         // Animator Parameters
         // readonly int Speed = Animator.StringToHash("Speed");
@@ -88,6 +87,10 @@ namespace Game {
                 && !attackTimer.IsRunning;
         }
 
+        public void UpdateEquipment(Inventory inventory) {
+            equipmentInv = inventory;
+        }
+
         private void SetupTimers() {
             dashTimer = new CountdownTimer(dashDuration);
             dashCooldownTimer = new CountdownTimer(dashCooldown);
@@ -118,11 +121,17 @@ namespace Game {
 
         new void Update() {
             base.Update();
-            movement = new Vector2(input.Direction.x, input.Direction.y);
-            stateMachine.Update();
-            
-            HandleTimers();
-            UpdateAnimator();
+
+            if(!GameManager.Instance.Paused) {
+                if(GetComponent<Animator>().speed == 0f) {
+                    GetComponent<Animator>().speed = 1f;
+                }
+                movement = new Vector2(input.Direction.x, input.Direction.y);
+                stateMachine.Update();
+                HandleTimers();
+            } else {
+                GetComponent<Animator>().speed = 0f;
+            }
         }
 
         void FixedUpdate() {
@@ -131,45 +140,35 @@ namespace Game {
 
         void OnEnable() {
             input.Dash += OnDash;
-            input.Attack += OnAttack;
             input.Aim += OnAim;
+            input.Attack += OnAttack;
         }
 
         void OnDisable() {
             input.Dash -= OnDash;
-            input.Attack -= OnAttack;
             input.Aim -= OnAim;
+            input.Attack -= OnAttack;
         }
 
         void OnAim(Vector2 position, bool isDeviceMouse) { 
             if(isDeviceMouse) {
-                aimDirection = (position - (Vector2)transform.position).normalized;
+                var pos = CameraManager.Instance.camera.ScreenToWorldPoint(position);
+                facingDirection = (pos - transform.position).normalized;
+            } else {
+                facingDirection = position.normalized;
+                Debug.Log("using controller");
             }
         }
 
         void OnAttack() {
             if(GameManager.Instance.Paused) return;
-            if(!attackTimer.IsRunning) {
-                attackTimer.Start();
-            }
+            var weapon = equipmentInv.GetItem(5);
+            if(weapon?.IsEmpty ?? true) return;
+            if(!attackTimer.IsRunning) attackTimer.Start();
         }
 
         public void Attack() {
-            Vector2 attackPos = transform.position + ((Vector3)aimDirection * attackDistance);
-            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange);
-            Debug.DrawLine(attackPos, attackPos + (aimDirection * attackRange), Color.red, 1f);
-
-            foreach(var hit in hits) {
-                Debug.Log(hit.name);
-
-                if(hit.CompareTag("Enemy")) {
-                    hit.GetComponent<Enemy>().TakeDamage(attackDamage);
-                }
-            }
-        }
-
-        private void UpdateAnimator() {
-            // animator.SetFloat(Speed, currentSpeed);
+            EquipmentManager.Instance.TriggerItemBehaviour(equipmentInv, 5, BehaviourType.OnUse, this);
         }
 
         void HandleTimers() {
@@ -193,16 +192,12 @@ namespace Game {
         }
 
         private void HandleHorizontalMovement(Vector2 movement) {
-            Vector2 velocity = movement * moveSpeed * dashVelocity * Time.fixedDeltaTime;
+            Vector2 velocity = dashVelocity * moveSpeed * movement;
             rb.velocity = new Vector2(velocity.x, velocity.y);
         }
 
         void SmoothSpeed(float value) {
             currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
-        }
-
-        public void TakeDamage(int damage) {
-            health.TakeDamage(damage - Stats.Defense);
         }
     }
 }

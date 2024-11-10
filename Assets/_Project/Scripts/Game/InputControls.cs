@@ -67,7 +67,7 @@ namespace Game
                 },
                 {
                     ""name"": ""Aim"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""977c669d-b094-4ed5-92c6-1e1019127518"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -263,7 +263,7 @@ namespace Game
                 {
                     ""name"": """",
                     ""id"": ""0bd71e0d-2614-4998-ab93-5e3db5b70058"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller-Generic;Switch Pro Controller"",
@@ -351,7 +351,7 @@ namespace Game
                 {
                     ""name"": """",
                     ""id"": ""9bed9a46-1397-47d4-9e2a-952bf6987251"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller-Generic;Switch Pro Controller"",

@@ -12,5 +12,6 @@ namespace UtilsModule {
         public float AttackCooldown = 0.6f;
         public float AttackRange = 1f;
         public float AttackDistance = 0.75f;
+        public float StunDuration = 0.5f;
     }
 }

@@ -32,7 +32,7 @@ namespace StateMachines {
             var previousState = current.State;
             var nextState = nodes[state.GetType()].State;
 
-            previousState?.OnExtit();
+            previousState?.OnExit();
             nextState?.OnEnter();
 
             current = nodes[state.GetType()];
