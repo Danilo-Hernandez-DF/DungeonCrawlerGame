@@ -5,7 +5,7 @@ namespace Game {
     public abstract class Collectible : Entity, IEffector {
         public void Visit<T> (T visitable) where T : Component, IVisitable {
             if(visitable is Entity entity) {
-                ApplyEffect(entity);
+                if(entity.gameObject.CompareTag("Player")) ApplyEffect(entity);
             }
         }
 

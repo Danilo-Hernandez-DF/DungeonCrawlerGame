@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace UtilsModule {
@@ -14,7 +13,7 @@ namespace UtilsModule {
 
             if(items.Count == 0 && itemDatas.Count == 0) return GameManager.Instance.EmptyItem.GetItem();
             if(items.Count == 0 && itemDatas.Count == 1) return itemDatas[0].data.GetItem();
-            if(items.Count == 1 && itemDatas.Count == 0) return items[0].item;
+            if(items.Count == 1 && itemDatas.Count == 0) return items[0].item.GetItem();
 
             foreach(WeightedItem item in items) {
                 if(item.weight < lowerLimit) continue;
@@ -39,10 +38,9 @@ namespace UtilsModule {
                 added += item.weight;
                 if(rand < added) {
                     int randCount = seeded? SeededRandom.GetRange(item.countMin, item.countMax+1): Random.Range(item.countMin, item.countMax+1);
-                    var toReturn = item.item.Copy();
-                    toReturn.count = randCount;
+                    var toReturn = item.item.GetItem(randCount);
 
-                    foreach(OverrideTag tag in item.overrideTags) {
+                    foreach(OverrideTag tag in item.additionalTags) {
                         if(tag.tag.data is TagData<int>) {
                             var tagInt = new Tag<int>((TagData<int>)tag.tag.data, tag.tag.inherent, Mathf.FloorToInt(tag.value));
                             toReturn.AddTag(tagInt);
@@ -80,11 +78,11 @@ namespace UtilsModule {
 
     [System.Serializable]
     public struct WeightedItem {
-        public Item item;
+        public ItemData item;
         public int countMin;
         public int countMax;
         public int weight;
-        public List<OverrideTag> overrideTags;
+        public List<OverrideTag> additionalTags;
     }
 
     [System.Serializable]

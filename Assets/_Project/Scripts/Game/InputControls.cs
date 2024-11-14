@@ -340,7 +340,7 @@ namespace Game
                 {
                     ""name"": """",
                     ""id"": ""aa94ad32-1514-4c54-86db-0c2fe6ff3d31"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard-Mouse"",

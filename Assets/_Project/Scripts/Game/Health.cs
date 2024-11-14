@@ -29,6 +29,12 @@ namespace Game {
             return currentHealth == 0;
         }
 
+        public void Heal(int amount) { 
+            currentHealth += amount;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+            PublishHealthPercentage();
+        }
+
         public void Init(int health) {
             maxHealth = health;
             currentHealth = health;
