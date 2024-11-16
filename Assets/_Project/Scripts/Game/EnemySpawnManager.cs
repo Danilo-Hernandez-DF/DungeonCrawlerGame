@@ -1,0 +1,65 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UtilsModule;
+
+namespace Game {
+    public class EnemySpawnManager : EntitySpawnManager {
+        [SerializeField] int targetEnemies;
+        [SerializeField] EntityData[] enemyData;
+        [SerializeField] int enemiesPerWave;
+        [SerializeField] int maxEnemies;
+        [SerializeField] float spawnInterval;
+        int spawnedEnemies = 0;
+        bool exhausted = false;
+        List<GameObject> enemies;
+        EntitySpawner<Enemy> spawner;
+        CountdownTimer spawnTimer;
+
+
+        protected override void Awake() {
+            base.Awake();
+
+            spawner = new EntitySpawner<Enemy>(new EntityFactory<Enemy>(enemyData), spawnPointStrategy);
+            enemies = new List<GameObject>();
+
+            spawnTimer = new CountdownTimer(spawnInterval);
+            spawnTimer.OnTimerStop += () => {
+                if(enemies.Count + enemiesPerWave <= maxEnemies) {
+                    if(enemiesPerWave + spawnedEnemies <= targetEnemies) {
+                        for(int i = 0; i < enemiesPerWave; i++) {
+                            Spawn();
+                        }
+                    } else if(spawnedEnemies < targetEnemies) {
+                        for(int i = 0; i < targetEnemies - spawnedEnemies; i++) {
+                            Spawn();
+                        }
+
+                        spawnTimer.Stop();
+                        exhausted = true;
+                        Debug.Log("All Enemies Spawned, spawner exhausted");
+                        return;
+                    }
+                }
+                spawnTimer.Start();
+            };
+        }
+
+        void Start() => spawnTimer.Start();
+
+        void Update() {
+            for(int i = 0; i < enemies.Count; i++) {
+                if(enemies[i] == null) {
+                    enemies.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            spawnTimer.Tick(Time.deltaTime);        
+        }
+
+        public override void Spawn() {
+            spawnedEnemies++;
+            enemies.Add(spawner.Spawn().gameObject);
+        }
+    }
+}

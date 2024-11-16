@@ -12,25 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d81b1a0b103668643a53c725692fcf7a, type: 3}
   m_Name: TestLootTable
   m_EditorClassIdentifier: 
-  items:
-  - item: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
-    countMin: 1
-    countMax: 2
-    weight: 30
-    additionalTags:
-    - tag:
-        inherent: 0
-        data: {fileID: 11400000, guid: ae86d307db912384ba343e9c416cfb2c, type: 2}
-      value: 0
+  items: []
   itemDatas:
-  - data: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
-    countMin: 1
-    countMax: 6
-    weight: 10
-  - data: {fileID: 11400000, guid: b2992e78ae1d08f458438345ee5ddcac, type: 2}
-    countMin: 1
-    countMax: 1
-    weight: 10
   - data: {fileID: 11400000, guid: f28ea8931da617d43be08d6c23322c9d, type: 2}
     countMin: 1
     countMax: 1

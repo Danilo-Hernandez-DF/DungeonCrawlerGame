@@ -3,7 +3,7 @@ using UtilsModule;
 
 namespace Game {
     public class CollectibleSpawnManager : EntitySpawnManager {
-        [SerializeField] CollectibleData[] collectibleData;
+        [SerializeField] EntityData[] collectibleData;
         [SerializeField] float spawnInterval = 1f;
 
         EntitySpawner<Collectible> spawner;
