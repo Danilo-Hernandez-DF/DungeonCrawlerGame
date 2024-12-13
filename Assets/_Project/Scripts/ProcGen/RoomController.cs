@@ -1,43 +1,140 @@
 using System.Collections.Generic;
-using KBCore.Refs;
+using Game;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UtilsModule;
 
 namespace ProcGen {
-    public class RoomController :  ValidatedMonoBehaviour {
-        [SerializeField, Self] public BoxCollider2D col;
-        public List<Dir> exits;
-        private RoomTrigger triggerCondition;
-        [SerializeField] bool completed;
+    public class RoomController :  MonoBehaviour { 
+        [Header("Room Settings")]
+        [SerializeField] RoomType type;
+        public Vector2Int roomSize;
+        [SerializeField] List<RoomBehaviour> roomBehaviours;
+        [SerializeField] List<EnemySpawnManager> enemySpawners;
+        [SerializeField] List<Lootable> lootables;
+        [SerializeField] List<Collectible> collectibles;
+        public List<RoomEntrance> doorPositions;
+        [Header("Tilemap Settings")]
+        [SerializeField] Tilemap[] tilemaps;
+        [SerializeField] bool replaceTiles = true;
+        List<TilemapBuilder> tilemapBuilders = new List<TilemapBuilder>();
+        List<Door> doors;
+        BoxCollider2D col;
+        bool active = false;
 
-        // List of spawners
-        // List of spawned enemies
-
-        void InitRoom() {
-            if(completed) return;
-
-            //close doors
-            //spawn enemies
+        int EnemyCount {
+            get {
+                int count = 0;
+                foreach(EnemySpawnManager spawner in enemySpawners) {
+                    count += spawner.EnemyCount;
+                }
+                return count;
+            }
         }
 
-        void EndRoom() {
-            //spawn rewards
-            //open doors
-
-            completed = true;
+        bool SpawnersExhausted {
+            get {
+                foreach(EnemySpawnManager spawner in enemySpawners) {
+                    if(!spawner.exhausted) return false;
+                }
+                return true;
+            }
         }
 
-        void Update() {
-            // room end logic
+        void Awake() {
+            col = GetComponent<BoxCollider2D>();
+            doors = new List<Door>();
+        }
+
+        public void Init() {
+            foreach(RoomEntrance entrance in doorPositions) {
+                if(entrance.Active) {
+                    Instantiate(entrance.wallPrefab, entrance.transform.position, Quaternion.identity);
+                    continue;
+                }
+
+                doors.Add(Instantiate(entrance.doorPrefab, entrance.transform.position, Quaternion.identity)
+                    .GetComponent<Door>());
+            }
+
+            foreach(Tilemap tilemap in tilemaps)
+                tilemapBuilders.Add(new TilemapBuilder(tilemap, this));
+            
+            Vector2Int startPos =  new Vector2Int(-Mathf.FloorToInt(roomSize.x/2), -Mathf.FloorToInt(roomSize.y/2));
+
+            if(replaceTiles) {
+                foreach(TilemapBuilder builder in tilemapBuilders)
+                    builder.RemovePlaceholders(startPos, roomSize);
+            }
+
+            //CloseDoors();
+        }
+
+        public RoomEntrance GetNextEntrance(Dir direction, RoomEntrance currentEntrance = null) {
+            int startIndex = doorPositions.FindIndex(x => x == currentEntrance) >= 0 ? doorPositions.FindIndex(x => x == currentEntrance) : 0;
+            for(int i = startIndex; i < doorPositions.Count; i++) {
+                if(!doorPositions[i].Active) continue;
+                if(doorPositions[i].dir == direction) return doorPositions[i];
+            }
+
+            return null;
+        }
+
+        public void AddSpawner(EnemySpawnManager spawner) => enemySpawners.Add(spawner);
+        public void AddLoot(Lootable loot) => lootables.Add(loot);
+        public void AddCollectible(Collectible collectible) => collectibles.Add(collectible);
+
+        public void CloseDoors() => doors.ForEach(door => door.Close());
+        public void OpenDoors() => doors.ForEach(door => door.Open());
+
+        protected virtual void OnPlayerEnter() {
+            foreach(RoomBehaviour behaviour in roomBehaviours) {
+                behaviour.OnPlayerEnter(this);
+            }
+        }
+
+        protected virtual void OnPlayerExit() {
+            foreach(RoomBehaviour behaviour in roomBehaviours) {
+                behaviour.OnPlayerExit(this);
+            }
+        }
+
+        protected virtual void OnEnd() {
+            active = false;
+            foreach(RoomBehaviour behaviour in roomBehaviours) {
+                behaviour.OnEnd(this);
+            }
+        }
+
+        protected virtual void OnStart() {
+            active = true;
+            foreach(RoomBehaviour behaviour in roomBehaviours) {
+                behaviour.OnStart(this);
+            }
+
+            foreach(EnemySpawnManager spawner in enemySpawners) {
+                spawner.Activate();
+            }
+        }
+
+        protected virtual void Update() {
+            foreach(RoomBehaviour behaviour in roomBehaviours) {
+                behaviour.OnUpdate(this);
+            }
         }
 
         void OnTriggerEnter2D(Collider2D other) {
             if(!other.CompareTag("Player")) return;
 
-            if(triggerCondition == RoomTrigger.Enter) InitRoom();
+            OnPlayerEnter();
+            Invoke("OnStart", 0.7f);
+        }
+
+        void OnTriggerExit2D(Collider2D other) {
+            if(!other.CompareTag("Player")) return;
+
+            OnPlayerExit();
         }
     }
-
-    public enum RoomType {NoRoom, StartRoom, PlaceholderRoom, EmptyRoom, HostileRoom, TreasureRoom, ShopRoom, BossRoom}
-    public enum RoomTrigger {Enter}
 }

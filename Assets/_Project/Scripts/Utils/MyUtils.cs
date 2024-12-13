@@ -21,5 +21,5 @@ namespace UtilsModule {
 		}
 	}
 
-	public enum Dir {North, East, South, West}
+	public enum Dir {Up, Down, Left, Right}
 }

@@ -15,6 +15,9 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: 88a1eb1c8d92e8543a1a6e83ba31d13a, type: 2}
   destroyable: 0
-  replaceTiles:
-  - {fileID: 11400000, guid: bf37cd8d6ca34e94eb0f574318f189c7, type: 2}
-  isPlaceholder: 1
+  replaceTiles: {fileID: 11400000, guid: b5d8a0e40d9bda545806222f6ba2fb8e, type: 2}
+  tileType: 2
+  placementWeight: 1
+  poiTilemaps: {fileID: 0}
+  poiSize: {x: 0, y: 0}
+  prefabs: {fileID: 0}

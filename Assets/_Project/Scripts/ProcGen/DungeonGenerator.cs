@@ -1,308 +1,153 @@
 using System.Collections.Generic;
-using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 using UtilsModule;
 
 namespace ProcGen {
-    public class DungeonGenerator : MonoBehaviour {
-        private RoomType[,] rooms;
-        int size;
-        List<Vector2Int> deadEnds;
-        List<Vector2Int> populatedRooms;
+    public class DungeonGenerator : MonoBehaviour { 
+        [SerializeField] int targetRooms = 10;
+        [SerializeField] List<RoomRequirements> specialRoomRequirements;
+        [SerializeField] GameObject startRoomPrefab;
+        [SerializeField] GOLootTable roomPrefabs;
+        [SerializeField] GOLootTable bossRooms;
+        [SerializeField] LayerMask roomMask;
+        Dictionary<Vector2, RoomController> roomPositions;
+        List<RoomController> rooms;
+        List<RoomEntrance> entrances;
+        [SerializeField] int seed = 0;
 
-        [Header("Generation data")]
-        [SerializeField, Min(0)] int seed;
-        [SerializeField, Min(10)] int roomCount;
-        [SerializeField, Min(1)] int walkers;
-        [SerializeField] Vector2Int roomSize = new(16, 9);
-
-        [Header("Input")]
-
-        [Header("Tilemap References")]
-        [SerializeField] Tilemap groundTilemap;
-        [SerializeField] Tilemap objectTilemap;
-        [SerializeField] Tilemap mapTilemap;
-
-        [Header("Prefab Tilemap references")]
-        [SerializeField] Tilemap roomExits;
-        [SerializeField] Tilemap roomMapOutlines;
-        [SerializeField] Tilemap roomMapExits;
-
-        [Header("Prefab Room pools")]
-        [SerializeField] Transform[] bossTilemaps;
-        [SerializeField] Transform[] treasureTilemaps;
-        [SerializeField] Transform[] shopTilemaps;
-        [SerializeField] Transform[] hostileTilemaps;
-        [SerializeField] Transform[] emptyRoomTilemaps;
-        [SerializeField] Transform[] startTilemaps;
-
-        [Header("Prefab references")]
-        [SerializeField] GameObject roomManager;
-
-        int radius => roomCount/2*walkers;
-
-        WeightedTable<Transform> bossRooms;
-        WeightedTable<Transform> treasureRooms;
-        WeightedTable<Transform> shopRooms;
-        WeightedTable<Transform> hostileRooms;
-        WeightedTable<Transform> emptyRooms;
-        WeightedTable<Transform> startRooms;
-
-        Dictionary<RoomType, WeightedTable<Transform>> roomPools;
-
-        void Awake() {
-            if(seed > 0) SeededRandom.SetSeed(seed);
-            else SeededRandom.SetSeed(Random.Range(1, int.MaxValue));
-            seed = SeededRandom.GetSeed();
-
-            bossRooms = new WeightedTable<Transform>(bossTilemaps.ToList(), new List<int>());
-            treasureRooms = new WeightedTable<Transform>(treasureTilemaps.ToList(), new List<int>());
-            shopRooms = new WeightedTable<Transform>(shopTilemaps.ToList(), new List<int>());
-            hostileRooms = new WeightedTable<Transform>(hostileTilemaps.ToList(), new List<int>());
-            emptyRooms = new WeightedTable<Transform>(emptyRoomTilemaps.ToList(), new List<int>());
-            startRooms = new WeightedTable<Transform>(startTilemaps.ToList(), new List<int>());
-
-            roomPools = new() {{RoomType.BossRoom, bossRooms}, {RoomType.TreasureRoom, treasureRooms}, {RoomType.ShopRoom, shopRooms},
-            {RoomType.HostileRoom, hostileRooms}, {RoomType.EmptyRoom, emptyRooms}, {RoomType.StartRoom, startRooms}};
-        }
-
-        void Start() {
-            //temp
-            Generate();
-        }
+        void Start() => Generate();
 
         public void Generate() {
-            PopulateGrid();
-            PopulateTilemaps();
+            SeededRandom.SetSeed(seed > 0 ? seed : Random.Range(0, int.MaxValue));
+            seed = SeededRandom.GetSeed();
+
+            rooms = new List<RoomController>();
+            roomPositions = new Dictionary<Vector2, RoomController>();
+            entrances = new List<RoomEntrance>();
+
+            int requiredRooms = 0;
+            foreach(var requirement in specialRoomRequirements) {
+                requiredRooms += requirement.count;
+            }
+
+            targetRooms = targetRooms >= requiredRooms + 4 ? targetRooms : requiredRooms + 4;
+            Vector2 roomPos = Vector2.zero;
+
+            var startRoom = Instantiate(startRoomPrefab, roomPos, Quaternion.identity);
+            AddRoom(startRoom.GetComponent<RoomController>());
+
+            for(int i = 0; i < targetRooms - requiredRooms; i++) {
+                TryGenerateRoom(roomPrefabs, roomPos, entrances);
+            }
+
+            foreach(RoomRequirements requirement in specialRoomRequirements) {
+                for(int i = 0; i < requirement.count; i++) {
+                    TryGenerateRoom(requirement.roomPrefabs, roomPos, entrances, false);
+                }
+            }
+
+            //Generate boss rooms
+
+            foreach(RoomController room in rooms) {
+                room.Init();
+            }
+
             NavMeshManager.BakeNavMesh();
         }
 
-        void PopulateTilemaps() {
-            TilemapBuilder builder = new(groundTilemap);
-            TilemapBuilder objectBuilder = new(objectTilemap);
-            TilemapBuilder outlineBuilder = new(mapTilemap);
+        bool TryGenerateRoom(GOLootTable roomPrefabs, Vector2 roomPos, List<RoomEntrance> entrances, bool addEntrances = true) {
+            bool validEntrance = false;
 
-            foreach(Vector2Int roomPos in populatedRooms) {
-                var roomType = rooms[roomPos.x, roomPos.y];
-                Transform toCopy;
+            RoomController room = null;
+            RoomEntrance targetEntrance = null;
 
-                toCopy = roomPools[roomType].GetWeightedT(seeded: true);
-
-                Vector2Int startTile = Vector2Int.Scale(roomPos - new Vector2Int(radius, radius), roomSize) - 
-                new Vector2Int(Mathf.RoundToInt(roomSize.x/2), Mathf.RoundToInt(roomSize.y/2));
-
-                Vector3 roomWorldPos = groundTilemap.CellToWorld((Vector3Int)startTile) + new Vector3(roomSize.x/2, (roomSize.y/2) + 0.5f);
-                RoomController room = Instantiate(roomManager, roomWorldPos, Quaternion.identity).GetComponent<RoomController>();
-                room.col.size = roomSize - Vector2.one; 
-                
-                builder.CopyAndRemovePlaceholders(toCopy.GetChild(0).GetComponent<Tilemap>(), new(-8, -4), startTile, roomSize);
-                objectBuilder.CopyAndRemovePlaceholders(toCopy.GetChild(1).GetComponent<Tilemap>(), new(-8, -4), startTile, roomSize);
-                outlineBuilder.CopyFrom(roomMapOutlines, new(-8, -4), startTile, roomSize);
-
-                List<Dir> exits = GetNeighbours(roomPos);
-                room.exits = exits;
-
-                if(exits.Contains(Dir.North)) {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-6, 2), startTile + new Vector2Int(6, 8), new(4, 1));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-6, 2), startTile + new Vector2Int(6, 8), new(4, 1));
-                } else {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-6, 3), startTile + new Vector2Int(6, 8), new(4, 1));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-6, 3), startTile + new Vector2Int(6, 8), new(4, 1));
-                }
-
-                if(exits.Contains(Dir.South)) {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-6, -3), startTile + new Vector2Int(6, 0), new(4, 1));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-6, -3), startTile + new Vector2Int(6, 0), new(4, 1));
-                } else {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-6, -2), startTile + new Vector2Int(6, 0), new(4, 1));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-6, -2), startTile + new Vector2Int(6, 0), new(4, 1));
-                }
-
-                if(exits.Contains(Dir.East)) {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-2, -1), startTile + new Vector2Int(15, 3), new(1, 3));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-2, -1), startTile + new Vector2Int(15, 3), new(1, 3));
-                } else {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-1, -1), startTile + new Vector2Int(15, 3), new(1, 3));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-1, -1), startTile + new Vector2Int(15, 3), new(1, 3));
-                }
-
-                if(exits.Contains(Dir.West)) {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-8, -1), startTile + new Vector2Int(0, 3), new(1, 3));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-8, -1), startTile + new Vector2Int(0, 3), new(1, 3));
-                } else {
-                    builder.CopyAndRemovePlaceholders(roomExits, new(-7, -1), startTile + new Vector2Int(0, 3), new(1, 3));
-                    outlineBuilder.CopyFrom(roomMapExits, new(-7, -1), startTile + new Vector2Int(0, 3), new(1, 3));
-                }
-            }
-
-            objectTilemap.RefreshAllTiles();
-            groundTilemap.RefreshAllTiles();
-            mapTilemap.RefreshAllTiles();
-        }
-
-        void PopulateGrid() {
-            populatedRooms = new();
-            deadEnds = new();
-            size = (radius*2) + 1;
-            rooms = new RoomType[size,size];
-
-            rooms[radius, radius] = RoomType.StartRoom;
-            populatedRooms.Add(new(radius, radius));
-
-            for(int i = 0; i < walkers; i++) {
-                RandomWalker(new(radius,radius), roomCount);
-            }
-
-            SelectDeadEnds();
-
-            foreach(Vector2Int deadEnd in deadEnds) {
-                if(rooms[deadEnd.x, deadEnd.y] == RoomType.StartRoom) continue;
-
-                if(deadEnd.x != 0) if(rooms[deadEnd.x-1, deadEnd.y] == RoomType.StartRoom) continue;
-                if(deadEnd.x != size-1) if(rooms[deadEnd.x+1, deadEnd.y] == RoomType.StartRoom) continue;
-                if(deadEnd.y != 0) if(rooms[deadEnd.x, deadEnd.y-1] == RoomType.StartRoom) continue;
-                if(deadEnd.y != size-1) if(rooms[deadEnd.x, deadEnd.y+1] == RoomType.StartRoom) continue;
-
-                rooms[deadEnd.x, deadEnd.y] = RoomType.BossRoom;
-                break;
-            }
-
-            int rand;
+            var invalidEntrances = new List<RoomEntrance>();
+            RoomEntrance entrance = null;
+            bool noEntrances = false;
 
             do {
-                rand = SeededRandom.GetRange(0, deadEnds.Count);
-            } while(rooms[deadEnds[rand].x, deadEnds[rand].y] != RoomType.PlaceholderRoom);
+                entrance = entrances[SeededRandom.GetRange(0, entrances.Count)];
+                var invalidRooms = new List<RoomController>();
+                bool roomsRemaining = true;
+                targetEntrance = null;
 
-            rooms[deadEnds[rand].x, deadEnds[rand].y] = RoomType.ShopRoom; 
-
-            do {
-                rand = SeededRandom.GetRange(0, deadEnds.Count);
-            } while(rooms[deadEnds[rand].x, deadEnds[rand].y] != RoomType.PlaceholderRoom);
-
-            rooms[deadEnds[rand].x, deadEnds[rand].y] = RoomType.TreasureRoom; 
-
-            for(int x = 0; x < size; x++) {
-                for(int y = 0; y < size; y++) {
-                    if(rooms[x,y] == RoomType.PlaceholderRoom) {
-                        rand = SeededRandom.GetRange(0, 10);
-                        if(rand == 0) rooms[x,y] = RoomType.EmptyRoom;
-                        else rooms[x,y] = RoomType.HostileRoom;
-                    }
-                }
-            }
-        }
-
-        void SelectDeadEnds() {
-            foreach(Vector2Int roomPos in populatedRooms) {
-                if(IsDeadEnd(roomPos)) deadEnds.Add(roomPos);
-            }
-
-            if(deadEnds.Count < 4) {
-                AddDeadEnds(4-deadEnds.Count);
-            }
-        }
-
-        bool IsDeadEnd(Vector2Int pos) {
-            return GetNeighbours(pos).Count == 1;
-        }
-
-        List<Dir> GetNeighbours(Vector2Int pos) {
-            List<Dir> neighbours = new List<Dir>();
-            if(pos.x != 0) if(rooms[pos.x-1, pos.y] != RoomType.NoRoom) neighbours.Add(Dir.West);
-            if(pos.x != size-1) if(rooms[pos.x+1, pos.y] != RoomType.NoRoom) neighbours.Add(Dir.East);
-            if(pos.y != 0) if(rooms[pos.x, pos.y-1] != RoomType.NoRoom) neighbours.Add(Dir.South);
-            if(pos.y != size-1) if(rooms[pos.x, pos.y+1] != RoomType.NoRoom) neighbours.Add(Dir.North);
-
-            return neighbours;
-        }
-
-        void AddDeadEnds(int count) {
-            int added = 0;
-
-            var tempPopulated = new List<Vector2Int>(populatedRooms);
-
-            foreach(Vector2Int roomPos in tempPopulated) {
-                if(deadEnds.Contains(roomPos)) continue;
-                if(rooms[roomPos.x, roomPos.y] == RoomType.StartRoom) continue;
-
-                if(roomPos.x != 0) if(!deadEnds.Contains(new(roomPos.x-1, roomPos.y)) && IsDeadEnd(new(roomPos.x-1, roomPos.y))) {
-                    PopulateRoom(roomPos.x-1, roomPos.y);
-                    deadEnds.Add(new(roomPos.x-1, roomPos.y));
-                    added++;
-                    //Debug.Log("Room Added");
-                }
-
-                if(roomPos.x != size-1) if(!deadEnds.Contains(new(roomPos.x+1, roomPos.y)) && IsDeadEnd(new(roomPos.x+1, roomPos.y))) {
-                    PopulateRoom(roomPos.x+1, roomPos.y);
-                    deadEnds.Add(new(roomPos.x+1, roomPos.y));
-                    added++;
-                    //Debug.Log("Room Added");
-                }
-
-                if(roomPos.y != 0) if(!deadEnds.Contains(new(roomPos.x, roomPos.y-1)) && IsDeadEnd(new(roomPos.x, roomPos.y-1))) {
-                    PopulateRoom(roomPos.x, roomPos.y-1);
-                    deadEnds.Add(new(roomPos.x, roomPos.y-1));
-                    added++;
-                    //Debug.Log("Room Added");
-                }
-
-                if(roomPos.y != size-1) if(!deadEnds.Contains(new(roomPos.x, roomPos.y+1)) && IsDeadEnd(new(roomPos.x, roomPos.y+1))) {
-                    PopulateRoom(roomPos.x, roomPos.y+1);
-                    deadEnds.Add(new(roomPos.x, roomPos.y+1));
-                    added++;
-                    //Debug.Log("Room Added");
-                }
-
-                if(added >= count) break;
-            }
-        }
-
-        void RandomWalker(Vector2Int startPos, int steps) {
-            Vector2Int currentPos = startPos;
-            Vector2Int lastPos = startPos;
-            Vector2Int dir;
-
-            for(int i = 0; i < steps; i++) {
-                if(SeededRandom.GetRange(0, 2) == 0) {
-                    dir = SeededRandom.GetRange(0, 2) == 0? new(0, 1):  new(0, -1);
-                } else {
-                    dir = SeededRandom.GetRange(0, 2) == 0? new(1, 0):  new(-1, 0);
-                }
-
-                bool success = true;
+                if(invalidEntrances.Contains(entrance)) continue;
 
                 do {
-                    currentPos += dir;
+                    room = roomPrefabs.GetWeightedItem(seeded: true).GetComponent<RoomController>();
+                    if(invalidRooms.Contains(room)) continue;
+                        
+                    do {
+                        targetEntrance = room.GetNextEntrance(entrance.dir.GetOpposite(), targetEntrance);
+                        if(targetEntrance == null) {
+                            Debug.LogError("No next entrance");
+                            break;
+                        }
+                        roomPos = new Vector2(entrance.pos.x - targetEntrance.pos.x, entrance.pos.y - targetEntrance.pos.y);
+                        if(Physics2D.OverlapBox(roomPos, room.roomSize - (Vector2.one/10), 0, roomMask) == null) validEntrance = true;
+                        else {
+                            Debug.Log("Overlapping with existing room");
+                            break;
+                        }
+                    } while(!validEntrance);
 
-                    if(currentPos.x >= size || currentPos.x < 0 || currentPos.y >= size || currentPos.y < 0) {
-                        i--;
-                        currentPos = lastPos;
-                        success = false;
-                        break;
+                    if(!validEntrance) {
+                        if(!invalidRooms.Contains(room)) invalidRooms.Add(room);
+                        if(invalidRooms.Count == roomPrefabs.GetList().Count) roomsRemaining = false;
                     }
-                } while(rooms[currentPos.x, currentPos.y] != RoomType.NoRoom);
+                } while(roomsRemaining && !validEntrance);
 
-                if(success) {
-                    lastPos = currentPos;
-                } else continue;
+                if(!validEntrance) {
+                    if(!invalidEntrances.Contains(entrance)) invalidEntrances.Add(entrance);
+                    if(invalidEntrances.Count == entrances.Count) noEntrances = true;
+                }
+            } while(!validEntrance && !noEntrances);
 
-                PopulateRoom(currentPos.x, currentPos.y);
+            if(noEntrances) {
+                Debug.LogError("No more entrances to connect to");
+                return false;
+            }
+
+            var newRoom = Instantiate(room.gameObject, roomPos, Quaternion.identity).GetComponent<RoomController>();
+            targetEntrance = newRoom.GetNextEntrance(entrance.dir.GetOpposite());
+            targetEntrance.DeActivate();
+
+            foreach(RoomEntrance otherEntrance in newRoom.doorPositions) {
+                var foundEntrances = otherEntrance.GetOverlappingEntrances();
+                if(foundEntrances.Count > 0) {
+                    otherEntrance.DeActivate();
+                    if(entrances.Contains(otherEntrance)) entrances.Remove(otherEntrance);
+                }
+
+                foreach(RoomEntrance foundEntrance in foundEntrances) {
+                    foundEntrance.DeActivate();
+                    if(entrances.Contains(foundEntrance)) entrances.Remove(foundEntrance);
+                }
+            }
+
+            AddRoom(newRoom, addEntrances);
+            return true;
+        }
+
+        void AddRoom(RoomController room, bool addEntrances = true) {
+            roomPositions.Add(room.transform.position, room);
+            rooms.Add(room);
+
+            if(addEntrances) {
+                foreach(RoomEntrance entrance in room.doorPositions) {
+                    if(!entrance.Active) continue;
+                    entrances.Add(entrance);
+                }
             }
         }
+    }
 
-        void PopulateRoom(int x, int y) {
-            rooms[x, y] = RoomType.PlaceholderRoom;
-            populatedRooms.Add(new(x, y));
-        }
-
-        void Refresh() {
-            NavMeshManager.Instance.ClearData();
-            groundTilemap.ClearAllTiles();
-            mapTilemap.ClearAllTiles();
-
-            MyUtils.ClearLogConsole();
-            Generate();
-        }
+    [System.Serializable]
+    public class RoomRequirements {
+        public GOLootTable roomPrefabs;
+        public RoomType type;
+        public int count;
     }
 }

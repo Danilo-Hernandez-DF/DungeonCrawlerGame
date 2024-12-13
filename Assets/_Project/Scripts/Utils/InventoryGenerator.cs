@@ -6,7 +6,7 @@ namespace UtilsModule {
     [RequireComponent(typeof(IInventoryHolder))]
     public class InventoryGenrator : ValidatedMonoBehaviour {
         [SerializeField, Self] InventoryHolder inventoryHolder;
-        [SerializeField] LootTable lootTable;
+        [SerializeField] LootTable<Item> lootTable;
         [SerializeField] int rolls = 2;
         public Inventory inventory => inventoryHolder.heldInventory;
 
@@ -28,7 +28,7 @@ namespace UtilsModule {
             }
         }
 
-        public void Init(LootTable lootTable, int rolls) {
+        public void Init(LootTable<Item> lootTable, int rolls) {
             this.lootTable = lootTable;
             this.rolls = rolls;
         }

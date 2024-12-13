@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryHolder: {fileID: 1147412483401445751}
-  lootTable: {fileID: 11400000, guid: f8df38553bf49ac4f93a12678597203b, type: 2}
+  lootTable: {fileID: 11400000, guid: ad0a43bc70e9f734cb0394afb1eefed6, type: 2}
   rolls: 10
 --- !u!212 &4499921466147522123
 SpriteRenderer:
@@ -107,7 +107,7 @@ SpriteRenderer:
   m_SortingLayerID: -273874925
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5cb5d09da18909442a9ff8d16b5b179d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

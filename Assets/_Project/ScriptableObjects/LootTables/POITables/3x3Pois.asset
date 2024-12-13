@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bcf657095d75f744a06f3c3fb1ac2ac, type: 3}
+  m_Name: 3x3Pois
+  m_EditorClassIdentifier: 
+  weight: 0
+  items:
+  - item: {fileID: 3713418458269773092, guid: ac255500b676cfa4cb63b8200daee35a, type: 3}
+    weight: 10
+  - item: {fileID: 3713418458269773092, guid: 549187236db666b4db543190d75d0d60, type: 3}
+    weight: 10
+  secondaryTables: []
