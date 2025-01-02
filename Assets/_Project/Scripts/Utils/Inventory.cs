@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Game;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UtilsModule {
+    [Serializable]
     public class Inventory {
         public List<Item> items;
         protected InventoryEventChannel inventoryChannel;
@@ -73,7 +76,7 @@ namespace UtilsModule {
             return items[slot];
         }
 
-        public virtual bool SetSlot(int slot, Item item, int count = 1) {
+        public virtual bool SetSlot(int slot, Item item, int count = 1, bool force = false) {
             items[slot] = item.Copy();
             items[slot].count = count;
 

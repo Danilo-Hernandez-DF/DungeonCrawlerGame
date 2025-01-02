@@ -1,26 +1,33 @@
 using System.Collections.Generic;
-using Game;
+using System.Linq;
 using UnityEngine;
 
 namespace UtilsModule {
     public class LootingInventoryUI : UIBase {
         [SerializeField] InventoryUI playerInventory;
         [SerializeField] InventoryUI otherInventory;
-        [SerializeField] ItemEventChannel itemDisplayChannel;
 
-        public override void Open() {
-            if(GameManager.Instance.openUI != null) return;
-            OpenChildrenEvent?.Invoke();
-            startUI = playerInventory.StartUI;
-            base.Open();
+        protected override void Awake() {
+            base.Awake();
 
-            itemDisplayChannel?.Invoke(null);
+            children = new List<UIBase> {
+                playerInventory,
+                otherInventory
+            };
+            
+            foreach(UIBase child in children) {
+                child.SetParent(this);
+            }
         }
 
-        public override void Close() {
-            if(GameManager.Instance.openUI != handledUI) return;
+        protected override void OnOpen() {
+            foreach(InventoryUI child in children) {
+                //child.Refresh();
+            }
+        }
 
-            if(!InventorySlotUI.heldItem?.IsEmpty ?? false) {
+        protected override void OnClose() {
+            if(!InventorySlotUI.HeldItemEmpty) {
                 if(playerInventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
                     otherInventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 } else {
@@ -29,10 +36,6 @@ namespace UtilsModule {
                 
                 InventorySlotUI.heldItem = null;
             }
-
-            CloseChildrenEvent?.Invoke();
-
-            base.Close();
         }
     }
 }

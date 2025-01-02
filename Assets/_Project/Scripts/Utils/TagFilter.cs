@@ -1,9 +1,10 @@
 using UnityEngine;
 
-namespace UtilsModule {
+namespace UtilsModule
+{
     [CreateAssetMenu(fileName = "New Slot Filter", menuName = "SlotFilter/TagFilter")]
     public class TagFilter : SlotFilter {
-       [SerializeField] FloatTagData tag;
+        [SerializeField] TagData tag;
         [SerializeField] ComparisonType comparisonType;
 
         public override bool Evaluate(Item item) {

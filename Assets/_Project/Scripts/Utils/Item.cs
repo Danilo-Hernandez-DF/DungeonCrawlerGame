@@ -17,23 +17,22 @@ namespace UtilsModule {
             
             tags ??= new List<Tag>();
             foreach(var tag in data.inherentTags) {
-                if(tag.data is TagData<int>) {
-                    tags.Add(((TagData<int>)tag.data).GetTag(Mathf.FloorToInt(tag.value), true));
+                if(tag.data.type == TagData.TagType.Int) {
+                    tags.Add(tag.data.GetTag(tag.value, true));
                     continue;
                 }
 
-                if(tag.data is TagData<float>) {
-                    tags.Add(((TagData<float>)tag.data).GetTag(tag.value, true));
+                if(tag.data.type == TagData.TagType.Float) {
+                    tags.Add(tag.data.GetTag(tag.value, true));
                     continue;
                 }
 
-                if(tag.data is TagData<EquipmentSlot>) {
-                    var tValue = (EquipmentSlot)Mathf.FloorToInt(tag.value);
-                    tags.Add(((TagData<EquipmentSlot>)tag.data).GetTag(tValue, true));
+                if(tag.data.type == TagData.TagType.Equipment) {
+                    tags.Add(tag.data.GetTag(tag.value, true));
                     continue;
                 }
 
-                tags.Add(tag.data.GetTag(true));
+                tags.Add(tag.data.GetTag(0, true));
             }
             this.tags = tags;
         }
@@ -62,7 +61,7 @@ namespace UtilsModule {
             if(!tags.Contains(tag)) tags.Add(tag);
         }
 
-        public void AddTag<T>(Tag<T> tag, T value) {
+        public void AddTag<T>(T tag, float value) where T : Tag {
             if(!tags.Contains(tag)) tags.Add(tag.SetValue(value));
         }
 
@@ -72,11 +71,11 @@ namespace UtilsModule {
             if(!foundTag.inherent) tags.Remove(foundTag);
         }
 
-        public T GetTagValue<T>(TagData tag) {
+        public float GetTagValue<T>(TagData tag) where T : Tag {
             if(!HasTag(tag)) return default;
             Tag foundTag = tags.Find(x => x.data == tag);
-            if(foundTag.GetType() != typeof(Tag<T>)) return default;
-            return ((Tag<T>)foundTag).GetValue();
+            if(foundTag.GetType() != typeof(T)) return default;
+            return (float)((T)foundTag).GetValue();
         }
 
         public Item Copy() { 

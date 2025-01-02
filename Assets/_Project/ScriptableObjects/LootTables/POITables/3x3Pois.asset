@@ -16,6 +16,4 @@ MonoBehaviour:
   items:
   - item: {fileID: 3713418458269773092, guid: ac255500b676cfa4cb63b8200daee35a, type: 3}
     weight: 10
-  - item: {fileID: 3713418458269773092, guid: 549187236db666b4db543190d75d0d60, type: 3}
-    weight: 10
   secondaryTables: []

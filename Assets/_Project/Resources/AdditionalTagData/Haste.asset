@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Haste
   m_EditorClassIdentifier: 
   tags:
-  - {fileID: 11400000, guid: 95192a79b9f393745a9f639645b8560c, type: 2}
+  - {fileID: 11400000, guid: 30831e8da3d2296479f34a8902788118, type: 2}
   effects:
   - operatorType: 1
     type: 1
     value: 0
     duration: 0
+  additionalEffects: []
+  statusEffects: []

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using KBCore.Refs;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,9 +8,9 @@ namespace Game {
     [RequireComponent(typeof(PlayerDetector))]
     public class Enemy : Entity {
         [Header("Behaviour Settings")]
-        [SerializeField, Self] NavMeshAgent agent;
-        [SerializeField, Self] PlayerDetector playerDetector;
-        [SerializeField, Child] Animator animator;
+        [SerializeField] NavMeshAgent agent;
+        [SerializeField] PlayerDetector playerDetector;
+        [SerializeField] Animator animator;
         [SerializeField] float wanderRadius = 10f;
 
         float timeBetweenAttacks => Stats.AttackCooldown;
@@ -27,33 +24,25 @@ namespace Game {
 
         public Vector3 MovementDirection => agent.velocity.normalized;
 
-        public bool tookDamage = false;
-
-        void OnValidate() => this.ValidateRefs();
-
-        new protected void Awake() {
-            base.Awake();
-            agent.speed = Stats.Speed;
-        }
+        public bool wasStunned = false;
 
         void Start() {
-            playerDetector.Init(Stats.AttackRange);
-
             attackTimer = new CountdownTimer(timeBetweenAttacks);
+            attackTimer.OnTimerStop += () => attackTimer.Reset(timeBetweenAttacks);
             stateMachine = new StateMachine();
 
             var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
             var chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
             var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
-            var damagedState = new EnemyDamagedState(this, animator, agent, playerDetector.Player);
+            var stunnedState = new EnemyStunnedState(this, animator, agent, playerDetector.Player);
 
             At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer(MovementDirection)));
             At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer(MovementDirection)));
             At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
             At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
-            At(damagedState, wanderState, new FuncPredicate(() => !tookDamage));
+            At(stunnedState, wanderState, new FuncPredicate(() => !wasStunned));
 
-            Any(damagedState, new FuncPredicate(() => tookDamage));
+            Any(stunnedState, new FuncPredicate(() => wasStunned));
             
 
             stateMachine.SetState(wanderState);
@@ -65,8 +54,11 @@ namespace Game {
         new void Update() {
             base.Update();
 
+            agent.speed = Stats.Speed;
+            playerDetector.Init(Stats.AttackRange);
+
             if(!GameManager.Instance.Paused) {
-                if(agent.isStopped) {
+                if(agent.isActiveAndEnabled && agent.isStopped == true) {
                     agent.isStopped = false;
                     animator.speed = 1f;
                 }
@@ -89,9 +81,9 @@ namespace Game {
         }
 
 
-        protected override void OnDamage(int damage, GameObject dmgSource = null) {
+        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             lastDamageSource = dmgSource != null ? dmgSource : lastDamageSource;
-            tookDamage = true;
+            if(!ignoreKnockback) wasStunned = true;
         }
 
         public void Attack() {

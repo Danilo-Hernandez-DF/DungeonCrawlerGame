@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1470861dae8472d499f64b879cee66b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f08b93b73740fb43a4bcd4f83fbdead, type: 3}
   m_Name: ElementalInfusion
   m_EditorClassIdentifier: 
-  name: Elemental Infusion
+  type: 2
   valPrefix: x
   valSuffix: 
+  name: Elemental Infusion

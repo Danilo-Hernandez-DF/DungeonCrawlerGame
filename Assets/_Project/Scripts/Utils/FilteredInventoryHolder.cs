@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace UtilsModule {
-    public class FilteredInventoryHolder : MonoBehaviour, IInventoryHolder {
-        [SerializeField] List<SlotFilter> slotFilters;
+    public class FilteredInventoryHolder : MonoBehaviour {
+        [SerializeField] protected List<SlotFilter> slotFilters;
         [SerializeField] protected InventoryEventChannel inventoryChannel;
         public int InventorySize => slotFilters.Count;
         public FilteredInventory inventory;
@@ -11,9 +11,7 @@ namespace UtilsModule {
 
         void Awake() {
             inventory = new FilteredInventory(slotFilters, inventoryChannel);
-            if(GetComponent<InventoryGenrator>() != null) {
-                GetComponent<InventoryGenrator>().Generate();
-            }
+            GetComponent<InventoryGenrator>()?.Generate();
             inventoryChannel?.Invoke(inventory);
         }
     }

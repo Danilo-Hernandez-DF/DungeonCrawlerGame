@@ -17,7 +17,7 @@ namespace Game {
         }
 
         public override void Update() {
-            agent.SetDestination(player.position);
+            if(agent.isActiveAndEnabled) agent.SetDestination(player.position);
         }
     }
 }

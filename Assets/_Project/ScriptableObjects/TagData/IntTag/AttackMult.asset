@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f247d5b0ec879443bb1141eb4cc79ef, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f08b93b73740fb43a4bcd4f83fbdead, type: 3}
   m_Name: AttackMult
   m_EditorClassIdentifier: 
+  type: 1
+  valPrefix: x
+  valSuffix: 
   name: Attack
-  valPrefix: +
-  valSuffix: '%'

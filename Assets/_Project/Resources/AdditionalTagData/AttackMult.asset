@@ -19,3 +19,5 @@ MonoBehaviour:
     type: 6
     value: 0
     duration: 0
+  additionalEffects: []
+  statusEffects: []

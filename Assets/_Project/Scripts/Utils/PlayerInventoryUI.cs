@@ -1,13 +1,43 @@
+using System.Collections.Generic;
+using System.Linq;
 using Game;
 using UnityEngine;
 
 namespace UtilsModule {
-    public class PlayerInventoryUI : InventoryUI { 
+    public class PlayerInventoryUI: UIBase { 
+        [SerializeField] private InventoryUI inventory;
         [SerializeField] private InventoryUI equipmentUI;
 
-        protected override void Start() {
-            base.Start();
+        protected override void Awake() {
+            base.Awake();
             equipmentUI.targetEntity = PlayerDetector.GetPlayer().GetComponent<PlayerController>();
+
+            children = new List<UIBase> {
+                inventory,
+                equipmentUI
+            };
+
+            foreach(UIBase child in children) {
+                child.SetParent(this);
+            }
+        }
+
+        protected override void OnOpen() {
+            foreach(InventoryUI child in children) {
+                //child.Refresh();
+            }
+        }
+
+        protected override void OnClose() {
+            if(!InventorySlotUI.HeldItemEmpty) {
+                if(inventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
+                    equipmentUI.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+                } else {
+                    inventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+                }
+                
+                InventorySlotUI.heldItem = null;
+            }
         }
 
         protected new void OnEnable() {

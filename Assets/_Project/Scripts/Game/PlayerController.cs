@@ -1,20 +1,24 @@
-using KBCore.Refs;
 using UnityEngine;
 using UtilsModule;
 using Cinemachine;
 using System.Collections.Generic;
 using StateMachines;
+using Systems.Persistence;
 
 namespace Game {
-    public class PlayerController : Entity {
+    public class PlayerController : Entity, IBind<PlayerData> {
         [Header("References")]
-        [SerializeField, Self] Animator animator;
-        [SerializeField, Anywhere] CinemachineVirtualCamera vCam;
+        [SerializeField] Animator animator;
+        [SerializeField] CinemachineVirtualCamera vCam;
         InputReader input => GameManager.Instance.input;
 
         [Header("Settings")]
         [SerializeField] float smoothTime = .2f;
         float moveSpeed => Stats.Speed;
+
+        [Header("Binding Data")]
+        [SerializeField] PlayerData data;
+        [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 
         float dashCooldown => Stats.DashCooldown;
         float dashForce => Stats.DashForce;
@@ -46,6 +50,13 @@ namespace Game {
 
         // Animator Parameters
         // readonly int Speed = Animator.StringToHash("Speed");
+
+        public void Bind(PlayerData data) {
+            this.data = data;
+            this.data.Id = Id;
+            transform.position = data.position;
+            transform.rotation = data.rotation;
+        }
 
         new protected void Awake() {
             base.Awake();
@@ -120,6 +131,9 @@ namespace Game {
         }
 
         new void Update() {
+            data.position = transform.position;
+            data.rotation = transform.rotation;
+
             base.Update();
 
             if(!GameManager.Instance.Paused) {
@@ -168,7 +182,7 @@ namespace Game {
         }
 
         public void Attack() {
-            EquipmentManager.Instance.TriggerItemBehaviour(equipmentInv, 5, BehaviourType.OnUse, this);
+            AdditionalDataManager.Instance.TriggerItemBehaviour(equipmentInv, 5, BehaviourType.OnUse, this);
         }
 
         void HandleTimers() {

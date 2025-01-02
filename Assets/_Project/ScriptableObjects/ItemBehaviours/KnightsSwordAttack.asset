@@ -18,9 +18,3 @@ MonoBehaviour:
   damageAreaPrefab: {fileID: 7264073455762122431, guid: 2199cb67e80ca4f4e930368c33efc809, type: 3}
   attackArea: {x: 1.5, y: 2.5}
   attackOffset: 0.75
-  hitEffect:
-    operatorType: 0
-    type: 0
-    value: 0
-    duration: 0
-  ApplyEffect: 0

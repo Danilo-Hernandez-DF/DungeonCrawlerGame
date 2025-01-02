@@ -1,18 +1,17 @@
+using System.Linq;
+using Systems.Persistence;
 using UnityEngine;
 
 namespace UtilsModule {
-    public class InventoryHolder : MonoBehaviour, IInventoryHolder {
-        [SerializeField] int inventorySize = 10;
+    public class InventoryHolder : MonoBehaviour {
+        [SerializeField] protected int inventorySize = 10;
         [SerializeField] protected InventoryEventChannel inventoryChannel;
-        public Inventory inventory;
-        public int InventorySize => inventorySize;
-        public Inventory heldInventory => inventory;
+        protected Inventory inventory;
+        public Inventory inventory_ => inventory;
 
         void Awake() {
-            inventory = new Inventory(InventorySize, inventoryChannel);
-            if(GetComponent<InventoryGenrator>() != null) {
-                GetComponent<InventoryGenrator>().Generate();
-            }
+            inventory = new Inventory(inventorySize, inventoryChannel);
+            GetComponent<InventoryGenrator>()?.Generate();
             inventoryChannel?.Invoke(inventory);
         }
     }

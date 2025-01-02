@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UtilsModule {
-    [RequireComponent(typeof(Button))]
     public class InventorySlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler {
         public static Item heldItem;
+        public static bool HeldItemEmpty => heldItem?.IsEmpty ?? true;
 
         [Header("Visuals")]
         [SerializeField] Image image;
@@ -19,28 +19,29 @@ namespace UtilsModule {
 
         [Header("Events")]
         [SerializeField] ItemEventChannel itemDisplayChannel;
-        [SerializeField] IntEventChannel slotIndexChannel;
 
         [Header("Data")]
         [SerializeField] int index;
+        Animator anim;
         int indexOffset = 0;
         public int offsetIndex => index + indexOffset;
         private Item currentItem;
         bool selected;
         public bool IsSelected => selected;
-        CountdownTimer cooldownTimer;
+        InventoryUI parent;
 
-        public void OnPress() {
-            slotIndexChannel?.Invoke(index);
+        public void OnPress(int action = 0) {
+            if(!IsSelected) return;
+            anim.SetTrigger("Pressed");
+            parent.OnSlotPressed(offsetIndex, action);
         }
 
-        public void Init(int index, IntEventChannel slotIndexChannel) {
-            this.slotIndexChannel = slotIndexChannel;
-            this.index = index;
+        void Update() {
+            anim.SetBool("Selected", IsSelected);
+        }
 
-            cooldownTimer = new CountdownTimer(0);
-            cooldownTimer.OnTimerStart += () => GetComponent<Button>().interactable = false;
-            cooldownTimer.OnTimerStop += () => GetComponent<Button>().interactable = true;
+        public void Init(int index) {
+            this.index = index;
         }
 
         public void Refresh(int offset) {
@@ -52,13 +53,9 @@ namespace UtilsModule {
             DeactivateHeldItem();
         }
 
-        public void Cooldown(float time) {
-            cooldownTimer.Reset(time);
-            cooldownTimer.Start();
-        }
-
-        public void OnUpdate(Inventory inventory) {
-            currentItem = inventory.items[offsetIndex];
+        public void OnUpdate(InventoryUI inventoryUI) {
+            parent = inventoryUI;
+            currentItem = inventoryUI.TargetInventory.items[offsetIndex];
             if(currentItem.IsEmpty) {
                 image.sprite = null;
                 image.color = Color.clear;
@@ -75,7 +72,8 @@ namespace UtilsModule {
         }
 
         void Awake() {
-            GetComponent<Button>().onClick.AddListener(OnPress);
+            GameManager.Instance.input.UIInteract += OnPress;
+            anim = GetComponent<Animator>();
         }
 
         public void OnSelect(BaseEventData eventData) {

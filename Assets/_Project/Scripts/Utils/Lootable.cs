@@ -1,10 +1,9 @@
 using Game;
-using KBCore.Refs;
 using UnityEngine;
 
 namespace UtilsModule {
     public class Lootable : InventoryHolder, IInteractable {
-        [SerializeField, Self] private InventoryGenrator inventoryGenrator;
+        [SerializeField] private InventoryGenrator inventoryGenrator;
         [SerializeField] EventChannel lootUIChannel;
         public bool InRange() {
             var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
@@ -16,8 +15,6 @@ namespace UtilsModule {
 
             return false;
         }
-
-        void OnValidate() => this.ValidateRefs();
 
         public void OnInteract() {
             if(GameManager.Instance.Paused) return;

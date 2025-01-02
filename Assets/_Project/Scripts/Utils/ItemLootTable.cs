@@ -40,14 +40,14 @@ namespace UtilsModule {
                     var toReturn = wItem.item.GetItem(randCount);
 
                     foreach(OverrideTag tag in wItem.additionalTags) {
-                        if(tag.tag.data is TagData<int>) {
-                            var tagInt = new Tag<int>((TagData<int>)tag.tag.data, tag.tag.inherent, Mathf.FloorToInt(tag.value));
+                        if(tag.tag.data.type == TagData.TagType.Int || tag.tag.data.type == TagData.TagType.Equipment) {
+                            var tagInt = new Tag(tag.tag.data, tag.tag.inherent, Mathf.FloorToInt(tag.value));
                             toReturn.AddTag(tagInt);
                             continue;
                         }
 
-                        if(tag.tag.data is TagData<float>) {
-                            var tagFloat = new Tag<float>((TagData<float>)tag.tag.data, tag.tag.inherent, tag.value);
+                        if(tag.tag.data.type == TagData.TagType.Float) {
+                            var tagFloat = new Tag(tag.tag.data, tag.tag.inherent, tag.value);
                             toReturn.AddTag(tagFloat);
                             continue;
                         }

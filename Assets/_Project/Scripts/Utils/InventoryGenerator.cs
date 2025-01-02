@@ -1,18 +1,17 @@
-using KBCore.Refs;
-using Unity.Collections;
 using UnityEngine;
 
 namespace UtilsModule {
     [RequireComponent(typeof(IInventoryHolder))]
-    public class InventoryGenrator : ValidatedMonoBehaviour {
-        [SerializeField, Self] InventoryHolder inventoryHolder;
+    public class InventoryGenrator : MonoBehaviour {
+        [SerializeField] InventoryHolder inventoryHolder;
         [SerializeField] LootTable<Item> lootTable;
         [SerializeField] int rolls = 2;
-        public Inventory inventory => inventoryHolder.heldInventory;
+        [SerializeField] bool isSeeded = false;
+        private Inventory inventory => inventoryHolder.inventory_;
 
         public void Generate() {
             for(int i = 0; i < rolls; i++) {
-                var toAdd = lootTable.GetWeightedItem();
+                var toAdd = lootTable.GetWeightedItem(seeded: isSeeded);
                 inventory.SetAtRandom(toAdd, toAdd.count, true);
             }
 

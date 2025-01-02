@@ -6,5 +6,7 @@ namespace UtilsModule {
     public class AdditionalTagData : ScriptableObject {
         public TagData[] tags;
         public ModifierEffect[] effects;
+        public ModifierEffect[] additionalEffects;
+        public StatusEffectData[] statusEffects;
     }
 }

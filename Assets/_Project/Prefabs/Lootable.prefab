@@ -49,6 +49,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySize: 12
   inventoryChannel: {fileID: 11400000, guid: aee78890e2549ca4eac0c399445d1bee, type: 2}
+  <Id>k__BackingField:
+    Part1: 0
+    Part2: 0
+    Part3: 0
+    Part4: 0
   inventoryGenrator: {fileID: 2968686434369573278}
   lootUIChannel: {fileID: 11400000, guid: 331f92e68473c874db56d7e83cd863b7, type: 2}
 --- !u!114 &2968686434369573278
@@ -66,6 +71,7 @@ MonoBehaviour:
   inventoryHolder: {fileID: 1147412483401445751}
   lootTable: {fileID: 11400000, guid: ad0a43bc70e9f734cb0394afb1eefed6, type: 2}
   rolls: 10
+  isSeeded: 0
 --- !u!212 &4499921466147522123
 SpriteRenderer:
   m_ObjectHideFlags: 0

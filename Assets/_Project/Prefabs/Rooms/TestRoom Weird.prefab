@@ -1110,13 +1110,13 @@ Tilemap:
   - first: {x: -1, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 14
-      m_TileSpriteIndex: 14
+      m_TileIndex: 1
+      m_TileSpriteIndex: 6
       m_TileMatrixIndex: 0
       m_TileColorIndex: 1
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
-      m_AllTileFlags: 1
+      m_AllTileFlags: 1073741825
   - first: {x: 0, y: -1, z: 0}
     second:
       serializedVersion: 2
@@ -2281,8 +2281,8 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 4d291d995a55c9a48a7f23257ba77be8, type: 2}
   - m_RefCount: 4
     m_Data: {fileID: 11400000, guid: 29d81796ba8ebc14799baed687d60891, type: 2}
   - m_RefCount: 4
@@ -2307,7 +2307,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 098d799606efc334698fbf1c1cb4adfb, type: 2}
   - m_RefCount: 8
     m_Data: {fileID: 11400000, guid: 0a54cd2cad00d4a43982058247f43b7b, type: 2}
-  - m_RefCount: 173
+  - m_RefCount: 172
     m_Data: {fileID: 11400000, guid: b46e6cceed1549344bd1dffb3ba12f26, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
@@ -2322,8 +2322,8 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: -799436298, guid: d990b55b7d2e6de478ff0ea4ca802162, type: 3}
   - m_RefCount: 4
     m_Data: {fileID: 959934748, guid: 7b505071f2d5f74469d127d21333cc45, type: 3}
   - m_RefCount: 4
@@ -2338,7 +2338,7 @@ Tilemap:
     m_Data: {fileID: 1670217508, guid: 7b505071f2d5f74469d127d21333cc45, type: 3}
   - m_RefCount: 4
     m_Data: {fileID: -1692606846, guid: 7b505071f2d5f74469d127d21333cc45, type: 3}
-  - m_RefCount: 173
+  - m_RefCount: 172
     m_Data: {fileID: 219490635, guid: 7b505071f2d5f74469d127d21333cc45, type: 3}
   - m_RefCount: 5
     m_Data: {fileID: 1462390311, guid: 7b505071f2d5f74469d127d21333cc45, type: 3}
@@ -2607,6 +2607,14 @@ CompositeCollider2D:
         Y: 10937500
       - X: -82500000
         Y: 10937500
+    - - X: 0
+        Y: 0
+      - X: -10000000
+        Y: 0
+      - X: -10000000
+        Y: -10000000
+      - X: 0
+        Y: -10000000
     - - X: -42500000
         Y: -72187504
       - X: -62500000
@@ -2693,6 +2701,10 @@ CompositeCollider2D:
       - {x: -8.00003, y: 3}
       - {x: -9, y: 2.999971}
       - {x: -8.99997, y: 1.09375}
+    - - {x: -0.000029300001, y: -1}
+      - {x: -0.000029300001, y: 0}
+      - {x: -1, y: -0.000029300001}
+      - {x: -0.99997073, y: -1}
     - - {x: -4.250029, y: -8}
       - {x: -4.250029, y: -7.2187505}
       - {x: -6.25, y: -7.218721}

@@ -75,8 +75,8 @@ namespace UtilsModule {
             return count;
         }
 
-        public override bool SetSlot(int slot, Item item, int count = 1) {
-            if(!slotFilters[slot].Evaluate(item)) {
+        public override bool SetSlot(int slot, Item item, int count = 1, bool force = false) {
+            if(!force) if(!slotFilters[slot].Evaluate(item)) {
                 Debug.Log("Item not allowed");
                 return false;
             }

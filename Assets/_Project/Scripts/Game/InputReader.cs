@@ -12,6 +12,7 @@ namespace Game {
     public class InputReader : ScriptableObject, IPlayerActions, IDebugActions {
         public event UnityAction<Vector2> Move = delegate { };
         public event UnityAction<Vector2, bool> Aim = delegate { };
+        public event UnityAction<int> UIInteract = delegate { };
         public event UnityAction DebugRefresh = delegate { };
         public event UnityAction EnableMouseControlCursor = delegate { };
         public event UnityAction DisableMouseControlCursor = delegate { };
@@ -108,6 +109,10 @@ namespace Game {
         
         public void OnPageNavigation(InputAction.CallbackContext context) { 
             if(context.phase == InputActionPhase.Started) PageChangeCahnnel?.Invoke((int)context.ReadValue<float>());
+        }
+
+        public void OnUIInteract(InputAction.CallbackContext context) {
+            if(context.phase == InputActionPhase.Started) UIInteract.Invoke((int)context.ReadValue<float>());
         }
     }
 }

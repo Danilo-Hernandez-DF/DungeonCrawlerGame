@@ -20,6 +20,7 @@ MonoBehaviour:
     countMax: 1
     additionalTags:
     - tag:
+        value: 0
         inherent: 0
         data: {fileID: 11400000, guid: ae86d307db912384ba343e9c416cfb2c, type: 2}
       value: 0
@@ -29,6 +30,7 @@ MonoBehaviour:
     countMax: 3
     additionalTags:
     - tag:
+        value: 0
         inherent: 0
         data: {fileID: 11400000, guid: f3e83f5a01a73894ca10a454701edf7e, type: 2}
       value: 1.5

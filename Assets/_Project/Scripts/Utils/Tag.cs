@@ -1,48 +1,17 @@
 using System;
-using UnityEngine;
 
 namespace UtilsModule {
-    public class Tag<T> : Tag {
-        [SerializeField] private T value;
-
-        public Tag(TagData<T> data, bool inherent = false, T value = default) : base(data, inherent) {
-            this.value = value;
-        }
-
-        public T GetValue() {
-            return value;
-        }
-
-        public Tag SetValue(T value) {
-            this.value = value;
-            return this;
-        }
-
-        public override bool Matches(Tag tag) {
-            if(tag.data != data) return false;
-            if(inherent != tag.inherent) return false;
-            if(!GetValue().Equals(((Tag<T>)tag).GetValue())) return false;
-            
-            return true;
-        }
-
-        TagData<T> TData() {
-            return (TagData<T>)data;
-        }
-
-        public override string ToString() {
-            return data.name + $": {TData().valPrefix}{value}{TData().valSuffix}";
-        }
-    }
-
     [Serializable]
     public class Tag {
+        public TagData.TagType type => data.type;
+        public float value;
         public bool inherent;
         public TagData data;
 
-        public Tag(TagData data, bool inherent = false) { 
+        public Tag(TagData data, bool inherent = false, float value = 0) { 
             this.inherent = inherent;
             this.data = data;
+            this.value = value;
         }
 
         public virtual bool Matches(Tag tag) {
@@ -52,8 +21,28 @@ namespace UtilsModule {
             return true;
         }
 
+        public Tag SetValue(float value) {
+            this.value = value;
+            return this;
+        }
+
+        public virtual float GetValue() {
+            return value;
+        }
+
         public override string ToString() {
-            return data.name;
+            if(type == TagData.TagType.None) return data.name;
+            if(type == TagData.TagType.Equipment) return data.name + $": {(Equipment)value}";
+            return data.name + $": {data.valPrefix}{value}{data.valSuffix}";
+        }
+
+        public enum Equipment {
+            Weapon, // 0
+            Chest, // 1
+            Legs, // 2
+            Head, // 3
+            Charm, // 4
+            Pendant // 5
         }
     }
 }

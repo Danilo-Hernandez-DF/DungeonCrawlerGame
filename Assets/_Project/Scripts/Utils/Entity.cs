@@ -34,12 +34,12 @@ namespace UtilsModule {
             Debug.Log($"{name} has reached 0 Hp");
         }
 
-        protected virtual void OnDamage(int damage, GameObject dmgSource = null) {
+        protected virtual void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
             Debug.Log($"{name} took {damage} damage");
         } 
 
-        public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null) {
+        public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null, bool ignoreKnockback = false) {
             if(health == null) return;
 
             bool isDead;

@@ -13,7 +13,7 @@ public static class Setup {
 
     [MenuItem("Tools/Setup/Import Favorite Assets")]
     public static void ImportMyFavoriteAssets() {
-        Assets.ImportAsset("DOTween HOTween v2.unitypackage", "Demigiant/Editor ExtensionsAnimation");
+        //Assets.ImportAsset("DOTween HOTween v2.unitypackage", "Demigiant/Editor ExtensionsAnimation");
     }
 
     static class Folders {

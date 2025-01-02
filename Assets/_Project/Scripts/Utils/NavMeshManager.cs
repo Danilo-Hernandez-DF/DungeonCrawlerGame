@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using KBCore.Refs;
 using NavMeshPlus.Components;
 using UnityEngine;
-using UtilsModule;
 
 namespace UtilsModule {
-    public class NavMeshManager : ValidatedSingleton<NavMeshManager> {
-        [SerializeField, Self] NavMeshSurface surface;
+    public class NavMeshManager : Singleton<NavMeshManager> {
+        [SerializeField] NavMeshSurface surface;
         bool initialized = false;
 
         int framesSinceLast = 4;
