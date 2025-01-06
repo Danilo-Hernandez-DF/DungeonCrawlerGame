@@ -7,7 +7,7 @@ namespace UtilsModule {
             }
         }
 
-        public void Reset() => Time = initialTime;
+        public void Reset() => Time = InitialTime;
         public float GetTime() => Time;
     }
 }

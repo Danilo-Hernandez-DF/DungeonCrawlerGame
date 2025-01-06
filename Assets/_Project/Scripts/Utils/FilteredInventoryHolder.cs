@@ -4,15 +4,15 @@ using UnityEngine;
 namespace UtilsModule {
     public class FilteredInventoryHolder : MonoBehaviour {
         [SerializeField] protected List<SlotFilter> slotFilters;
-        [SerializeField] protected InventoryEventChannel inventoryChannel;
+        [SerializeField] protected FilteredInventoryEventChannel inventoryChannel;
         public int InventorySize => slotFilters.Count;
-        public FilteredInventory inventory;
-        public Inventory heldInventory => inventory;
+        public FilteredInventory Inventory;
+        public Inventory HeldInventory => Inventory;
 
         void Awake() {
-            inventory = new FilteredInventory(slotFilters, inventoryChannel);
+            Inventory = new FilteredInventory(slotFilters, inventoryChannel);
             GetComponent<InventoryGenrator>()?.Generate();
-            inventoryChannel?.Invoke(inventory);
+            inventoryChannel?.Invoke(Inventory);
         }
     }
 }

@@ -17,7 +17,7 @@ MonoBehaviour:
   effects:
   - operatorType: 0
     type: 6
-    value: 6
+    value: 0
     duration: 0
   additionalEffects: []
   statusEffects: []

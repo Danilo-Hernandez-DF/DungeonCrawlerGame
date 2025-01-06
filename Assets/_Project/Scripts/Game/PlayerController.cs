@@ -1,35 +1,36 @@
 using UnityEngine;
 using UtilsModule;
-using Cinemachine;
 using System.Collections.Generic;
 using StateMachines;
 using Systems.Persistence;
+using Unity.Cinemachine;
 
 namespace Game {
     public class PlayerController : Entity, IBind<PlayerData> {
         [Header("References")]
         [SerializeField] Animator animator;
-        [SerializeField] CinemachineVirtualCamera vCam;
-        InputReader input => GameManager.Instance.input;
+        [SerializeField] CinemachineCamera vCam;
+        InputReader Input => GameManager.Instance.input;
 
         [Header("Settings")]
         [SerializeField] float smoothTime = .2f;
-        float moveSpeed => Stats.Speed;
+        float MoveSpeed => Stats.Speed;
 
         [Header("Binding Data")]
         [SerializeField] PlayerData data;
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 
-        float dashCooldown => Stats.DashCooldown;
-        float dashForce => Stats.DashForce;
-        float dashDuration => Stats.DashDuration;
+        float DashCooldown => Stats.DashCooldown;
+        float DashForce => Stats.DashForce;
+        float DashDuration => Stats.DashDuration;
 
-        float atatckCooldown => Stats.AttackCooldown;
-        float attackRange => Stats.AttackRange;
-        float attackDistance => Stats.AttackDistance;
-        int attackDamage => Stats.Attack;
+        float AttackCooldown => Stats.AttackCooldown;
+        float AttackRange => Stats.AttackRange;
+        float AttackDistance => Stats.AttackDistance;
+        int AttackDamage => Stats.Attack;
 
         const float ZeroF = 0f;
+        private int attackStep = 0;
 
         Transform mainCam;
 
@@ -46,7 +47,7 @@ namespace Game {
         CountdownTimer dashCooldownTimer;
         CountdownTimer attackTimer;
 
-        private Inventory equipmentInv;
+        private FilteredInventory equipmentInv;
 
         // Animator Parameters
         // readonly int Speed = Animator.StringToHash("Speed");
@@ -65,8 +66,8 @@ namespace Game {
             vCam.LookAt = transform;
             vCam.OnTargetObjectWarped(transform, transform.position - vCam.transform.position - Vector3.forward);
 
-            rb.freezeRotation = true;
-            rb.gravityScale = 0f;
+            Rb.freezeRotation = true;
+            Rb.gravityScale = 0f;
 
             health.Init(Stats.Health);
 
@@ -98,22 +99,25 @@ namespace Game {
                 && !attackTimer.IsRunning;
         }
 
-        public void UpdateEquipment(Inventory inventory) {
+        public void UpdateEquipment(FilteredInventory inventory) {
             equipmentInv = inventory;
+            attackStep = 0;
         }
 
         private void SetupTimers() {
-            dashTimer = new CountdownTimer(dashDuration);
-            dashCooldownTimer = new CountdownTimer(dashCooldown);
+            dashTimer = new CountdownTimer(DashDuration);
 
-            dashTimer.OnTimerStart += () => dashVelocity = dashForce;
+            dashCooldownTimer = new CountdownTimer(DashCooldown);
+
+            dashTimer.OnTimerStart += () => dashVelocity = DashForce;
             dashTimer.OnTimerStop += () =>
             {
                 dashVelocity = 1f;
+                dashCooldownTimer.Reset(DashCooldown);
                 dashCooldownTimer.Start();
             };
 
-            attackTimer = new CountdownTimer(atatckCooldown);
+            attackTimer = new CountdownTimer(AttackCooldown);
 
             timers = new(3) { dashTimer, dashCooldownTimer, attackTimer };
         }
@@ -123,11 +127,15 @@ namespace Game {
 
         void OnDash(bool performed) {
             if(GameManager.Instance.Paused) return;
+            attackStep = 0;
             if(performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning) {
+                dashTimer.Reset(DashDuration);
                 dashTimer.Start();
             } else if(!performed && dashTimer.IsRunning) {
                 dashTimer.Stop();
             }
+
+            Debug.Log(Stats.ToString());
         }
 
         new void Update() {
@@ -140,7 +148,7 @@ namespace Game {
                 if(GetComponent<Animator>().speed == 0f) {
                     GetComponent<Animator>().speed = 1f;
                 }
-                movement = new Vector2(input.Direction.x, input.Direction.y);
+                movement = new Vector2(Input.Direction.x, Input.Direction.y);
                 stateMachine.Update();
                 HandleTimers();
             } else {
@@ -153,36 +161,41 @@ namespace Game {
         }
 
         void OnEnable() {
-            input.Dash += OnDash;
-            input.Aim += OnAim;
-            input.Attack += OnAttack;
+            Input.Dash += OnDash;
+            Input.Aim += OnAim;
+            Input.Attack += OnAttack;
         }
 
         void OnDisable() {
-            input.Dash -= OnDash;
-            input.Aim -= OnAim;
-            input.Attack -= OnAttack;
+            Input.Dash -= OnDash;
+            Input.Aim -= OnAim;
+            Input.Attack -= OnAttack;
         }
 
         void OnAim(Vector2 position, bool isDeviceMouse) { 
             if(isDeviceMouse) {
                 var pos = CameraManager.Instance.camera.ScreenToWorldPoint(position);
-                facingDirection = (pos - transform.position).normalized;
+                FacingDirection = (pos - transform.position).normalized;
             } else {
-                facingDirection = position.normalized;
-                Debug.Log("using controller");
+                FacingDirection = position.normalized;
+                //Debug.Log("using controller");
             }
         }
 
         void OnAttack() {
             if(GameManager.Instance.Paused) return;
-            var weapon = equipmentInv.GetItem(5);
+            Item weapon = equipmentInv.GetItem(equipmentInv.NextMatch(GameManager.Instance.ItemDatabase.GetEquipment(Tag.Equipment.Weapon)));
             if(weapon?.IsEmpty ?? true) return;
-            if(!attackTimer.IsRunning) attackTimer.Start();
+            if(!attackTimer.IsRunning) {
+                attackTimer.Reset(AttackCooldown);
+                attackTimer.Start();
+            }
         }
 
         public void Attack() {
-            AdditionalDataManager.Instance.TriggerItemBehaviour(equipmentInv, 5, BehaviourType.OnUse, this);
+            AdditionalDataManager.Instance.TriggerItemBehaviour(equipmentInv, 
+                equipmentInv.NextMatch(GameManager.Instance.ItemDatabase.GetEquipment(Tag.Equipment.Weapon)), BehaviourType.OnUse, this, attackStep);
+            if(++attackStep > 2) attackStep = 0;
         }
 
         void HandleTimers() {
@@ -193,7 +206,7 @@ namespace Game {
 
         public void HandleMovement() {
             if(GameManager.Instance.Paused) {
-                rb.velocity = Vector2.zero;
+                Rb.linearVelocity = Vector2.zero;
                 return;
             }
             if(movement.magnitude > ZeroF) {
@@ -201,13 +214,13 @@ namespace Game {
                 SmoothSpeed(movement.magnitude);
             } else {
                 SmoothSpeed(ZeroF);
-                rb.velocity = new Vector2(ZeroF, ZeroF);
+                Rb.linearVelocity = new Vector2(ZeroF, ZeroF);
             }
         }
 
         private void HandleHorizontalMovement(Vector2 movement) {
-            Vector2 velocity = dashVelocity * moveSpeed * movement;
-            rb.velocity = new Vector2(velocity.x, velocity.y);
+            Vector2 velocity = dashVelocity * MoveSpeed * movement;
+            Rb.linearVelocity = new Vector2(velocity.x, velocity.y);
         }
 
         void SmoothSpeed(float value) {

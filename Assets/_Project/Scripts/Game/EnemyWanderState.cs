@@ -19,7 +19,7 @@ namespace Game {
         }
 
         public override void OnEnter() {
-            Debug.Log("Wander");
+            //Debug.Log("Wander");
             //animator stuff
         }
 

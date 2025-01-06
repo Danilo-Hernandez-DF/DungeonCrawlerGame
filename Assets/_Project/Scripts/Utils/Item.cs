@@ -84,6 +84,10 @@ namespace UtilsModule {
             return copy;
         }
 
-        public bool IsEmpty => data == GameManager.Instance.EmptyItem;
+        public override string ToString() {
+            return $"{data.name} x{count}";
+        }
+
+        public bool IsEmpty => data == GameManager.Instance.emptyItem;
     }
 }

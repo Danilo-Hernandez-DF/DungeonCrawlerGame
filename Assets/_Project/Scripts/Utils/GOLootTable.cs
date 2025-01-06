@@ -11,7 +11,7 @@ namespace UtilsModule {
             var toReturn = new List<GameObject>();
 
             foreach(var item in items) {
-                toReturn.Add(item.item);
+                toReturn.Add(item.Item);
             }
 
             foreach(var table in secondaryTables) {
@@ -27,10 +27,10 @@ namespace UtilsModule {
             if(items?.Count == 0 && secondaryTables?.Count == 0) return default;
 
             foreach(WeightedGameObject wItem in items) {
-                if(wItem.weight < lowerLimit) continue;
-                if(wItem.weight > upperLimit) continue;
+                if(wItem.Weight < lowerLimit) continue;
+                if(wItem.Weight > upperLimit) continue;
 
-                sumWeights += wItem.weight;
+                sumWeights += wItem.Weight;
             }
 
             foreach(GOLootTable lootTable in secondaryTables) {
@@ -43,12 +43,12 @@ namespace UtilsModule {
             int rand = seeded? SeededRandom.GetRange(0, sumWeights): Random.Range(0, sumWeights);
             int added = 0;
             foreach(WeightedGameObject wItem in items) {
-                if(wItem.weight < lowerLimit) continue;
-                if(wItem.weight > upperLimit) continue;
+                if(wItem.Weight < lowerLimit) continue;
+                if(wItem.Weight > upperLimit) continue;
 
-                added += wItem.weight;
+                added += wItem.Weight;
                 if(rand < added) {
-                    return wItem.item;
+                    return wItem.Item;
                 }
             }
 

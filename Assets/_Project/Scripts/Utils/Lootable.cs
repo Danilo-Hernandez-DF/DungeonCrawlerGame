@@ -20,7 +20,7 @@ namespace UtilsModule {
             if(GameManager.Instance.Paused) return;
             if(!InRange()) return;
 
-            inventoryChannel?.Invoke(inventory);
+            inventoryChannel?.Invoke(Inventory);
             lootUIChannel?.Invoke(new Empty());
         }
 

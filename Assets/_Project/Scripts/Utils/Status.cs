@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace UtilsModule {
     public class Status {
-        public List<StatusEffect> effects = new List<StatusEffect>();
+        public List<StatusEffect> Effects = new List<StatusEffect>();
         private CountdownTimer timer;
-        public Entity entity;
+        public Entity Entity;
 
         public Status(Entity entity) { 
-            this.entity = entity;
+            this.Entity = entity;
 
             timer = new CountdownTimer(0.2f);
             timer.OnTimerStop += () => {
@@ -22,41 +22,41 @@ namespace UtilsModule {
         public void Update(float deltaTime) => timer.Tick(deltaTime);
 
         public void Add(StatusEffect effect) { 
-            effects.Add(effect);
-            effect.data.OnApply(entity);
+            Effects.Add(effect);
+            effect.Data.OnApply(Entity);
         }
 
         public void Tick() { 
             List<StatusEffect> toRemove = new List<StatusEffect>();
 
-            foreach(var effect in effects) {
-                if(effect.toRemove) {
+            foreach(var effect in Effects) {
+                if(effect.ToRemove) {
                     toRemove.Add(effect);
                     continue;
                 }
-                effect.OnTick(entity); 
+                effect.OnTick(Entity); 
             }
 
             foreach(var effect in toRemove) {
-                effects.Remove(effect);
+                Effects.Remove(effect);
             }
         }
     
         public void OnDamage(int damage) { 
-            foreach(var effect in effects) {
-                effect.data.OnDamage(entity, damage); 
+            foreach(var effect in Effects) {
+                effect.Data.OnDamage(Entity, damage); 
             }
         }
 
         public void OnHeal(int amount) { 
-            foreach(var effect in effects) {
-                effect.data.OnHeal(entity, amount); 
+            foreach(var effect in Effects) {
+                effect.Data.OnHeal(Entity, amount); 
             }
         }
 
         public void OnDeath() { 
-            foreach(var effect in effects) {
-                effect.data.OnDeath(entity); 
+            foreach(var effect in Effects) {
+                effect.Data.OnDeath(Entity); 
             }
         }
     }

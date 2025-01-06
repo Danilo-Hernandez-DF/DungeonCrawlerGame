@@ -6,11 +6,11 @@ namespace Game {
         public DashState(PlayerController player, Animator animator) : base(player, animator) { }
 
         public override void OnEnter() {
-            animator.CrossFade(DashHash, crossFadeDuration);
+            Animator.CrossFade(DashHash, CrossFadeDuration);
         }
 
         public override void FixedUpdate() {
-            player.HandleMovement();
+            Player.HandleMovement();
         }
     }
 }

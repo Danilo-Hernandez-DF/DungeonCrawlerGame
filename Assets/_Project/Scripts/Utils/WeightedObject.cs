@@ -1,6 +1,6 @@
 namespace UtilsModule {
     public class WeightedObject<T> {
-        public T item;
-        public int weight;
+        public T Item;
+        public int Weight;
     }
 } 

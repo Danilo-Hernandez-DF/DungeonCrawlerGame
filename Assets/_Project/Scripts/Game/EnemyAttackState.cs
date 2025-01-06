@@ -13,13 +13,13 @@ namespace Game {
         }
 
         public override void OnEnter() {
-            Debug.Log("Attack");
+            //Debug.Log("Attack");
             //animator stuff
         }
 
         public override void Update() {
             agent.SetDestination(player.position);
-            enemy.Attack();
+            Enemy.Attack();
         }
     }
 }

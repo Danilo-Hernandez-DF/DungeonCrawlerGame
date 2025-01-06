@@ -25,8 +25,6 @@ namespace UtilsModule {
                 }
             }
 
-            base.Awake();
-
             itemData = Resources.LoadAll<AdditionalItemData>("AdditionalItemData").ToList();
 
             dataFromItem = new Dictionary<ItemData, AdditionalItemData>();
@@ -38,8 +36,8 @@ namespace UtilsModule {
             base.Awake();
         }
 
-        public void ApplyEffect(Entity entity) {
-            StatModifier modifier = modifierEffect.operatorType switch {
+        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect) {
+            BasicStatModifier modifier = modifierEffect.operatorType switch {
                 OperatorType.Add => new BasicStatModifier(modifierEffect.type, v => v + modifierEffect.value, 0),
                 OperatorType.Multiply => new BasicStatModifier(modifierEffect.type, v => v, 0, modifierEffect.value),
                 _ => throw new ArgumentOutOfRangeException()
@@ -54,8 +52,8 @@ namespace UtilsModule {
 
         void ApplyQueuedEffects(Entity entity) {
             foreach(var effect in queuedEffects) {
-                modifierEffect = effect;
-                ApplyEffect(entity);
+                var modifierEffect = new ModifierEffect(effect);
+                ApplyEffect(entity, modifierEffect);
             }
         }
 
@@ -69,6 +67,8 @@ namespace UtilsModule {
             id = item.data.name;
             queuedEffects = GetEffectsFromItem(item);
             ApplyQueuedEffects(entity);
+
+            //foreach(ModifierEffect effect in queuedEffects) Debug.Log(effect.ToString());
         }
 
         public void OnUnequip(Item item, Entity entity) {
@@ -76,10 +76,10 @@ namespace UtilsModule {
             RemoveEffects(entity);
         }
 
-        public void TriggerItemBehaviour(Inventory source, int indexSource, BehaviourType behaviourType, Entity entitySource = null) {
+        public void TriggerItemBehaviour(Inventory source, int indexSource, BehaviourType behaviourType, Entity entitySource = null, int addData = 0) {
             ItemBehaviour[] behaviours = dataFromItem[source.items[indexSource].data].behaviours;
             foreach(var behaviour in behaviours) {
-                if(behaviour.behaviourType == behaviourType) behaviour.ExecuteBehaviour(source, indexSource, entitySource);
+                if(behaviour.behaviourType == behaviourType) behaviour.ExecuteBehaviour(source, indexSource, entitySource, addData);
             }
         }
 
@@ -89,11 +89,11 @@ namespace UtilsModule {
             foreach(var tag in item.tags) {
                 if(dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) {
                     foreach(var effect in data.effects) {
-                        var tempEffect = effect;
+                        var tempEffect = new ModifierEffect(effect);
 
-                        if(tag.type == TagData.TagType.Float) {
+                        if(tag.Type == TagData.TagType.Float) {
                             tempEffect.value = tag.GetValue();
-                        } else if(tag.type == TagData.TagType.Int) {
+                        } else if(tag.Type == TagData.TagType.Int) {
                             tempEffect.value = Mathf.FloorToInt(tag.GetValue());
                         }
 
@@ -111,11 +111,11 @@ namespace UtilsModule {
             foreach(var tag in item.tags) {
                 if(dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) {
                     foreach(var effect in data.additionalEffects) {
-                        var tempEffect = effect;
+                        var tempEffect = new ModifierEffect(effect);
 
-                        if(tag.type == TagData.TagType.Float) {
+                        if(tag.Type == TagData.TagType.Float) {
                             tempEffect.value = tag.GetValue();
-                        } else if(tag.type == TagData.TagType.Int) {
+                        } else if(tag.Type == TagData.TagType.Int) {
                             tempEffect.value = Mathf.FloorToInt(tag.GetValue());
                         }
 

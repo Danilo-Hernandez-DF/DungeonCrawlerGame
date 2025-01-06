@@ -1,13 +1,13 @@
 namespace UtilsModule {
     public class Query {
-        public readonly StatType statType;
-        public float value;
-        public float finalMultiplier;
+        public readonly StatType StatType;
+        public float Value;
+        public float FinalMultiplier;
 
         public Query(StatType statType, float value, float finalMultiplier = 100f) {
-            this.statType = statType;
-            this.value = value;
-            this.finalMultiplier = finalMultiplier;
+            this.StatType = statType;
+            this.Value = value;
+            this.FinalMultiplier = finalMultiplier;
         }
     }
 }

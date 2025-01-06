@@ -4,12 +4,12 @@ using UtilsModule;
 
 namespace Game {
     public class StatModifierCollectible : Collectible {
-        [SerializeField] ModifierEffect modifierEffect;
+        [SerializeField] ModifierEffect modEffect;
 
-        public override void ApplyEffect(Entity entity) {
-            StatModifier modifier = modifierEffect.operatorType switch {
-                OperatorType.Add => new BasicStatModifier(modifierEffect.type, v => v + modifierEffect.value, modifierEffect.duration),
-                OperatorType.Multiply => new BasicStatModifier(modifierEffect.type, v => v, modifierEffect.duration, modifierEffect.value),
+        public override void ApplyEffect(Entity entity, ModifierEffect modifierEffect) {
+            BasicStatModifier modifier = modEffect.operatorType switch {
+                OperatorType.Add => new BasicStatModifier(modEffect.type, v => v + modEffect.value, modEffect.duration),
+                OperatorType.Multiply => new BasicStatModifier(modEffect.type, v => v, modEffect.duration, modEffect.value),
                 _ => throw new ArgumentOutOfRangeException()
             };
 

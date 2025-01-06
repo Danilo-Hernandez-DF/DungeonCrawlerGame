@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace UtilsModule {
     public class BasicStatModifier : StatModifier {
@@ -13,9 +14,11 @@ namespace UtilsModule {
         }
 
         public override void Handle(object sender, Query query) {
-            if(query.statType == type) {
-                query.value = operation.Invoke(query.value);
-                query.finalMultiplier += finalMultiplier;
+            if(query.StatType == type) {
+                query.Value = operation.Invoke(query.Value);
+                query.FinalMultiplier += finalMultiplier;
+
+                //Debug.Log($"StatModifier {id} applied to {query.statType} with value {query.value}");
             }
         }
     }

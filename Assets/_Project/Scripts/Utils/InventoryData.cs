@@ -1,11 +1,12 @@
 using System;
 using Systems.Persistence;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UtilsModule {
     [Serializable]
     public class InventoryData : ISaveable{
         [field: SerializeField] public SerializableGuid Id { get; set; }
-        public Item[] Items = new Item[0];
+        [FormerlySerializedAs("Items")] public Item[] items = new Item[0];
     }
 }

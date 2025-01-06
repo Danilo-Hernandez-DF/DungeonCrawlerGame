@@ -1,29 +1,30 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UtilsModule {
     [Serializable]
     public struct SerializableGuid : IEquatable<SerializableGuid> {
-        [SerializeField, HideInInspector] public uint Part1;
-        [SerializeField, HideInInspector] public uint Part2;
-        [SerializeField, HideInInspector] public uint Part3;
-        [SerializeField, HideInInspector] public uint Part4;
+        [FormerlySerializedAs("Part1")] [SerializeField, HideInInspector] public uint part1;
+        [FormerlySerializedAs("Part2")] [SerializeField, HideInInspector] public uint part2;
+        [FormerlySerializedAs("Part3")] [SerializeField, HideInInspector] public uint part3;
+        [FormerlySerializedAs("Part4")] [SerializeField, HideInInspector] public uint part4;
 
         public static SerializableGuid Empty => new(0, 0, 0, 0);
 
         public SerializableGuid(uint val1, uint val2, uint val3, uint val4) {
-            Part1 = val1;
-            Part2 = val2;
-            Part3 = val3;
-            Part4 = val4;
+            part1 = val1;
+            part2 = val2;
+            part3 = val3;
+            part4 = val4;
         }
 
         public SerializableGuid(Guid guid) {
             byte[] bytes = guid.ToByteArray();
-            Part1 = BitConverter.ToUInt32(bytes, 0);
-            Part2 = BitConverter.ToUInt32(bytes, 4);
-            Part3 = BitConverter.ToUInt32(bytes, 8);
-            Part4 = BitConverter.ToUInt32(bytes, 12);
+            part1 = BitConverter.ToUInt32(bytes, 0);
+            part2 = BitConverter.ToUInt32(bytes, 4);
+            part3 = BitConverter.ToUInt32(bytes, 8);
+            part4 = BitConverter.ToUInt32(bytes, 12);
         }
 
         public static SerializableGuid NewGuid() => Guid.NewGuid().ToSerializableGuid();
@@ -43,15 +44,15 @@ namespace UtilsModule {
         }
 
         public string ToHexString() {
-            return $"{Part1:X8}{Part2:X8}{Part3:X8}{Part4:X8}";
+            return $"{part1:X8}{part2:X8}{part3:X8}{part4:X8}";
         }
 
         public Guid ToGuid() {
             var bytes = new byte[16];
-            BitConverter.GetBytes(Part1).CopyTo(bytes, 0);
-            BitConverter.GetBytes(Part2).CopyTo(bytes, 4);
-            BitConverter.GetBytes(Part3).CopyTo(bytes, 8);
-            BitConverter.GetBytes(Part4).CopyTo(bytes, 12);
+            BitConverter.GetBytes(part1).CopyTo(bytes, 0);
+            BitConverter.GetBytes(part2).CopyTo(bytes, 4);
+            BitConverter.GetBytes(part3).CopyTo(bytes, 8);
+            BitConverter.GetBytes(part4).CopyTo(bytes, 12);
             return new Guid(bytes);
         }
 
@@ -63,11 +64,11 @@ namespace UtilsModule {
         }
 
         public bool Equals(SerializableGuid other) {
-            return Part1 == other.Part1 && Part2 == other.Part2 && Part3 == other.Part3 && Part4 == other.Part4;
+            return part1 == other.part1 && part2 == other.part2 && part3 == other.part3 && part4 == other.part4;
         }
 
         public override int GetHashCode() {
-            return HashCode.Combine(Part1, Part2, Part3, Part4);
+            return HashCode.Combine(part1, part2, part3, part4);
         }
 
         public static bool operator ==(SerializableGuid left, SerializableGuid right) => left.Equals(right);

@@ -8,13 +8,14 @@ namespace UtilsModule {
         public event EventHandler<Query> Queries;
         public void PerformQuery(object sender, Query query) => Queries?.Invoke(sender, query);
 
-        public void AddModifier(StatModifier modifier, string id = "") {
-            modifier.id = id;
-            modifiers.AddLast(modifier);
-            Queries += modifier.Handle;
+        public void AddModifier(BasicStatModifier modifier, string id = "") {
+            BasicStatModifier mod = modifier;
+            mod.ID = id;
+            modifiers.AddLast(mod);
+            Queries += mod.Handle;
 
-            modifier.OnDispose += _ => {
-                Queries -= modifier.Handle;
+            mod.OnDispose += _ => {
+                Queries -= mod.Handle;
             };
         }
 
@@ -42,7 +43,7 @@ namespace UtilsModule {
             var node = modifiers.First;
             while(node != null) {
                 var modifier = node.Value;
-                if(modifier.id == id) {
+                if(modifier.ID == id) {
                     modifier.MarkedForRemoval = true;
                 }
                 node = node.Next;

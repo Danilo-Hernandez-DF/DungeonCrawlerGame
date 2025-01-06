@@ -52,10 +52,10 @@ namespace Systems.Persistence {
 
         public void NewGame() {
             gameData = new GameData {
-                Name = "New Game",
-                CurrentLevelName = "DevScene"
+                name = "New Game",
+                currentLevelName = "DevScene"
             };
-            SceneManager.LoadScene(gameData.CurrentLevelName);
+            SceneManager.LoadScene(gameData.currentLevelName);
         }
 
         public void SaveGame() => dataService.Save(gameData, true);
@@ -63,14 +63,14 @@ namespace Systems.Persistence {
         public void LoadGame(string gameName) {
             gameData = dataService.Load(gameName);
 
-            if(String.IsNullOrWhiteSpace(gameData.CurrentLevelName)) {
-                gameData.CurrentLevelName = "DevScene";
+            if(String.IsNullOrWhiteSpace(gameData.currentLevelName)) {
+                gameData.currentLevelName = "DevScene";
             }
 
-            SceneManager.LoadScene(gameData.CurrentLevelName);
+            SceneManager.LoadScene(gameData.currentLevelName);
         }
 
-        public void ReloadGame() => LoadGame(gameData.Name);
+        public void ReloadGame() => LoadGame(gameData.name);
 
         public void DeleteGame(string gameName) => dataService.Delete(gameName);
     }

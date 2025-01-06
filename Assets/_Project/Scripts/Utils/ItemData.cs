@@ -15,6 +15,16 @@ namespace UtilsModule {
         public virtual Item GetItem(int count = 1, List<Tag> tags = default) {
             return new Item(this, count, tags);
         }
+
+        public bool HasTag(TagData tag, float value = 0, bool accept0 = false) {
+            if(!accept0 && value == 0) return inherentTags.Exists(x => x.data == tag);
+            return inherentTags.Exists(x => x.data == tag && x.value == value);
+        }
+
+        public bool HasTag(string tag, float value = 0, bool accept0 = false) {
+            if(!accept0 && value == 0) return inherentTags.Exists(x => x.data.name == tag);
+            return inherentTags.Exists(x => x.data.name == tag && x.value == value);
+        }
     }
 
     [Serializable]

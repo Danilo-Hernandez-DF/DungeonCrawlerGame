@@ -85,10 +85,10 @@ namespace ProcGen {
                             Debug.LogError("No next entrance");
                             break;
                         }
-                        roomPos = new Vector2(entrance.pos.x - targetEntrance.pos.x, entrance.pos.y - targetEntrance.pos.y);
+                        roomPos = new Vector2(entrance.Pos.x - targetEntrance.Pos.x, entrance.Pos.y - targetEntrance.Pos.y);
                         if(Physics2D.OverlapBox(roomPos, room.roomSize - (Vector2.one/10), 0, roomMask) == null) validEntrance = true;
                         else {
-                            Debug.Log("Overlapping with existing room");
+                            //Debug.Log("Overlapping with existing room");
                             break;
                         }
                     } while(!validEntrance);

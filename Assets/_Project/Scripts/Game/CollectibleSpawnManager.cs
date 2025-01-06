@@ -14,7 +14,7 @@ namespace Game {
         protected override void Awake() {
             base.Awake();
 
-            spawner = new EntitySpawner<Collectible>(new EntityFactory<Collectible>(collectibleData), spawnPointStrategy);
+            spawner = new EntitySpawner<Collectible>(new EntityFactory<Collectible>(collectibleData), SpawnPointStrategy);
 
             spawnTimer = new CountdownTimer(spawnInterval);
             spawnTimer.OnTimerStop += () => {

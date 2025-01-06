@@ -5,7 +5,7 @@ using System;
 namespace UtilsModule {
     public static class MyUtils {
 		static MethodInfo _clearConsoleMethod;
-		static MethodInfo clearConsoleMethod {
+		static MethodInfo ClearConsoleMethod {
 			get {
 				if (_clearConsoleMethod == null) {
 					Assembly assembly = Assembly.GetAssembly (typeof(SceneView));
@@ -17,7 +17,7 @@ namespace UtilsModule {
 		}
 
 		public static void ClearLogConsole() {
-			clearConsoleMethod.Invoke (new object (), null);
+			ClearConsoleMethod.Invoke (new object (), null);
 		}
 	}
 

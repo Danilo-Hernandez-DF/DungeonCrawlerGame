@@ -14,10 +14,10 @@ namespace UtilsModule {
 
         public static Guid ToSystemGuid(this SerializableGuid serializableGuid) {
             byte[] bytes = new byte[16];
-            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.Part1), 0, bytes, 0, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.Part2), 0, bytes, 4, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.Part3), 0, bytes, 8, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.Part4), 0, bytes, 12, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.part1), 0, bytes, 0, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.part2), 0, bytes, 4, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.part3), 0, bytes, 8, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(serializableGuid.part4), 0, bytes, 12, 4);
             return new Guid(bytes);
         }
     }

@@ -9,20 +9,20 @@ namespace UtilsModule {
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 
         void Update() {
-            inventoryData.Items = inventory.items.ToArray();
+            inventoryData.items = Inventory.items.ToArray();
         }
 
         public void Bind(InventoryData data) {
             inventoryData = data;
             inventoryData.Id = Id;
 
-            inventory = new Inventory(inventorySize, inventoryChannel);
+            Inventory = new Inventory(inventorySize, inventoryChannel);
 
-            for(int i = 0; i < inventoryData.Items.Length; i++) {
-                inventory.SetSlot(i, inventoryData.Items[i], inventoryData.Items[i].count);
+            for(int i = 0; i < inventoryData.items.Length; i++) {
+                Inventory.SetSlot(i, inventoryData.items[i], inventoryData.items[i].count);
             }
 
-            inventoryChannel?.Invoke(inventory);
+            inventoryChannel?.Invoke(Inventory);
         }
     }
 }

@@ -8,13 +8,12 @@ namespace UtilsModule {
     [Serializable]
     public class Inventory {
         public List<Item> items;
-        protected InventoryEventChannel inventoryChannel;
-        protected int size = 10;
-        public int Size {get => size;}
+        protected InventoryEventChannel InventoryChannel;
+        public int Size { get; protected set; }
 
         public Inventory(int size = 10, InventoryEventChannel inventoryChannel = null) {
-            this.inventoryChannel = inventoryChannel;
-            this.size = size;
+            this.InventoryChannel = inventoryChannel;
+            this.Size = size;
             PopulateInventory();
         }
 
@@ -29,7 +28,7 @@ namespace UtilsModule {
                 foundMatch.count += count;
 
                 if(remainder > 0) return Add(item, remainder);
-                inventoryChannel?.Invoke(this);
+                InventoryChannel?.Invoke(this);
                 return 0;
             } else if(EmptySlots() > 0) {
                 int remainder = count - item.data.maxCount;
@@ -38,12 +37,12 @@ namespace UtilsModule {
                 SetSlot(NextEmpty(), item, count);
 
                 if(remainder > 0) return Add(item, remainder);
-                inventoryChannel?.Invoke(this);
+                InventoryChannel?.Invoke(this);
                 return 0;
             }
 
-            Debug.Log("Inventory is full");
-            inventoryChannel?.Invoke(this);
+            //Debug.Log("Inventory is full");
+            InventoryChannel?.Invoke(this);
             return count;
         }
 
@@ -62,11 +61,11 @@ namespace UtilsModule {
                 if(remainder < 0) remainder = 0;
                 count -= remainder;
                 items[slot].count += count;
-                inventoryChannel?.Invoke(this);
+                InventoryChannel?.Invoke(this);
                 return remainder;
             }
 
-            Debug.Log("Slot is occupied");
+            //Debug.Log("Slot is occupied");
             return count;
         }
 
@@ -80,22 +79,22 @@ namespace UtilsModule {
             items[slot] = item.Copy();
             items[slot].count = count;
 
-            inventoryChannel?.Invoke(this);
+            InventoryChannel?.Invoke(this);
             return true;
         }
 
         protected int NextEmpty(int start = 0) {
             for(int i = start; i < items.Count; i++) {
-                if(items[i].data == GameManager.Instance.EmptyItem) return i;
+                if(items[i].data == GameManager.Instance.emptyItem) return i;
             }
             return items.Count;
         }
 
         protected void PopulateInventory() {
-            items = new List<Item>(size);
+            items = new List<Item>(Size);
 
-            for(int i = 0; i < size; i++) {
-                items.Add(new Item(GameManager.Instance.EmptyItem));
+            for(int i = 0; i < Size; i++) {
+                items.Add(new Item(GameManager.Instance.emptyItem));
             }
         }
 
@@ -141,7 +140,7 @@ namespace UtilsModule {
                 }
 
                 if(count == 0) {
-                    inventoryChannel?.Invoke(this);
+                    InventoryChannel?.Invoke(this);
                     return true;
                 }
             }
@@ -154,13 +153,13 @@ namespace UtilsModule {
             if(items[index].count <= count) return false;
 
             items[index].count -= count;
-            inventoryChannel?.Invoke(this);
+            InventoryChannel?.Invoke(this);
             return true;
         }
 
         public void ResetSlot(int index) {
-            items[index] = new Item(GameManager.Instance.EmptyItem, 0);
-            inventoryChannel?.Invoke(this);
+            items[index] = new Item(GameManager.Instance.emptyItem, 0);
+            InventoryChannel?.Invoke(this);
         }
 
         public int GetCount(Item item) {
@@ -173,7 +172,7 @@ namespace UtilsModule {
         }
 
         public int AvailableCount(Item item) {
-            if(items == null) return item.data.maxCount * size;
+            if(items == null) return item.data.maxCount * Size;
             if(!items.Exists(x => x.Matches(item))) return EmptySlots() * item.data.maxCount;
             
             int count = 0;
@@ -187,7 +186,7 @@ namespace UtilsModule {
             int emptySlots = 0;
 
             foreach(var i in items) {
-                if(i.data == GameManager.Instance.EmptyItem) emptySlots++;
+                if(i.data == GameManager.Instance.emptyItem) emptySlots++;
             }
 
             return emptySlots;

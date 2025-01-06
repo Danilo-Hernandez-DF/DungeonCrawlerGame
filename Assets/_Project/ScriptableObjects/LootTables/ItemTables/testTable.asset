@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weight: 0
   items:
-  - item: {fileID: 11400000, guid: f28ea8931da617d43be08d6c23322c9d, type: 2}
-    weight: 10
+  - Item: {fileID: 11400000, guid: b2992e78ae1d08f458438345ee5ddcac, type: 2}
+    Weight: 5
     countMin: 1
     countMax: 1
     additionalTags: []
-  - item: {fileID: 11400000, guid: b2992e78ae1d08f458438345ee5ddcac, type: 2}
-    weight: 5
+  - Item: {fileID: 11400000, guid: f28ea8931da617d43be08d6c23322c9d, type: 2}
+    Weight: 5
     countMin: 1
     countMax: 1
     additionalTags: []

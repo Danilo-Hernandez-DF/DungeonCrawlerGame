@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UtilsModule {
@@ -15,6 +16,7 @@ namespace UtilsModule {
         StunDuration
     }
 
+    [Serializable]
     public class Stats {
         readonly StatsMediator mediator;
         readonly BaseStats baseStats;
@@ -22,7 +24,7 @@ namespace UtilsModule {
 
         private float StatCalculation(Query q) {
             mediator.PerformQuery(this, q);
-            return q.value * (q.finalMultiplier / 100f);
+            return q.Value * (q.FinalMultiplier / 100f);
         }
 
         public int Attack {
@@ -34,21 +36,21 @@ namespace UtilsModule {
 
         public float AttackCooldown {
             get {
-                var q = new Query(StatType.AttackCooldown, baseStats.AttackCooldown);
+                var q = new Query(StatType.AttackCooldown, baseStats.attackCooldown);
                 return StatCalculation(q);
             }
         }
 
         public float AttackDistance {
             get {
-                var q = new Query(StatType.AttackDistance, baseStats.AttackDistance);
+                var q = new Query(StatType.AttackDistance, baseStats.attackDistance);
                 return StatCalculation(q);
             }
         }
 
         public float AttackRange {
             get {
-                var q = new Query(StatType.AttackRange, baseStats.AttackRange);
+                var q = new Query(StatType.AttackRange, baseStats.attackRange);
                 return StatCalculation(q);
             }
         }
@@ -76,28 +78,28 @@ namespace UtilsModule {
 
         public float DashForce {
             get {
-                var q = new Query(StatType.DashForce, baseStats.DashForce);
+                var q = new Query(StatType.DashForce, baseStats.dashForce);
                 return StatCalculation(q);
             }
         }
 
         public float DashDuration {
             get {
-                var q = new Query(StatType.DashDuration, baseStats.DashDuration);
+                var q = new Query(StatType.DashDuration, baseStats.dashDuration);
                 return StatCalculation(q);
             }
         }
 
         public float DashCooldown {
             get {
-                var q = new Query(StatType.DashCooldown, baseStats.DashCooldown);
+                var q = new Query(StatType.DashCooldown, baseStats.dashCooldown);
                 return StatCalculation(q);
             }
         }
 
         public float StunDuration {
             get {
-                var q = new Query(StatType.StunDuration, baseStats.StunDuration);
+                var q = new Query(StatType.StunDuration, baseStats.stunDuration);
                 return StatCalculation(q);
             }
         }
@@ -107,6 +109,6 @@ namespace UtilsModule {
             this.baseStats = baseStats;
         }
 
-        public override string ToString() => $"Attack: {Attack}, Defense: {Defense}, Speed: {Speed}, Health: {Health}";
+        public override string ToString() => $"Attack: {Attack}, Defense: {Defense}, Speed: {Speed}, Health: {Health}, DashForce: {DashForce}, DashDuration: {DashDuration}, DashCooldown: {DashCooldown}, StunDuration: {StunDuration}, AttackCooldown: {AttackCooldown}, AttackRange: {AttackRange}, AttackDistance: {AttackDistance}";
     }
 }

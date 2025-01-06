@@ -1,6 +1,7 @@
 using UnityEngine;
 
-namespace UtilsModule {
+namespace UtilsModule
+{
     [CreateAssetMenu(menuName = "Events/Inventory EventChannel")]
     public class InventoryEventChannel : EventChannel<Inventory> { }
 }

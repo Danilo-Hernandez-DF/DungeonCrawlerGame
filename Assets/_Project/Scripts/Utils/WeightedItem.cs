@@ -8,11 +8,11 @@ namespace UtilsModule {
         public List<OverrideTag> additionalTags;
 
         public static WeightedItem GetFromBase(WeightedObject<ItemData> toConvert) {
-            return new WeightedItem {item = toConvert.item, weight = toConvert.weight};
+            return new WeightedItem {Item = toConvert.Item, Weight = toConvert.Weight};
         }
 
         public static WeightedObject<ItemData> GetBase(WeightedItem toConvert) {
-            return new WeightedObject<ItemData> {item = toConvert.item, weight = toConvert.weight};
+            return new WeightedObject<ItemData> {Item = toConvert.Item, Weight = toConvert.Weight};
         }
 
         public static List<WeightedItem> GetListFromBase(List<WeightedObject<ItemData>> toConvert) {

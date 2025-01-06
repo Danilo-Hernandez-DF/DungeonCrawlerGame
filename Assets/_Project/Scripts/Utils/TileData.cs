@@ -16,8 +16,8 @@ namespace UtilsModule {
         [SerializeField] public Vector2Int poiSize; //min 3x3, both values must be odd
         [Header("Prefabs")]
         [SerializeField] public GOLootTable prefabs;
-        public Vector2Int poiOffset => new Vector2Int(Mathf.FloorToInt(poiSize.x/2), Mathf.FloorToInt(poiSize.y/2));
-        public Tilemap GetPOI(bool seeded = false) {
+        public Vector2Int PoiOffset => new Vector2Int(Mathf.FloorToInt(poiSize.x/2), Mathf.FloorToInt(poiSize.y/2));
+        public Tilemap GetPoi(bool seeded = false) {
             if(poiTilemaps == null) return null;
             return poiTilemaps.GetWeightedItem(seeded: seeded).GetComponentInChildren<Tilemap>();
         }
@@ -25,5 +25,5 @@ namespace UtilsModule {
         public TileBase GetTile(bool seeded = false) => replaceTiles.GetWeightedItem(seeded: seeded);  
     }
 
-    public enum TileType {Normal, POI, Placeholder, SpawnPoint}
+    public enum TileType {Normal, Poi, Placeholder, SpawnPoint}
 }

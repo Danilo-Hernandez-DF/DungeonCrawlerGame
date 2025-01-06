@@ -2,7 +2,7 @@ using System;
 
 namespace UtilsModule {
     public abstract class StatModifier : IDisposable {
-        public string id;
+        public string ID;
         public bool MarkedForRemoval { get; set; }
         public event Action<StatModifier> OnDispose = delegate {};
         readonly CountdownTimer timer;

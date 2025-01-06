@@ -6,11 +6,11 @@ namespace Game {
 
         public override void OnEnter() {
             //Animator stuff
-            player.Attack();
+            Player.Attack();
         }
 
         public override void FixedUpdate() {
-            player.HandleMovement();
+            Player.HandleMovement();
         }
     }
 }

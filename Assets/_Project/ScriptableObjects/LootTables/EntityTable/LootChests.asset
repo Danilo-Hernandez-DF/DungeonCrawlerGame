@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weight: 10
   items:
-  - item: {fileID: 8051316908950360065, guid: 7983e546d0796374a9079a59bf1cf2a3, type: 3}
-    weight: 10
+  - Item: {fileID: 8051316908950360065, guid: 7983e546d0796374a9079a59bf1cf2a3, type: 3}
+    Weight: 10
   secondaryTables: []

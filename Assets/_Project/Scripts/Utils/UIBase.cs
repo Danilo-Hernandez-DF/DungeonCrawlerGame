@@ -7,24 +7,24 @@ namespace UtilsModule {
         [SerializeField] protected GameObject handledUI;
         [SerializeField] protected GameObject startElement;
         [SerializeField] protected List<UIBase> children = new List<UIBase>();
-        protected GameObject StartElement => !isParent? startElement: children[0].startElement;
-        protected bool open => handledUI? handledUI.activeSelf: parent.open;
-        protected UIBase parent;
-        protected bool isParent => children.Count > 0;
-        protected bool isChild => parent != null;
+        protected GameObject StartElement => !IsParent? startElement: children[0].startElement;
+        protected bool open => handledUI? handledUI.activeSelf: Parent.open;
+        protected UIBase Parent;
+        protected bool IsParent => children.Count > 0;
+        protected bool IsChild => Parent != null;
 
         protected virtual void Awake() {
             foreach(UIBase child in children) {
-                child.parent = this;
+                child.Parent = this;
             }
         }
 
         public void SetParent(UIBase parent) {
-            this.parent = parent;
+            this.Parent = parent;
         }
 
         public void Open() {
-            if(!isChild) {
+            if(!IsChild) {
                 if(GameManager.Instance.openUI != null) return;
                 handledUI.SetActive(true);
                 GameManager.Instance.eventSystem.SetSelectedGameObject(StartElement);
@@ -32,11 +32,11 @@ namespace UtilsModule {
 
             OnOpen();
             
-            if(isParent) foreach(UIBase child in children) {
+            if(IsParent) foreach(UIBase child in children) {
                 child.Open();
             }
 
-            if(!isChild) GameManager.Instance.openUI = handledUI;
+            if(!IsChild) GameManager.Instance.openUI = handledUI;
         }
 
         protected virtual void OnOpen() {
@@ -44,7 +44,7 @@ namespace UtilsModule {
         }
 
         public void Close() {
-            if(!isChild) {
+            if(!IsChild) {
                 if(GameManager.Instance.openUI != handledUI) return;
                 handledUI.SetActive(false);
                 GameManager.Instance.eventSystem.SetSelectedGameObject(null);
@@ -52,11 +52,11 @@ namespace UtilsModule {
             
             OnClose();
             
-            if(isParent) foreach(UIBase child in children) {
+            if(IsParent) foreach(UIBase child in children) {
                 child.Open();
             }
 
-            if(!isChild) GameManager.Instance.openUI = null;
+            if(!IsChild) GameManager.Instance.openUI = null;
         }
 
         protected virtual void OnClose() {

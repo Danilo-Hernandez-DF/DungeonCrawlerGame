@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UtilsModule {
     public class PersistentSingleton<T> : MonoBehaviour where T : Component {
-        public bool AutoUnparentOnAwake = true;
+        [FormerlySerializedAs("AutoUnparentOnAwake")] public bool autoUnparentOnAwake = true;
 
         protected static T instance;
 
@@ -30,7 +31,7 @@ namespace UtilsModule {
         protected virtual void InitializeSingleton() {
             if (!Application.isPlaying) return;
 
-            if(AutoUnparentOnAwake) {
+            if(autoUnparentOnAwake) {
                 transform.SetParent(null);
             }
 

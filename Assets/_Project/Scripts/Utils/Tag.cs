@@ -3,7 +3,7 @@ using System;
 namespace UtilsModule {
     [Serializable]
     public class Tag {
-        public TagData.TagType type => data.type;
+        public TagData.TagType Type => data.type;
         public float value;
         public bool inherent;
         public TagData data;
@@ -31,8 +31,8 @@ namespace UtilsModule {
         }
 
         public override string ToString() {
-            if(type == TagData.TagType.None) return data.name;
-            if(type == TagData.TagType.Equipment) return data.name + $": {(Equipment)value}";
+            if(Type == TagData.TagType.None) return data.name;
+            if(Type == TagData.TagType.Equipment) return data.name + $": {(Equipment)value}";
             return data.name + $": {data.valPrefix}{value}{data.valSuffix}";
         }
 

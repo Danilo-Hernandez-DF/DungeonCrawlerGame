@@ -4,7 +4,7 @@ namespace UtilsModule {
     public abstract class EntitySpawnManager : MonoBehaviour {
         [SerializeField] protected SpawnPointStrategyType spawnPointStrategyType = SpawnPointStrategyType.Linear;
         [SerializeField] protected Transform[] spawnPoints;
-        protected ISpawnPointStrategy spawnPointStrategy;
+        protected ISpawnPointStrategy SpawnPointStrategy;
 
         protected enum SpawnPointStrategyType {
             Linear,
@@ -12,10 +12,10 @@ namespace UtilsModule {
         }
 
         protected virtual void Awake() {
-            spawnPointStrategy = spawnPointStrategyType switch {
+            SpawnPointStrategy = spawnPointStrategyType switch {
                 SpawnPointStrategyType.Linear => new LinearSpawnPointStrategy(spawnPoints),
                 SpawnPointStrategyType.Random => new RandomSpawnPointSrategy(spawnPoints),
-                _ => spawnPointStrategy
+                _ => SpawnPointStrategy
             };
         }
 

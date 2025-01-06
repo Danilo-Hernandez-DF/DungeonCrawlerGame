@@ -14,10 +14,10 @@ namespace UtilsModule {
             if(items?.Count == 0 && secondaryTables?.Count == 0) return default;
 
             foreach(WeightedTile wItem in items) {
-                if(wItem.weight < lowerLimit) continue;
-                if(wItem.weight > upperLimit) continue;
+                if(wItem.Weight < lowerLimit) continue;
+                if(wItem.Weight > upperLimit) continue;
 
-                sumWeights += wItem.weight;
+                sumWeights += wItem.Weight;
             }
 
             foreach(TileBaseLootTable lootTable in secondaryTables) {
@@ -30,12 +30,12 @@ namespace UtilsModule {
             int rand = seeded? SeededRandom.GetRange(0, sumWeights): Random.Range(0, sumWeights);
             int added = 0;
             foreach(WeightedTile wItem in items) {
-                if(wItem.weight < lowerLimit) continue;
-                if(wItem.weight > upperLimit) continue;
+                if(wItem.Weight < lowerLimit) continue;
+                if(wItem.Weight > upperLimit) continue;
 
-                added += wItem.weight;
+                added += wItem.Weight;
                 if(rand < added) {
-                    return wItem.item;
+                    return wItem.Item;
                 }
             }
 

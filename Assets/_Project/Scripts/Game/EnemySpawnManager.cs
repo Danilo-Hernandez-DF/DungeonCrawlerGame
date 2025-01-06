@@ -10,7 +10,7 @@ namespace Game {
         [SerializeField] int maxEnemies;
         [SerializeField] float spawnInterval;
         int spawnedEnemies = 0;
-        public bool exhausted { get; protected set; } = false;
+        public bool Exhausted { get; protected set; } = false;
         List<GameObject> enemies;
         EntitySpawner<Enemy> spawner;
         CountdownTimer spawnTimer;
@@ -20,7 +20,7 @@ namespace Game {
         protected override void Awake() {
             base.Awake();
 
-            spawner = new EntitySpawner<Enemy>(new EntityFactory<Enemy>(enemyData), spawnPointStrategy);
+            spawner = new EntitySpawner<Enemy>(new EntityFactory<Enemy>(enemyData), SpawnPointStrategy);
             enemies = new List<GameObject>();
 
             spawnTimer = new CountdownTimer(spawnInterval);
@@ -36,7 +36,7 @@ namespace Game {
                         }
 
                         spawnTimer.Stop();
-                        exhausted = true;
+                        Exhausted = true;
                         Debug.Log("All Enemies Spawned, spawner exhausted");
                         return;
                     }
@@ -49,7 +49,7 @@ namespace Game {
         public void Deactivate() => spawnTimer.Stop();
         public void Reset() {
             spawnedEnemies = 0;
-            exhausted = false;
+            Exhausted = false;
             Activate();
         }
 

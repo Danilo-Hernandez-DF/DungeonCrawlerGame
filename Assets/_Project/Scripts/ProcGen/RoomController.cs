@@ -36,7 +36,7 @@ namespace ProcGen {
         bool SpawnersExhausted {
             get {
                 foreach(EnemySpawnManager spawner in enemySpawners) {
-                    if(!spawner.exhausted) return false;
+                    if(!spawner.Exhausted) return false;
                 }
                 return true;
             }

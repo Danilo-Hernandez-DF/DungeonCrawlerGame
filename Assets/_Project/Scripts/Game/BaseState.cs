@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Game {
     public abstract class BaseState : IState {
-        protected readonly Animator animator;
-        protected readonly float crossFadeDuration = 0f;
-        protected readonly PlayerController player;
+        protected readonly Animator Animator;
+        protected readonly float CrossFadeDuration = 0f;
+        protected readonly PlayerController Player;
 
         protected static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
         protected static readonly int DashHash = Animator.StringToHash("Dash");
 
         protected BaseState(PlayerController player, Animator animator) {
-            this.player = player;
-            this.animator = animator;
+            this.Player = player;
+            this.Animator = animator;
         }
 
         public void Update() {

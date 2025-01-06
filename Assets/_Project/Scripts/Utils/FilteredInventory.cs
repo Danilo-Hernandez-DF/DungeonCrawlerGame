@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace UtilsModule {
     public class FilteredInventory : Inventory {
         private List<SlotFilter> slotFilters;
+        private new FilteredInventoryEventChannel inventoryChannel;
 
-        public FilteredInventory(List<SlotFilter> slotFilters, InventoryEventChannel inventoryChannel = null) {
+        public FilteredInventory(List<SlotFilter> slotFilters, FilteredInventoryEventChannel inventoryChannel = null) {
             this.slotFilters = slotFilters;
-            size = slotFilters.Count;
+            Size = slotFilters.Count;
             this.inventoryChannel = inventoryChannel;
             PopulateInventory();
         }
@@ -17,7 +19,7 @@ namespace UtilsModule {
         public override int Add(Item item, int count = 1) {
             if(items == null) PopulateInventory();
             if(!Allowed(item)) {
-                Debug.Log("Item not allowed");
+                //Debug.Log("Item not allowed");
                 return count;
             }
 
@@ -43,7 +45,7 @@ namespace UtilsModule {
                 return 0;
             }
 
-            Debug.Log("Inventory is full");
+            //Debug.Log("Inventory is full");
             inventoryChannel?.Invoke(this);
             return count;
         }
@@ -51,7 +53,7 @@ namespace UtilsModule {
         public override int AddAt(int slot, Item item, int count = 1) {
             if(items == null) PopulateInventory();
             if(!slotFilters[slot].Evaluate(item)) {
-                Debug.Log("Item not allowed");
+                //Debug.Log("Item not allowed");
                 return count;
             }
             if(slot < 0 || slot >= items.Count) return count;
@@ -71,13 +73,13 @@ namespace UtilsModule {
                 return remainder;
             }
 
-            Debug.Log("Slot is occupied");
+            //Debug.Log("Slot is occupied");
             return count;
         }
 
         public override bool SetSlot(int slot, Item item, int count = 1, bool force = false) {
             if(!force) if(!slotFilters[slot].Evaluate(item)) {
-                Debug.Log("Item not allowed");
+                //Debug.Log("Item not allowed");
                 return false;
             }
             items[slot] = item.Copy();
@@ -90,7 +92,7 @@ namespace UtilsModule {
         public override bool TryAdd(Item item, int count = 1) {
             if(AvailableCount(item) < count) return false;
             if(!Allowed(item)) {
-                Debug.Log("Item not allowed");
+                //Debug.Log("Item not allowed");
                 return false;
             }
 
@@ -100,7 +102,7 @@ namespace UtilsModule {
         public override void SetAtRandom(Item item, int count = 1, bool isSeeded = false) {
             if(items == null) PopulateInventory();
             if(!Allowed(item)) {
-                Debug.Log("Item not allowed");
+                //Debug.Log("Item not allowed");
                 return;
             }
             if(AvailableCount(item) == 0) return;
@@ -126,9 +128,16 @@ namespace UtilsModule {
             return true;
         }
 
-        private int NextAllowed(Item item, int start = 0) {
+        public int NextAllowed(Item item, int start = 0) {
             for(int i = start; i < slotFilters.Count; i++) {
                 if(slotFilters[i].Evaluate(item) && items[i].count < item.data.maxCount) return i;
+            }
+            return -1;
+        }
+
+        public int NextMatch(Item item, int start = 0) {
+            for(int i = start; i < slotFilters.Count; i++) {
+                if(slotFilters[i].Evaluate(item)) return i;
             }
             return -1;
         }

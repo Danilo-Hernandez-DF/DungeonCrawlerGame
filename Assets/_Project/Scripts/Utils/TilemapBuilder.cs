@@ -58,7 +58,7 @@ namespace UtilsModule {
         }
 
         public void RemovePlaceholders(Vector2Int pos, Vector2Int areaSize) {
-            AddPOIs(pos, areaSize);
+            AddPoIs(pos, areaSize);
             SpawnEntities(pos, areaSize, tilemap.transform.position);
             List<TileBase> boundsArea = GetTiles(tilemap, pos, areaSize);
             List<TileBase> replaceArea = new List<TileBase>();
@@ -113,18 +113,18 @@ namespace UtilsModule {
             }
         }
 
-        public void AddPOIs(Vector2Int pos, Vector2Int areaSize) {
+        public void AddPoIs(Vector2Int pos, Vector2Int areaSize) {
             List<List<TileBase>> boundsArea = GetTiles2D(tilemap, pos, areaSize);
 
             for(int x = 0; x < areaSize.x; x++) {
                 for(int y = 0; y < areaSize.y; y++) {
                     var tile = TilemapManager.Instance.GetTileData(boundsArea[x][y]);
                     if(tile == null) continue;
-                    if(tile.tileType != TileType.POI) continue;
+                    if(tile.tileType != TileType.Poi) continue;
 
-                    var poi = tile.GetPOI(true);
+                    var poi = tile.GetPoi(true);
                     if(poi != null) CopyFrom(poi, Vector2Int.zero, new Vector2Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
-                        -Mathf.FloorToInt(areaSize.y/2) + y) - tile.poiOffset, tile.poiSize);
+                        -Mathf.FloorToInt(areaSize.y/2) + y) - tile.PoiOffset, tile.poiSize);
                 }
             }
         }

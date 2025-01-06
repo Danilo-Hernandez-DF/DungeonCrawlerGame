@@ -5,18 +5,18 @@ namespace UtilsModule {
     public abstract class Entity : MonoBehaviour, IVisitable {
         [SerializeField] BaseStats baseStats; 
         public Health health;
-        public Rigidbody2D rb {get; private set;}
+        public Rigidbody2D Rb {get; private set;}
         public Stats Stats {get; private set;}
         public Status Status {get; private set;}
-        public Vector2 facingDirection {get; protected set;}
+        public Vector2 FacingDirection {get; protected set;}
 
         protected void Awake() {
             Stats = new Stats(new StatsMediator(), baseStats);
             Status = new Status(this);
-            rb = GetComponent<Rigidbody2D>();
+            Rb = GetComponent<Rigidbody2D>();
             health = GetComponent<Health>();
             health?.Init(Stats.Health);
-            facingDirection = Vector2.right;
+            FacingDirection = Vector2.right;
         }
 
         public void Update() {
@@ -25,18 +25,18 @@ namespace UtilsModule {
         }
 
         public void ApplyForce(Vector2 force) {
-            if(rb == null) return;
-            rb.AddForce(force);
+            if(Rb == null) return;
+            Rb.AddForce(force);
         }
 
         protected virtual void OnDeath() {
             Status.OnDeath();
-            Debug.Log($"{name} has reached 0 Hp");
+            //Debug.Log($"{name} has reached 0 Hp");
         }
 
         protected virtual void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
-            Debug.Log($"{name} took {damage} damage");
+            //Debug.Log($"{name} took {damage} damage");
         } 
 
         public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null, bool ignoreKnockback = false) {

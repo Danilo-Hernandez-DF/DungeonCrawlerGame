@@ -11,8 +11,8 @@ namespace ProcGen {
         public Dir dir;
         public bool Active { get; private set; } = true;
         public void DeActivate() => Active = false;
-        public Orientation orientation => dir.ToOrientation();
-        public Vector2 pos => transform.position;
+        public Orientation Orientation => dir.ToOrientation();
+        public Vector2 Pos => transform.position;
         Collider2D col;
 
         void Awake() {
@@ -20,7 +20,7 @@ namespace ProcGen {
         }
 
         public List<RoomEntrance> GetOverlappingEntrances() {
-            List<RoomEntrance> result = Physics2D.OverlapBoxAll(pos, col.bounds.size, 0, entraceMask)
+            List<RoomEntrance> result = Physics2D.OverlapBoxAll(Pos, col.bounds.size, 0, entraceMask)
                 .Select(x => x.GetComponent<RoomEntrance>()).Where(x => x != this).ToList();
 
             return result;

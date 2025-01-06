@@ -44,10 +44,10 @@ namespace Systems.Persistence {
         }
 
         public void Save(GameData data, bool overwrite = false) {
-            string fileLocation = GetPathToFile(data.Name);
+            string fileLocation = GetPathToFile(data.name);
 
             if(!overwrite && File.Exists(fileLocation)) {
-                throw new IOException($"The file '{data.Name}.{fileExtension}' already exists and cannot be overwritten.");
+                throw new IOException($"The file '{data.name}.{fileExtension}' already exists and cannot be overwritten.");
             }
 
             File.WriteAllText(fileLocation, serializer.Serialize(data));

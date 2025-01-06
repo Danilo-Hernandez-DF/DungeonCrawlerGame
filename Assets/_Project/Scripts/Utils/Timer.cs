@@ -2,22 +2,22 @@ using System;
 
 namespace UtilsModule {
     public abstract class Timer {
-        protected float initialTime;
+        protected float InitialTime;
         protected float Time {get; set;}
         public bool IsRunning {get; protected set;}
 
-        public float Progress => Time/initialTime;
+        public float Progress => Time/InitialTime;
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };
 
         protected Timer(float value) {
-            initialTime = value;
+            InitialTime = value;
             IsRunning = false;
         }
 
         public void Start() {
-            Time = initialTime;
+            Time = InitialTime;
 
             if(!IsRunning) {
                 IsRunning = true;

@@ -16,13 +16,13 @@ namespace Game {
 
         public override void OnEnter() {
             agent.speed = 0f;
-            timer = new CountdownTimer(enemy.Stats.StunDuration);
-            timer.OnTimerStop += () => enemy.wasStunned = false;
+            timer = new CountdownTimer(Enemy.Stats.StunDuration);
+            timer.OnTimerStop += () => Enemy.wasStunned = false;
             timer.Start();
         }
 
         public override void OnExit() {
-            agent.speed = enemy.Stats.Speed;
+            agent.speed = Enemy.Stats.Speed;
         }
 
         public override void Update() {

@@ -24,7 +24,7 @@ namespace UtilsModule {
         [SerializeField] int index;
         Animator anim;
         int indexOffset = 0;
-        public int offsetIndex => index + indexOffset;
+        public int OffsetIndex => index + indexOffset;
         private Item currentItem;
         bool selected;
         public bool IsSelected => selected;
@@ -33,7 +33,7 @@ namespace UtilsModule {
         public void OnPress(int action = 0) {
             if(!IsSelected) return;
             anim.SetTrigger("Pressed");
-            parent.OnSlotPressed(offsetIndex, action);
+            parent.OnSlotPressed(OffsetIndex, action);
         }
 
         void Update() {
@@ -55,7 +55,7 @@ namespace UtilsModule {
 
         public void OnUpdate(InventoryUI inventoryUI) {
             parent = inventoryUI;
-            currentItem = inventoryUI.TargetInventory.items[offsetIndex];
+            currentItem = inventoryUI.TargetInventory.items[OffsetIndex];
             if(currentItem.IsEmpty) {
                 image.sprite = null;
                 image.color = Color.clear;

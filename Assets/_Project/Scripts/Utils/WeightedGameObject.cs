@@ -6,11 +6,11 @@ namespace UtilsModule {
     [Serializable]
     public class WeightedGameObject : WeightedObject<GameObject> { 
         public static WeightedGameObject GetFromBase(WeightedObject<GameObject> toConvert) {
-            return new WeightedGameObject {item = toConvert.item, weight = toConvert.weight};
+            return new WeightedGameObject {Item = toConvert.Item, Weight = toConvert.Weight};
         }
 
         public static WeightedObject<GameObject> GetBase(WeightedGameObject toConvert) {
-            return new WeightedObject<GameObject> {item = toConvert.item, weight = toConvert.weight};
+            return new WeightedObject<GameObject> {Item = toConvert.Item, Weight = toConvert.Weight};
         }
 
         public static List<WeightedGameObject> GetListFromBase(List<WeightedObject<GameObject>> toConvert) {

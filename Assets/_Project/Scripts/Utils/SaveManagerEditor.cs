@@ -6,7 +6,7 @@ namespace Systems.Persistence.Editor {
     public class SaveManagerEditor : UnityEditor.Editor {
         public override void OnInspectorGUI() {
             SaveLoadSystem saveLoadSystem = (SaveLoadSystem)target;
-            string gameName = saveLoadSystem.gameData.Name;
+            string gameName = saveLoadSystem.gameData.name;
 
             DrawDefaultInspector();
 

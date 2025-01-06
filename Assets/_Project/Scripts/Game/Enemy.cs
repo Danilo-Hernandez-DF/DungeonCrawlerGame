@@ -13,10 +13,10 @@ namespace Game {
         [SerializeField] Animator animator;
         [SerializeField] float wanderRadius = 10f;
 
-        float timeBetweenAttacks => Stats.AttackCooldown;
-        int attackDamage => Stats.Attack;
+        float TimeBetweenAttacks => Stats.AttackCooldown;
+        int AttackDamage => Stats.Attack;
 
-        public GameObject lastDamageSource { get; protected set; }
+        public GameObject LastDamageSource { get; protected set; }
 
         StateMachine stateMachine;
 
@@ -27,8 +27,8 @@ namespace Game {
         public bool wasStunned = false;
 
         void Start() {
-            attackTimer = new CountdownTimer(timeBetweenAttacks);
-            attackTimer.OnTimerStop += () => attackTimer.Reset(timeBetweenAttacks);
+            attackTimer = new CountdownTimer(TimeBetweenAttacks);
+            attackTimer.OnTimerStop += () => attackTimer.Reset(TimeBetweenAttacks);
             stateMachine = new StateMachine();
 
             var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
@@ -72,7 +72,7 @@ namespace Game {
 
         void FixedUpdate() {
             stateMachine.FixedUpdate();
-            facingDirection = MovementDirection;
+            FacingDirection = MovementDirection;
         }
 
         protected override void OnDeath() {
@@ -82,7 +82,7 @@ namespace Game {
 
 
         protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
-            lastDamageSource = dmgSource != null ? dmgSource : lastDamageSource;
+            LastDamageSource = dmgSource != null ? dmgSource : LastDamageSource;
             if(!ignoreKnockback) wasStunned = true;
         }
 
@@ -90,7 +90,7 @@ namespace Game {
             if(attackTimer.IsRunning) return;
 
             attackTimer.Start();
-            playerDetector.PlayerComponent.TakeDamage(attackDamage, dmgSource: gameObject);
+            playerDetector.PlayerComponent.TakeDamage(AttackDamage, dmgSource: gameObject);
         }
     }
 }

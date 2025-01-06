@@ -7,23 +7,23 @@ namespace UtilsModule {
         [SerializeField] LootTable<Item> lootTable;
         [SerializeField] int rolls = 2;
         [SerializeField] bool isSeeded = false;
-        private Inventory inventory => inventoryHolder.inventory_;
+        private Inventory Inventory => inventoryHolder.Inventory;
 
         public void Generate() {
             for(int i = 0; i < rolls; i++) {
                 var toAdd = lootTable.GetWeightedItem(seeded: isSeeded);
-                inventory.SetAtRandom(toAdd, toAdd.count, true);
+                Inventory.SetAtRandom(toAdd, toAdd.count, true);
             }
 
-            Debug.Log(inventory.items.Count);
+            //Debug.Log(inventory.items.Count);
 
-            foreach(var i in inventory.items) {
+            foreach(var i in Inventory.items) {
                 string tagString = "";
                 for(int j = 0; j < i.tags.Count; j++) {
                     tagString += i.tags[j].ToString() + (j == i.tags.Count - 1 ? "" : ", ");
                 }
 
-                Debug.Log($"{i.data.name}: [Tags: [{tagString}], Count: {i.count}]");
+                //Debug.Log($"{i.data.name}: [Tags: [{tagString}], Count: {i.count}]");
             }
         }
 

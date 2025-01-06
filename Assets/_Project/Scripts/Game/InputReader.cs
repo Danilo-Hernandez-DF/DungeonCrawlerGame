@@ -6,6 +6,7 @@ using UtilsModule;
 using UnityEditor;
 using System.Threading.Tasks;
 using System.Linq;
+using UnityEngine.Serialization;
 
 namespace Game {
     [CreateAssetMenu(fileName = "InputReader", menuName = "Utils/Input/InputReader")]
@@ -22,9 +23,11 @@ namespace Game {
         public event UnityAction OpenMenu = delegate { };
         public event UnityAction Interact = delegate { };
         
-        [SerializeField] IntEventChannel PageChangeCahnnel;
+        [FormerlySerializedAs("PageChangeCahnnel")] [SerializeField] IntEventChannel pageChangeCahnnel;
 
         InputControls inputActions;
+
+        public InputControls Controls { get => inputActions; }
 
         public Vector3 Direction => inputActions.Player.Movement.ReadValue<Vector2>();
         public Vector2 AimPosition => CameraManager.Instance.camera.ScreenToWorldPoint(inputActions.Player.Aim.ReadValue<Vector2>());
@@ -108,7 +111,7 @@ namespace Game {
         }
         
         public void OnPageNavigation(InputAction.CallbackContext context) { 
-            if(context.phase == InputActionPhase.Started) PageChangeCahnnel?.Invoke((int)context.ReadValue<float>());
+            if(context.phase == InputActionPhase.Started) pageChangeCahnnel?.Invoke((int)context.ReadValue<float>());
         }
 
         public void OnUIInteract(InputAction.CallbackContext context) {

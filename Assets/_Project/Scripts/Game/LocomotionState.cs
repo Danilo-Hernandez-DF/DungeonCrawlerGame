@@ -5,11 +5,11 @@ namespace Game {
         public LocomotionState(PlayerController player, Animator animator) : base(player, animator) { }
 
         public override void OnEnter() {
-            animator.CrossFade(LocomotionHash, crossFadeDuration);
+            Animator.CrossFade(LocomotionHash, CrossFadeDuration);
         }
 
         public override void FixedUpdate() {
-            player.HandleMovement();
+            Player.HandleMovement();
         }
     }
 }

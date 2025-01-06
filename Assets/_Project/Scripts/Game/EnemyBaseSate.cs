@@ -4,16 +4,16 @@ using UnityEngine;
 namespace Game
 {
     public abstract class EnemyBaseSate : IState {
-        protected readonly Enemy enemy;
-        protected readonly Animator animator;
+        protected readonly Enemy Enemy;
+        protected readonly Animator Animator;
 
         protected static readonly int IdleHsah = Animator.StringToHash("ClayBlob_Idle");
 
-        protected const float crossFadeDuration = 0.1f;
+        protected const float CrossFadeDuration = 0.1f;
 
         protected EnemyBaseSate(Enemy enemy, Animator animator) {
-            this.enemy = enemy;
-            this.animator = animator;
+            this.Enemy = enemy;
+            this.Animator = animator;
         }
 
         public virtual void FixedUpdate() {

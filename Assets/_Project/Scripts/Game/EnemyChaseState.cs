@@ -12,7 +12,7 @@ namespace Game {
         }
 
         public override void OnEnter() {
-            Debug.Log("Chase");
+            //Debug.Log("Chase");
             //animator stuff
         }
 
