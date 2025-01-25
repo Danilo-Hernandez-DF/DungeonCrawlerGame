@@ -27,7 +27,7 @@ namespace UtilsModule {
             return Evaluate();
         }
 
-        public void SetArgument(T argument) {
+        private void SetArgument(T argument) {
             this.argument = argument;
         }
     }

@@ -37,7 +37,7 @@ namespace Game {
 
                         spawnTimer.Stop();
                         Exhausted = true;
-                        Debug.Log("All Enemies Spawned, spawner exhausted");
+                        //Debug.Log("All Enemies Spawned, spawner exhausted");
                         return;
                     }
                 }
@@ -55,10 +55,9 @@ namespace Game {
 
         void Update() {
             for(int i = 0; i < enemies.Count; i++) {
-                if(enemies[i] == null) {
-                    enemies.RemoveAt(i);
-                    i--;
-                }
+                if(enemies[i]) continue;
+                enemies.RemoveAt(i);
+                i--;
             }
 
             spawnTimer.Tick(Time.deltaTime);        

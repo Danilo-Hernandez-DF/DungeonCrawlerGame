@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+using Systems.Persistence;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UtilsModule;
 
-namespace Game
-{
+namespace Game {
     public class GameManager : PersistentSingleton<GameManager> {
         //------------------------------------------------
         //Variables
@@ -15,6 +17,10 @@ namespace Game
         public ItemDatabase ItemDatabase;
         public GameObject openUI;
         public InputReader input;
+
+        public UnityAction<StatisticsTracker.TrackedStat, int> TrackStat;
+        public UnityAction<ItemData, int> TrackItem;
+        
         public bool Paused => openUI != null;
 
         //------------------------------------------------
@@ -46,6 +52,14 @@ namespace Game
             }
             
             this.enabled = false;
+        }
+
+        public void TrackStats(StatisticsTracker.TrackedStat stat, int value) {
+            TrackStat?.Invoke(stat, value);
+        }
+        
+        public void TrackItems(ItemData item, int value) {
+            TrackItem?.Invoke(item, value);
         }
     }
 

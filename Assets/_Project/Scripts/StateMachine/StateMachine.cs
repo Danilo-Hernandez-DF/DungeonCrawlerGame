@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UtilsModule;
 
 namespace StateMachines {
     public class StateMachine {
         StateNode current;
-        Dictionary<Type, StateNode> nodes = new();
-        HashSet<ITransition> anyTransitions = new();
+        readonly Dictionary<Type, StateNode> nodes = new();
+        readonly HashSet<ITransition> anyTransitions = new();
 
         public void Update() {
             var transition = GetTransition();
@@ -39,17 +40,11 @@ namespace StateMachines {
         }
 
         ITransition GetTransition() {
-            foreach(var transition in anyTransitions) {
-                if(transition.Condition.Evaluate())
-                    return transition;
+            foreach (var transition in anyTransitions.Where(transition => transition.Condition.Evaluate())) {
+                return transition;
             }
 
-            foreach(var transition in current.Transitions) {
-                if(transition.Condition.Evaluate())
-                    return transition;
-            }
-
-            return null;
+            return current.Transitions.FirstOrDefault(transition => transition.Condition.Evaluate());
         }
 
         public void AddTransition(IState from, IState to, IPredicate condition) {
@@ -63,10 +58,9 @@ namespace StateMachines {
         StateNode GetOrAddNode(IState state) {
             var node = nodes.GetValueOrDefault(state.GetType());
 
-            if(node == null) {
-                node = new StateNode(state);
-                nodes.Add(state.GetType(), node);
-            }
+            if(node != null) return node;
+            node = new StateNode(state);
+            nodes.Add(state.GetType(), node);
 
             return node;
         }

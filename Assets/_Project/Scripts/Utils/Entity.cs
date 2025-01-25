@@ -5,7 +5,7 @@ namespace UtilsModule {
     public abstract class Entity : MonoBehaviour, IVisitable {
         [SerializeField] BaseStats baseStats; 
         public Health health;
-        public Rigidbody2D Rb {get; private set;}
+        protected Rigidbody2D Rb {get; private set;}
         public Stats Stats {get; private set;}
         public Status Status {get; private set;}
         public Vector2 FacingDirection {get; protected set;}
@@ -36,22 +36,17 @@ namespace UtilsModule {
 
         protected virtual void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
+            GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageDealt, damage);
             //Debug.Log($"{name} took {damage} damage");
         } 
 
         public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null, bool ignoreKnockback = false) {
-            if(health == null) return;
+            if(!health) return;
 
-            bool isDead;
-
-            if(!ignoreDefense) isDead = health.TakeDamage(damage - Stats.Defense);
-            else isDead = health.TakeDamage(damage);
-
-            if(isDead) { 
-                OnDeath();
-            } else {
-                OnDamage(damage, dmgSource);
-            }
+            var isDead = !ignoreDefense ? health.TakeDamage(damage - Stats.Defense) : health.TakeDamage(damage);
+            
+            OnDamage(damage, dmgSource);
+            if(isDead) OnDeath();
         }
 
         public void Heal(int amount) {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -9,6 +10,8 @@ namespace UtilsModule {
     public class Inventory {
         public List<Item> items;
         protected InventoryEventChannel InventoryChannel;
+        public Entity targetEntity;
+        public bool IsEquipment => targetEntity != null;
         public int Size { get; protected set; }
 
         public Inventory(int size = 10, InventoryEventChannel inventoryChannel = null) {
@@ -56,17 +59,15 @@ namespace UtilsModule {
                 return 0;
             }
 
-            if(items[slot].Matches(item)) {
-                int remainder = items[slot].count + count - item.data.maxCount;
-                if(remainder < 0) remainder = 0;
-                count -= remainder;
-                items[slot].count += count;
-                InventoryChannel?.Invoke(this);
-                return remainder;
-            }
+            if(!items[slot].Matches(item)) return count;
+            int remainder = items[slot].count + count - item.data.maxCount;
+            if(remainder < 0) remainder = 0;
+            count -= remainder;
+            items[slot].count += count;
+            InventoryChannel?.Invoke(this);
+            return remainder;
 
             //Debug.Log("Slot is occupied");
-            return count;
         }
 
         public Item GetItem(int slot) {
@@ -123,12 +124,14 @@ namespace UtilsModule {
             AddAt(rand, item, count);
         }
 
-        public bool TryRemove(Item item, int count = 1) {
+        public bool TryRemove(Item item, int count = 1, bool fullMatch = true) {
             if(items == null) return false;
-            if(!items.Exists(x => x.Matches(item))) return false;
-            if(GetCount(item) <= count) return false;
+            if(!items.Exists(x => x.Matches(item, fullMatch))) return false;
+            Debug.Log("Item exists");
+            if(GetCount(item, fullMatch) < count) return false;
+            Debug.Log("Count is enough");
 
-            List<Item> matchingItems = items.FindAll(x => x.Matches(item));
+            List<Item> matchingItems = items.FindAll(x => x.Matches(item, fullMatch));
             matchingItems.Reverse();
             for(int i = 0; i < matchingItems.Count; i++) {
                 if(matchingItems[i].count <= count) {
@@ -139,10 +142,9 @@ namespace UtilsModule {
                     count = 0;
                 }
 
-                if(count == 0) {
-                    InventoryChannel?.Invoke(this);
-                    return true;
-                }
+                if(count != 0) continue;
+                InventoryChannel?.Invoke(this);
+                return true;
             }
 
             return false;
@@ -162,34 +164,29 @@ namespace UtilsModule {
             InventoryChannel?.Invoke(this);
         }
 
-        public int GetCount(Item item) {
+        public int GetCount(Item item, bool fullmatch = true) {
             if(items == null) return 0;
-            if(!items.Exists(x => x.Matches(item))) return 0;
-            
-            int count = 0;
-            foreach(var i in items.FindAll(x => x.Matches(item))) count += i.count;
-            return count;
+            return !items.Exists(x => x.Matches(item, fullMatch:fullmatch)) ? 0 : items.FindAll(x => x.Matches(item, fullMatch:fullmatch)).Sum(i => i.count);
         }
 
-        public int AvailableCount(Item item) {
+        public int AvailableCount(Item item, bool fullmatch = true) {
             if(items == null) return item.data.maxCount * Size;
-            if(!items.Exists(x => x.Matches(item))) return EmptySlots() * item.data.maxCount;
+            if(!items.Exists(x => x.Matches(item, fullMatch:fullmatch))) return EmptySlots() * item.data.maxCount;
             
-            int count = 0;
-            foreach(var i in items.FindAll(x => x.Matches(item))) count += item.data.maxCount - i.count;
+            int count = items.FindAll(x => x.Matches(item, fullMatch:fullmatch)).Sum(i => item.data.maxCount - i.count);
 
             count += EmptySlots() * item.data.maxCount;
             return count;
         }
 
         public int EmptySlots() {
-            int emptySlots = 0;
+            return items.Count(i => i.data == GameManager.Instance.emptyItem);
+        }
 
-            foreach(var i in items) {
-                if(i.data == GameManager.Instance.emptyItem) emptySlots++;
+        public void Clear() {
+            for(int i = 0; i < items.Count; i++) {
+                ResetSlot(i);
             }
-
-            return emptySlots;
         }
     }
 }

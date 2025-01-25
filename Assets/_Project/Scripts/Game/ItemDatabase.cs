@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using UtilsModule;
 
-namespace Game
-{
+namespace Game {
     public class ItemDatabase {
-        public List<ItemData> Items = new();
+        private readonly List<ItemData> Items = new();
 
         public Item GetEquipment(Tag.Equipment type) {
             return Items.Find(item => item.HasTag("Equipment", (float)type, true)).GetItem();

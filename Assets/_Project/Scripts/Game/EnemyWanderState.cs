@@ -3,9 +3,9 @@ using UnityEngine.AI;
 
 namespace Game {
     public class EnemyWanderState : EnemyBaseSate {
-        private NavMeshAgent agent;
-        private Vector3 startPoint;
-        private float wanderRadius;
+        private readonly NavMeshAgent agent;
+        private readonly Vector3 startPoint;
+        private readonly float wanderRadius;
 
         public EnemyWanderState(Enemy enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator) {
             this.agent = agent;
@@ -23,16 +23,15 @@ namespace Game {
             //animator stuff
         }
 
-        public override void Update() {
-            if(HasReachedDestination()) {
-                var randomDirection = Random.insideUnitSphere * wanderRadius;
-                randomDirection += startPoint;
-                NavMeshHit hit;
-                NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
-                var finalPosition = hit.position;
+        public override void Update()
+        {
+            if(!HasReachedDestination()) return;
+            var randomDirection = Random.insideUnitSphere * wanderRadius;
+            randomDirection += startPoint;
+            NavMesh.SamplePosition(randomDirection, out var hit, wanderRadius, 1);
+            var finalPosition = hit.position;
 
-                agent.SetDestination(finalPosition);
-            }
+            agent.SetDestination(finalPosition);
         }
 
         bool HasReachedDestination() {

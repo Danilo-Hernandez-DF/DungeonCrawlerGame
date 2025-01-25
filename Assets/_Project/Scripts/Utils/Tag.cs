@@ -16,9 +16,7 @@ namespace UtilsModule {
 
         public virtual bool Matches(Tag tag) {
             if(tag.data != data) return false;
-            if(inherent != tag.inherent) return false;
-            
-            return true;
+            return inherent == tag.inherent;
         }
 
         public Tag SetValue(float value) {
@@ -31,9 +29,11 @@ namespace UtilsModule {
         }
 
         public override string ToString() {
-            if(Type == TagData.TagType.None) return data.name;
-            if(Type == TagData.TagType.Equipment) return data.name + $": {(Equipment)value}";
-            return data.name + $": {data.valPrefix}{value}{data.valSuffix}";
+            return Type switch {
+                TagData.TagType.None => data.name,
+                TagData.TagType.Equipment => data.name + $": {(Equipment)value}",
+                _ => data.name + $": {data.valPrefix}{value}{data.valSuffix}"
+            };
         }
 
         public enum Equipment {

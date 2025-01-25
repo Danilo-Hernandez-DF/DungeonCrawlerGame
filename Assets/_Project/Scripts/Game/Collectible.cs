@@ -4,13 +4,13 @@ using UtilsModule;
 namespace Game {
     public abstract class Collectible : Entity, IEffector {
         public void Visit<T> (T visitable) where T : Component, IVisitable {
-            if(visitable is Entity entity) {
-                if(entity.gameObject.CompareTag("Player")) ApplyEffect(entity, null);
-            }
+            if(visitable is not Entity entity) return;
+            if(entity.gameObject.CompareTag("Player")) ApplyEffect(entity, null);
         }
 
         public void OnTriggerEnter2D(Collider2D other) {
            other.GetComponent<IVisitable>()?.Accept(this);
+           GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.CollectiblesCollected, 1);
            Destroy(gameObject);
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace UtilsModule {
@@ -14,23 +15,11 @@ namespace UtilsModule {
         }
 
         public static List<WeightedGameObject> GetListFromBase(List<WeightedObject<GameObject>> toConvert) {
-            List<WeightedGameObject> toReturn = new List<WeightedGameObject> ();
-
-            foreach(WeightedObject<GameObject> item in toConvert) {
-                toReturn.Add(GetFromBase(item));
-            }
-
-            return toReturn;
+            return toConvert.Select(GetFromBase).ToList();
         }
 
         public static List<WeightedObject<GameObject>> GetListOfBase(List<WeightedGameObject> toConvert) {
-            List<WeightedObject<GameObject>> toReturn = new List<WeightedObject<GameObject>> ();
-
-            foreach(WeightedGameObject item in toConvert) {
-                toReturn.Add(GetBase(item));
-            }
-
-            return toReturn;
+            return toConvert.Select(GetBase).ToList();
         }
     }
 }

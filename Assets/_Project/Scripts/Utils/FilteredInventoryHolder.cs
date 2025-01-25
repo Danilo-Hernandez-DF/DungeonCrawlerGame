@@ -5,12 +5,15 @@ namespace UtilsModule {
     public class FilteredInventoryHolder : MonoBehaviour {
         [SerializeField] protected List<SlotFilter> slotFilters;
         [SerializeField] protected FilteredInventoryEventChannel inventoryChannel;
-        public int InventorySize => slotFilters.Count;
-        public FilteredInventory Inventory;
-        public Inventory HeldInventory => Inventory;
+        protected FilteredInventory Inventory;
+        
+        [SerializeField] protected Entity targetEntity;
 
         void Awake() {
             Inventory = new FilteredInventory(slotFilters, inventoryChannel);
+            if(targetEntity) {
+                Inventory.targetEntity = targetEntity;
+            }
             GetComponent<InventoryGenrator>()?.Generate();
             inventoryChannel?.Invoke(Inventory);
         }

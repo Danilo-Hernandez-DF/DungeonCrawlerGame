@@ -8,48 +8,32 @@ namespace Game {
     [RequireComponent(typeof(PlayerDetector))]
     public class Enemy : Entity {
         [Header("Behaviour Settings")]
-        [SerializeField] NavMeshAgent agent;
-        [SerializeField] PlayerDetector playerDetector;
-        [SerializeField] Animator animator;
-        [SerializeField] float wanderRadius = 10f;
+        [SerializeField] protected NavMeshAgent agent;
+        [SerializeField] protected PlayerDetector playerDetector;
+        [SerializeField] protected Animator animator;
+        
+        protected GameObject LastDamageSource { get;  set; }
 
-        float TimeBetweenAttacks => Stats.AttackCooldown;
-        int AttackDamage => Stats.Attack;
+        protected float TimeBetweenAttacks => Stats.AttackCooldown;
+        protected int AttackDamage => Stats.Attack;
+        public bool wasStunned;
+        protected Vector3 MovementDirection => agent.velocity.normalized;
 
-        public GameObject LastDamageSource { get; protected set; }
-
-        StateMachine stateMachine;
-
-        CountdownTimer attackTimer;
-
-        public Vector3 MovementDirection => agent.velocity.normalized;
-
-        public bool wasStunned = false;
-
+        protected StateMachine stateMachine;
+        protected CountdownTimer attackTimer;
+        
         void Start() {
             attackTimer = new CountdownTimer(TimeBetweenAttacks);
             attackTimer.OnTimerStop += () => attackTimer.Reset(TimeBetweenAttacks);
             stateMachine = new StateMachine();
 
-            var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
-            var chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
-            var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
-            var stunnedState = new EnemyStunnedState(this, animator, agent, playerDetector.Player);
-
-            At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer(MovementDirection)));
-            At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer(MovementDirection)));
-            At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
-            At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
-            At(stunnedState, wanderState, new FuncPredicate(() => !wasStunned));
-
-            Any(stunnedState, new FuncPredicate(() => wasStunned));
-            
-
-            stateMachine.SetState(wanderState);
+            InitStates();
         }
+        
+        virtual protected void InitStates() { }
 
-        void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
-        void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
+        protected void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
+        protected void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
         new void Update() {
             base.Update();
@@ -58,7 +42,7 @@ namespace Game {
             playerDetector.Init(Stats.AttackRange);
 
             if(!GameManager.Instance.Paused) {
-                if(agent.isActiveAndEnabled && agent.isStopped == true) {
+                if(agent.isActiveAndEnabled && agent.isStopped) {
                     agent.isStopped = false;
                     animator.speed = 1f;
                 }
@@ -74,23 +58,12 @@ namespace Game {
             stateMachine.FixedUpdate();
             FacingDirection = MovementDirection;
         }
-
+        
         protected override void OnDeath() {
+            GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.KilledEnemies, 1);
             base.OnDeath();
-            Destroy(gameObject);
         }
-
-
-        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
-            LastDamageSource = dmgSource != null ? dmgSource : LastDamageSource;
-            if(!ignoreKnockback) wasStunned = true;
-        }
-
-        public void Attack() {
-            if(attackTimer.IsRunning) return;
-
-            attackTimer.Start();
-            playerDetector.PlayerComponent.TakeDamage(AttackDamage, dmgSource: gameObject);
-        }
+        
+        public virtual void Attack() { }
     }
 }

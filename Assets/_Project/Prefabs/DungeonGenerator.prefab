@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6511419620126390729}
+  - component: {fileID: 6361772984377162577}
   - component: {fileID: 5700763460623081231}
   m_Layer: 0
   m_Name: DungeonGenerator
@@ -32,6 +33,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6361772984377162577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193825505722193794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f846df5feb5041c8857cce08a13d2863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonGenerator: {fileID: 5700763460623081231}
 --- !u!114 &5700763460623081231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,8 +68,8 @@ MonoBehaviour:
     count: 2
   startRoomPrefab: {fileID: 3974854122743024291, guid: e9ffc5eea0de65b43ad09c702b8b740e, type: 3}
   roomPrefabs: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
-  bossRooms: {fileID: 0}
+  bossRooms: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
   roomMask:
     serializedVersion: 2
     m_Bits: 128
-  seed: 1790117150
+  seed: 0

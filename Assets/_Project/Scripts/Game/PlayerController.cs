@@ -10,7 +10,7 @@ namespace Game {
         [Header("References")]
         [SerializeField] Animator animator;
         [SerializeField] CinemachineCamera vCam;
-        InputReader Input => GameManager.Instance.input;
+        static InputReader Input => GameManager.Instance.input;
 
         [Header("Settings")]
         [SerializeField] float smoothTime = .2f;
@@ -47,7 +47,8 @@ namespace Game {
         CountdownTimer dashCooldownTimer;
         CountdownTimer attackTimer;
 
-        private FilteredInventory equipmentInv;
+        public FilteredInventory equipmentInv { get; private set; }
+        public Inventory playerInv { get; private set; }
 
         // Animator Parameters
         // readonly int Speed = Animator.StringToHash("Speed");
@@ -55,13 +56,13 @@ namespace Game {
         public void Bind(PlayerData data) {
             this.data = data;
             this.data.Id = Id;
-            transform.position = data.position;
-            transform.rotation = data.rotation;
+            transform.SetPositionAndRotation(data.position, data.rotation);
         }
 
         new protected void Awake() {
+            animator = GetComponent<Animator>();
             base.Awake();
-            mainCam = Camera.main.transform;
+            mainCam = CameraManager.Instance.camera.transform;
             vCam.Follow = transform;
             vCam.LookAt = transform;
             vCam.OnTargetObjectWarped(transform, transform.position - vCam.transform.position - Vector3.forward);
@@ -98,6 +99,10 @@ namespace Game {
             return !dashTimer.IsRunning 
                 && !attackTimer.IsRunning;
         }
+        
+        public void UpdateInventory(Inventory inventory) {
+            playerInv = inventory;
+        }
 
         public void UpdateEquipment(FilteredInventory inventory) {
             equipmentInv = inventory;
@@ -128,13 +133,15 @@ namespace Game {
         void OnDash(bool performed) {
             if(GameManager.Instance.Paused) return;
             attackStep = 0;
-            if(performed && !dashTimer.IsRunning && !dashCooldownTimer.IsRunning) {
-                dashTimer.Reset(DashDuration);
-                dashTimer.Start();
-            } else if(!performed && dashTimer.IsRunning) {
-                dashTimer.Stop();
+            switch(performed) {
+                case true when !dashTimer.IsRunning && !dashCooldownTimer.IsRunning:
+                    dashTimer.Reset(DashDuration);
+                    dashTimer.Start();
+                    break;
+                case false when dashTimer.IsRunning:
+                    dashTimer.Stop();
+                    break;
             }
-
             Debug.Log(Stats.ToString());
         }
 
@@ -145,14 +152,14 @@ namespace Game {
             base.Update();
 
             if(!GameManager.Instance.Paused) {
-                if(GetComponent<Animator>().speed == 0f) {
-                    GetComponent<Animator>().speed = 1f;
+                if(animator.speed == 0f) {
+                    animator.speed = 1f;
                 }
                 movement = new Vector2(Input.Direction.x, Input.Direction.y);
                 stateMachine.Update();
                 HandleTimers();
             } else {
-                GetComponent<Animator>().speed = 0f;
+                animator.speed = 0f;
             }
         }
 
@@ -186,10 +193,9 @@ namespace Game {
             if(GameManager.Instance.Paused) return;
             Item weapon = equipmentInv.GetItem(equipmentInv.NextMatch(GameManager.Instance.ItemDatabase.GetEquipment(Tag.Equipment.Weapon)));
             if(weapon?.IsEmpty ?? true) return;
-            if(!attackTimer.IsRunning) {
-                attackTimer.Reset(AttackCooldown);
-                attackTimer.Start();
-            }
+            if(attackTimer.IsRunning) return;
+            attackTimer.Reset(AttackCooldown);
+            attackTimer.Start();
         }
 
         public void Attack() {
@@ -218,13 +224,19 @@ namespace Game {
             }
         }
 
-        private void HandleHorizontalMovement(Vector2 movement) {
-            Vector2 velocity = dashVelocity * MoveSpeed * movement;
-            Rb.linearVelocity = new Vector2(velocity.x, velocity.y);
+        private void HandleHorizontalMovement(Vector2 mvmnt) {
+            Vector2 vel = dashVelocity * MoveSpeed * mvmnt;
+            Rb.linearVelocity = new Vector2(vel.x, vel.y);
         }
 
         void SmoothSpeed(float value) {
             currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
+        }
+
+        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
+            Status.OnDamage(damage);
+            GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
+            //Debug.Log($"{name} took {damage} damage");
         }
     }
 }

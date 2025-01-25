@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace UtilsModule {
@@ -8,11 +9,7 @@ namespace UtilsModule {
         [SerializeField] private List<GOLootTable> secondaryTables;
 
         public List<GameObject> GetList() {
-            var toReturn = new List<GameObject>();
-
-            foreach(var item in items) {
-                toReturn.Add(item.Item);
-            }
+            var toReturn = items.Select(item => item.Item).ToList();
 
             foreach(var table in secondaryTables) {
                 toReturn.AddRange(table.GetList());
@@ -22,47 +19,30 @@ namespace UtilsModule {
         }
 
         public override GameObject GetWeightedItem(int lowerLimit = 0, uint upperLimit = int.MaxValue, bool seeded = false) {
-            int sumWeights = 0;
+            if(items?.Count == 0 && secondaryTables?.Count == 0) return null;
 
-            if(items?.Count == 0 && secondaryTables?.Count == 0) return default;
-
-            foreach(WeightedGameObject wItem in items) {
-                if(wItem.Weight < lowerLimit) continue;
-                if(wItem.Weight > upperLimit) continue;
-
-                sumWeights += wItem.Weight;
-            }
-
-            foreach(GOLootTable lootTable in secondaryTables) {
-                if(lootTable.weight < lowerLimit) continue;
-                if(lootTable.weight > upperLimit) continue;
-
-                sumWeights += lootTable.weight;
-            }
+            int sumWeights = (from wItem in items where wItem.Weight >= lowerLimit where wItem.Weight <= 
+                upperLimit select wItem.Weight).Sum() + (from lootTable in secondaryTables where lootTable.weight >= lowerLimit where lootTable.weight 
+                <= upperLimit select lootTable.weight).Sum();
 
             int rand = seeded? SeededRandom.GetRange(0, sumWeights): Random.Range(0, sumWeights);
             int added = 0;
-            foreach(WeightedGameObject wItem in items) {
-                if(wItem.Weight < lowerLimit) continue;
-                if(wItem.Weight > upperLimit) continue;
-
+            foreach (var wItem in items.Where(wItem => wItem.Weight >= lowerLimit).Where(wItem => 
+                         wItem.Weight <= upperLimit)) {
                 added += wItem.Weight;
                 if(rand < added) {
                     return wItem.Item;
                 }
             }
 
-            foreach(GOLootTable lootTable in secondaryTables) {
-                if(lootTable.weight < lowerLimit) continue;
-                if(lootTable.weight > upperLimit) continue;
-
+            foreach (var lootTable in secondaryTables.Where(lootTable => lootTable.weight >= lowerLimit).Where(lootTable => lootTable.weight <= upperLimit)) {
                 added += lootTable.weight;
                 if(rand < added) {
                     return lootTable.GetWeightedItem(lowerLimit, upperLimit, seeded);
                 }
             }
 
-            return default;
+            return null;
         }
     }
 }

@@ -18,12 +18,11 @@ namespace UtilsModule {
 
     [Serializable]
     public class Stats {
-        readonly StatsMediator mediator;
         readonly BaseStats baseStats;
-        public StatsMediator Mediator => mediator;
+        public StatsMediator Mediator { get; }
 
         private float StatCalculation(Query q) {
-            mediator.PerformQuery(this, q);
+            Mediator.PerformQuery(this, q);
             return q.Value * (q.FinalMultiplier / 100f);
         }
 
@@ -105,7 +104,7 @@ namespace UtilsModule {
         }
 
         public Stats(StatsMediator mediator, BaseStats baseStats) {
-            this.mediator = mediator;
+            this.Mediator = mediator;
             this.baseStats = baseStats;
         }
 

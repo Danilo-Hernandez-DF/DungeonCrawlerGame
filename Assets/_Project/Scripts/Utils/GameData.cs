@@ -11,5 +11,6 @@ namespace Systems.Persistence {
         public PlayerData playerData;
         public List<InventoryData> inventoryData;
         public List<InventoryData> filteredInventoryData;
+        public GameSettingsData gameSettingsData;
     }
 }

@@ -10,7 +10,7 @@ namespace UtilsModule {
 
         protected override void Awake() {
             base.Awake();
-            equipmentUI.targetEntity = PlayerDetector.GetPlayer().GetComponent<PlayerController>();
+            //equipmentUI.targetEntity = PlayerDetector.GetPlayer().GetComponent<PlayerController>();
 
             children = new List<UIBase> {
                 inventory,
@@ -21,23 +21,16 @@ namespace UtilsModule {
                 child.SetParent(this);
             }
         }
-
-        protected override void OnOpen() {
-            foreach(InventoryUI child in children) {
-                //child.Refresh();
-            }
-        }
-
+        
         protected override void OnClose() {
-            if(!InventorySlotUI.HeldItemEmpty) {
-                if(inventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
-                    equipmentUI.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
-                } else {
-                    inventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
-                }
-                
-                InventorySlotUI.heldItem = null;
+            if(InventorySlotUI.HeldItemEmpty) return;
+            if(inventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
+                equipmentUI.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+            } else {
+                inventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
             }
+                
+            InventorySlotUI.heldItem = null;
         }
 
         protected new void OnEnable() {

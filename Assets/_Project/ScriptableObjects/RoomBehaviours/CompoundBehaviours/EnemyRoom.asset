@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ebd257d2354443af08dc21bdfe1095, type: 3}
+  m_Name: EnemyRoom
+  m_EditorClassIdentifier: 
+  subBehaviours:
+  - {fileID: 11400000, guid: 818e6898ccf24f941bb9245a1bb4002c, type: 2}
+  - {fileID: 11400000, guid: 070da73bff9e6a246831a66fad41c973, type: 2}
+  - {fileID: 11400000, guid: cd1b0be33a0aa354fbd446581e60d425, type: 2}
+  - {fileID: 11400000, guid: b1acbb1e94443e64bbfa97a0c0aa498e, type: 2}
+  - {fileID: 11400000, guid: fcfe853d28034554ca300028177f0617, type: 2}

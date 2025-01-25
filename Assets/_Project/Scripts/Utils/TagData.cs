@@ -14,7 +14,7 @@ namespace UtilsModule {
         public string valPrefix;
         public string valSuffix;
         public new string name;
-        public virtual Tag GetTag(float value, bool inherent = false) {
+        public Tag GetTag(float value, bool inherent = false) {
             return new Tag(this, inherent, value);
         }
 

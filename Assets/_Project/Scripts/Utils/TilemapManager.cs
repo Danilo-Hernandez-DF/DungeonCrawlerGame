@@ -25,7 +25,7 @@ namespace UtilsModule {
             base.Awake();
         }
 
-        public TileBase GetTile(Vector2 pos) {
+        private TileBase GetTile(Vector2 pos) {
             Vector3Int gridPos = map.WorldToCell(pos);
             TileBase tile = map.GetTile(gridPos);
 
@@ -33,9 +33,8 @@ namespace UtilsModule {
         }
 
         public TileData GetTileData(TileBase tile) {
-            if(tile == null || !dataFromTiles.ContainsKey(tile)) return null;
+            if(tile == null || !dataFromTiles.TryGetValue(tile, out var tileData)) return null;
 
-            TileData tileData = dataFromTiles[tile];
             return tileData;
         }
 

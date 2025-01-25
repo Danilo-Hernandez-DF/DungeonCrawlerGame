@@ -7,6 +7,8 @@ using UnityEngine.UI;
 namespace UtilsModule {
     public class InventorySlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler {
         public static Item heldItem;
+        private static readonly int Pressed = Animator.StringToHash("Pressed");
+        private static readonly int Selected = Animator.StringToHash("Selected");
         public static bool HeldItemEmpty => heldItem?.IsEmpty ?? true;
 
         [Header("Visuals")]
@@ -24,20 +26,20 @@ namespace UtilsModule {
         [SerializeField] int index;
         Animator anim;
         int indexOffset = 0;
-        public int OffsetIndex => index + indexOffset;
+        private int OffsetIndex => index + indexOffset;
         private Item currentItem;
-        bool selected;
-        public bool IsSelected => selected;
+        public bool IsSelected { get; private set; }
+
         InventoryUI parent;
 
-        public void OnPress(int action = 0) {
+        private void OnPress(int action = 0) {
             if(!IsSelected) return;
-            anim.SetTrigger("Pressed");
+            anim.SetTrigger(Pressed);
             parent.OnSlotPressed(OffsetIndex, action);
         }
 
         void Update() {
-            anim.SetBool("Selected", IsSelected);
+            anim.SetBool(Selected, IsSelected);
         }
 
         public void Init(int index) {
@@ -49,7 +51,7 @@ namespace UtilsModule {
         }
 
         public void Clear() {
-            selected = false;
+            IsSelected = false;
             DeactivateHeldItem();
         }
 
@@ -77,19 +79,19 @@ namespace UtilsModule {
         }
 
         public void OnSelect(BaseEventData eventData) {
-            selected = true;
+            IsSelected = true;
             UpdateData();
         }
 
         void UpdateData() {
-            if(selected) itemDisplayChannel?.Invoke(currentItem);
+            if(IsSelected && currentItem != null) itemDisplayChannel?.Invoke(currentItem);
             UpdateHeldItemDisplay();
         }
 
         void UpdateHeldItemDisplay() {
-            if(heldItem?.IsEmpty ?? true || !selected) {
+            if((heldItem?.IsEmpty ?? true) || !IsSelected) {
                 DeactivateHeldItem();
-            } else if(selected) {
+            } else if(IsSelected) {
                 heldItemDisplay.SetActive(true);
                 heldItemImage.sprite = heldItem.data.DisplaySprite;
                 heldItemImage.color = Color.white;
@@ -98,7 +100,7 @@ namespace UtilsModule {
         }
 
         public void OnDeselect(BaseEventData eventData) {
-            selected = false;
+            IsSelected = false;
             DeactivateHeldItem();
         }
 

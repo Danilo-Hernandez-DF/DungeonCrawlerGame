@@ -6,22 +6,22 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace UtilsModule {
-    public class TilemapBuilder { 
-        Tilemap tilemap;
-        RoomController roomController;
+    public class TilemapBuilder {
+        readonly Tilemap tilemap;
+        readonly RoomController roomController;
 
         public TilemapBuilder(Tilemap tilemap, RoomController roomController = null) {
             this.tilemap = tilemap;
             this.roomController = roomController;
         }
 
-        public void CopyFrom(Tilemap other, Vector2Int fromPos, Vector2Int toPos, Vector2Int areaSize) {
+        private void CopyFrom(Tilemap other, Vector2Int fromPos, Vector2Int toPos, Vector2Int areaSize) {
             List<TileBase> copyArea = GetTiles(other, fromPos, areaSize);
             SetTiles(tilemap, toPos, copyArea, areaSize);
             tilemap.RefreshAllTiles();
         }
 
-        public List<TileBase> GetTiles(Tilemap map, Vector2Int startPos, Vector2Int areaSize) {
+        private static List<TileBase> GetTiles(Tilemap map, Vector2Int startPos, Vector2Int areaSize) {
             List<TileBase> areaToCopy = new(); 
             
             for(int x = 0; x < areaSize.x; x++) {
@@ -33,7 +33,7 @@ namespace UtilsModule {
             return areaToCopy;
         }
 
-        public List<List<TileBase>> GetTiles2D(Tilemap map, Vector2Int startPos, Vector2Int areaSize) {
+        private static List<List<TileBase>> GetTiles2D(Tilemap map, Vector2Int startPos, Vector2Int areaSize) {
             List<List<TileBase>> areaToCopy = new();
 
             for(int x = 0; x < areaSize.x; x++) {
@@ -46,7 +46,7 @@ namespace UtilsModule {
             return areaToCopy;
         }
 
-        public void SetTiles(Tilemap map, Vector2Int startPos, List<TileBase> tiles, Vector2Int areaSize) {
+        private static void SetTiles(Tilemap map, Vector2Int startPos, List<TileBase> tiles, Vector2Int areaSize) {
             int i = 0;
             for(int x = 0; x < areaSize.x; x++) {
                 for(int y = 0; y < areaSize.y; y++) {
@@ -84,7 +84,7 @@ namespace UtilsModule {
             SetTiles(tilemap, pos, replaceArea, areaSize);
         }
 
-        public void SpawnEntities(Vector2Int pos, Vector2Int areaSize, Vector2 centerPos) {
+        private void SpawnEntities(Vector2Int pos, Vector2Int areaSize, Vector2 centerPos) {
             List<List<TileBase>> boundsArea = GetTiles2D(tilemap, pos, areaSize);
 
             for(int x = 0; x < areaSize.x; x++) {
@@ -99,7 +99,7 @@ namespace UtilsModule {
                     var prefab = tile.prefabs.GetWeightedItem(seeded: true);
                     Vector2 position = new Vector2Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
                         -Mathf.FloorToInt(areaSize.y/2) + y) + new Vector2(0.5f, 0.5f) + centerPos;
-                    var entity =GameObject.Instantiate(prefab, position, Quaternion.identity);
+                    var entity = Object.Instantiate(prefab, position, Quaternion.identity);
 
                     if(entity.GetComponent<EnemySpawnManager>() != null)
                         roomController?.AddSpawner(entity.GetComponent<EnemySpawnManager>());
@@ -113,7 +113,7 @@ namespace UtilsModule {
             }
         }
 
-        public void AddPoIs(Vector2Int pos, Vector2Int areaSize) {
+        private void AddPoIs(Vector2Int pos, Vector2Int areaSize) {
             List<List<TileBase>> boundsArea = GetTiles2D(tilemap, pos, areaSize);
 
             for(int x = 0; x < areaSize.x; x++) {

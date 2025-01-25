@@ -6,7 +6,7 @@ namespace UtilsModule {
 
         public virtual void OnTick(Entity entity, int tickCount) { }
         public virtual void OnApply(Entity entity) { }
-        public virtual void OnRemove(Entity entity) { }
+        protected virtual void OnRemove(Entity entity) { }
         public void OnExpire(Entity entity) {
             OnRemove(entity); 
         }

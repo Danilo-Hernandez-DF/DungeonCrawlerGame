@@ -19,17 +19,15 @@ namespace UtilsModule {
         public void Start() {
             Time = InitialTime;
 
-            if(!IsRunning) {
-                IsRunning = true;
-                OnTimerStart.Invoke();
-            }
+            if(IsRunning) return;
+            IsRunning = true;
+            OnTimerStart.Invoke();
         }
 
         public void Stop() {
-            if(IsRunning) {
-                IsRunning = false;
-                OnTimerStop.Invoke();
-            }
+            if(!IsRunning) return;
+            IsRunning = false;
+            OnTimerStop.Invoke();
         }
 
         public void Pause() => IsRunning = false;

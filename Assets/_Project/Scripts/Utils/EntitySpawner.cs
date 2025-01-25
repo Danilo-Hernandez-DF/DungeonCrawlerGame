@@ -1,7 +1,7 @@
 namespace UtilsModule {
     public class EntitySpawner<T> where T : Entity {
-        IEntityFactory<T> entityFactory;
-        ISpawnPointStrategy spawnPointStrategy;
+        readonly IEntityFactory<T> entityFactory;
+        readonly ISpawnPointStrategy spawnPointStrategy;
 
         public EntitySpawner(IEntityFactory<T> entityFactory, ISpawnPointStrategy spawnPointStrategy) {
             this.entityFactory = entityFactory;

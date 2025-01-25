@@ -961,6 +961,71 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 363634468}
   m_CullTransparentMesh: 1
+--- !u!1 &388577880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 388577882}
+  - component: {fileID: 388577881}
+  m_Layer: 0
+  m_Name: GameSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &388577881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388577880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe24e3de07144484a97b5c02a891b8f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    <Id>k__BackingField:
+      part1: 0
+      part2: 0
+      part3: 0
+      part4: 0
+    statisticsTracker:
+      name: 
+      quest: {fileID: 0}
+    statKeyPairs: []
+    itemKeyPairs: []
+  <Id>k__BackingField:
+    part1: 2255911508
+    part2: 1175937367
+    part3: 3465134733
+    part4: 2570607463
+  statisticsTracker:
+    name: 
+    quest: {fileID: 0}
+  statsTrackers: []
+  quests: []
+--- !u!4 &388577882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388577880}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5675078, y: -2.4593582, z: -0.4180104}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &505905053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1158,6 +1223,7 @@ GameObject:
   - component: {fileID: 519420030}
   - component: {fileID: 519420034}
   - component: {fileID: 519420035}
+  - component: {fileID: 519420036}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1219,7 +1285,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.38431373, g: 0.2509804, b: 0.24705882, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1244,7 +1310,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 5.625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1316,6 +1382,30 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 1
+  m_AssetsPPU: 32
+  m_RefResolutionX: 1920
+  m_RefResolutionY: 1080
+  m_CropFrame: 4
+  m_GridSnapping: 1
+  m_FilterMode: 1
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1 &531921152
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,6 +1718,8 @@ MonoBehaviour:
   inventoryChannel: {fileID: 11400000, guid: 894b88c4038223249873c391075b9077, type: 2}
   Inventory:
     items: []
+    targetEntity: {fileID: 0}
+  targetEntity: {fileID: 0}
   <Id>k__BackingField:
     part1: 3514958159
     part2: 1306838417
@@ -1653,6 +1745,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9edd2e8a32ffb68409553c4e4073e85f, type: 2}
   - {fileID: 11400000, guid: f2306a6a01e93404fab9597dd63332ea, type: 2}
   inventoryChannel: {fileID: 11400000, guid: f7e453dc67fb33d46b8af87395a0989d, type: 2}
+  targetEntity: {fileID: 622018811}
   <Id>k__BackingField:
     part1: 571041261
     part2: 1268669130
@@ -1858,6 +1951,7 @@ GameObject:
   - component: {fileID: 622018816}
   - component: {fileID: 622018815}
   - component: {fileID: 622018818}
+  - component: {fileID: 622018819}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Player
@@ -2085,6 +2179,34 @@ MonoBehaviour:
       - m_Target: {fileID: 622018811}
         m_TargetAssemblyTypeName: Game.PlayerController, Assembly-CSharp
         m_MethodName: UpdateEquipment
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &622018819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622018809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6878361da4bf1c8409e5164e761fac17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventChannel: {fileID: 11400000, guid: 894b88c4038223249873c391075b9077, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 622018811}
+        m_TargetAssemblyTypeName: Game.PlayerController, Assembly-CSharp
+        m_MethodName: UpdateInventory
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2403,7 +2525,6 @@ MonoBehaviour:
   slotPrefab: {fileID: 5509897362931311048, guid: 61747458de154304183051d72bee7c07, type: 3}
   slotHolder: {fileID: 604627219}
   itemDisplayChannel: {fileID: 11400000, guid: 111b2b73ebf90d34aa4c42ab7cdc6adf, type: 2}
-  targetEntity: {fileID: 0}
 --- !u!4 &745224760
 Transform:
   m_ObjectHideFlags: 0
@@ -2486,7 +2607,6 @@ MonoBehaviour:
   slotPrefab: {fileID: 5509897362931311048, guid: 61747458de154304183051d72bee7c07, type: 3}
   slotHolder: {fileID: 2082988568}
   itemDisplayChannel: {fileID: 11400000, guid: 111b2b73ebf90d34aa4c42ab7cdc6adf, type: 2}
-  targetEntity: {fileID: 0}
 --- !u!4 &751453991
 Transform:
   m_ObjectHideFlags: 0
@@ -2561,7 +2681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUnparentOnAwake: 1
   gameData:
-    name: Game
+    name: TestSaveFile
     currentLevelName: DevScene
     playerData:
       <Id>k__BackingField:
@@ -2573,6 +2693,19 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
     inventoryData: []
     filteredInventoryData: []
+    gameSettingsData:
+      <Id>k__BackingField:
+        part1: 0
+        part2: 0
+        part3: 0
+        part4: 0
+      statisticsTracker:
+        name: 
+        quest: {fileID: 0}
+      statKeyPairs: []
+      itemKeyPairs: []
+  loadDevGame: 1
+  loadOnStart: 1
 --- !u!4 &893083504
 Transform:
   m_ObjectHideFlags: 0
@@ -4640,12 +4773,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2193825505722193794, guid: 6625f003617459b42b29d83be5c375a0, type: 3}
       propertyPath: m_Name
-      value: DungeonGenerator
+      value: DungeonController
       objectReference: {fileID: 0}
-    - target: {fileID: 5700763460623081231, guid: 6625f003617459b42b29d83be5c375a0, type: 3}
-      propertyPath: bossRooms
-      value: 
-      objectReference: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
     - target: {fileID: 6511419620126390729, guid: 6625f003617459b42b29d83be5c375a0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4702,6 +4831,7 @@ GameObject:
   - component: {fileID: 1913633279}
   - component: {fileID: 1913633280}
   - component: {fileID: 1913633281}
+  - component: {fileID: 1913633282}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -4749,7 +4879,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 40
-    OrthographicSize: 4.5
+    OrthographicSize: 6
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
@@ -4786,6 +4916,18 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 0, z: -10}
+--- !u!114 &1913633282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913633278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1954607087
 GameObject:
   m_ObjectHideFlags: 0
@@ -5160,7 +5302,6 @@ MonoBehaviour:
   slotPrefab: {fileID: 5509897362931311048, guid: 61747458de154304183051d72bee7c07, type: 3}
   slotHolder: {fileID: 1349074793}
   itemDisplayChannel: {fileID: 11400000, guid: 111b2b73ebf90d34aa4c42ab7cdc6adf, type: 2}
-  targetEntity: {fileID: 0}
 --- !u!114 &2055983072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5371,7 +5512,6 @@ MonoBehaviour:
   slotPrefab: {fileID: 5509897362931311048, guid: 61747458de154304183051d72bee7c07, type: 3}
   slotHolder: {fileID: 1838833218}
   itemDisplayChannel: {fileID: 11400000, guid: 111b2b73ebf90d34aa4c42ab7cdc6adf, type: 2}
-  targetEntity: {fileID: 0}
 --- !u!114 &2116805600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5449,6 +5589,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 893083504}
   - {fileID: 1290492512}
+  - {fileID: 388577882}
   - {fileID: 584949377}
   - {fileID: 1830098830}
   - {fileID: 622018810}

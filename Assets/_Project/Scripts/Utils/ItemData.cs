@@ -12,7 +12,7 @@ namespace UtilsModule {
         public List<TagDefault> inherentTags;
         public Sprite DisplaySprite {get => sprite;}
 
-        public virtual Item GetItem(int count = 1, List<Tag> tags = default) {
+        public Item GetItem(int count = 1, List<Tag> tags = null) {
             return new Item(this, count, tags);
         }
 

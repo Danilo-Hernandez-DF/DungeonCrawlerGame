@@ -17,14 +17,14 @@ namespace UtilsModule {
 
             //Debug.Log(inventory.items.Count);
 
-            foreach(var i in Inventory.items) {
+            /*foreach(var i in Inventory.items) {
                 string tagString = "";
                 for(int j = 0; j < i.tags.Count; j++) {
                     tagString += i.tags[j].ToString() + (j == i.tags.Count - 1 ? "" : ", ");
                 }
 
-                //Debug.Log($"{i.data.name}: [Tags: [{tagString}], Count: {i.count}]");
-            }
+                Debug.Log($"{i.data.name}: [Tags: [{tagString}], Count: {i.count}]");
+            }*/
         }
 
         public void Init(LootTable<Item> lootTable, int rolls) {

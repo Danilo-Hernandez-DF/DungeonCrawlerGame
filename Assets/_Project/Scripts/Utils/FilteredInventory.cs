@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace UtilsModule {
     public class FilteredInventory : Inventory {
-        private List<SlotFilter> slotFilters;
-        private new FilteredInventoryEventChannel inventoryChannel;
+        private readonly List<SlotFilter> slotFilters;
+        private new readonly FilteredInventoryEventChannel inventoryChannel;
 
         public FilteredInventory(List<SlotFilter> slotFilters, FilteredInventoryEventChannel inventoryChannel = null) {
             this.slotFilters = slotFilters;
@@ -64,17 +65,15 @@ namespace UtilsModule {
                 return 0;
             }
 
-            if(items[slot].Matches(item)) {
-                int remainder = items[slot].count + count - item.data.maxCount;
-                if(remainder < 0) remainder = 0;
-                count -= remainder;
-                items[slot].count += count;
-                inventoryChannel?.Invoke(this);
-                return remainder;
-            }
+            if(!items[slot].Matches(item)) return count;
+            int remainder = items[slot].count + count - item.data.maxCount;
+            if(remainder < 0) remainder = 0;
+            count -= remainder;
+            items[slot].count += count;
+            inventoryChannel?.Invoke(this);
+            return remainder;
 
             //Debug.Log("Slot is occupied");
-            return count;
         }
 
         public override bool SetSlot(int slot, Item item, int count = 1, bool force = false) {
@@ -122,13 +121,10 @@ namespace UtilsModule {
         }
 
         private bool Allowed(Item item) {
-            foreach(var filter in slotFilters) {
-                if(!filter.Evaluate(item)) return false;
-            }
-            return true;
+            return slotFilters.All(filter => filter.Evaluate(item));
         }
 
-        public int NextAllowed(Item item, int start = 0) {
+        private int NextAllowed(Item item, int start = 0) {
             for(int i = start; i < slotFilters.Count; i++) {
                 if(slotFilters[i].Evaluate(item) && items[i].count < item.data.maxCount) return i;
             }

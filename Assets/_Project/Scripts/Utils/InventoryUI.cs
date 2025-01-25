@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,16 +12,15 @@ namespace UtilsModule {
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] Transform slotHolder;
         [SerializeField] ItemEventChannel itemDisplayChannel;
-        [SerializeField] public Entity targetEntity;
-        bool IsEquipment => targetEntity != null;
-        public int MaxDisplaySlots => columns * rows;
+        
+        private int MaxDisplaySlots => columns * rows;
         List<InventorySlotUI> slots;
-        Inventory targetInventory;
-        public Inventory TargetInventory => targetInventory;
+        public Inventory TargetInventory { get; private set; }
+
         int page = 1;
-        int PageCount => Mathf.CeilToInt((float)targetInventory.Size / MaxDisplaySlots);
+        int PageCount => Mathf.CeilToInt((float)TargetInventory.Size / MaxDisplaySlots);
         int PageOffset => (page - 1) * MaxDisplaySlots;
-        int PageSize => targetInventory.Size - PageOffset > MaxDisplaySlots ? MaxDisplaySlots : targetInventory.Size - PageOffset;
+        int PageSize => TargetInventory.Size - PageOffset > MaxDisplaySlots ? MaxDisplaySlots : TargetInventory.Size - PageOffset;
 
         protected override void Awake() {
             base.Awake();
@@ -29,13 +29,13 @@ namespace UtilsModule {
         }
 
         protected override void OnOpen() {
-            if(targetInventory == null) {
+            if(TargetInventory == null) {
                 Debug.LogError("No target inventory set");
                 return;
             }
             page = 1;
 
-            OnUpdate(targetInventory);
+            OnUpdate(TargetInventory);
         }
 
         protected override void OnClose() {
@@ -49,8 +49,7 @@ namespace UtilsModule {
             grid.constraintCount = columns;
                 
             for(int i = 0; i < MaxDisplaySlots; i++) {
-                var newSlot = Instantiate(slotPrefab);
-                newSlot.transform.SetParent(slotHolder, false);
+                var newSlot = Instantiate(slotPrefab, slotHolder, false);
                 var slotComp = newSlot.GetComponent<InventorySlotUI>();
                 slotComp.Init(i);
                 slots.Add(slotComp);
@@ -60,12 +59,11 @@ namespace UtilsModule {
         }
 
         public void OnUpdate(Inventory inventory) {
-            if(inventory != targetInventory) targetInventory = inventory;
+            if(inventory != TargetInventory) TargetInventory = inventory;
             
-            if(MaxDisplaySlots > targetInventory.Size) {
+            if(MaxDisplaySlots > TargetInventory.Size) {
                 for(int i = 0; i < MaxDisplaySlots; i++) {
-                    if(i < targetInventory.Size) slots[i].gameObject.SetActive(true);
-                    else slots[i].gameObject.SetActive(false);
+                    slots[i].gameObject.SetActive(i < TargetInventory.Size);
                 }
             }
         
@@ -79,35 +77,35 @@ namespace UtilsModule {
         }
 
         public void Refresh() {
-            OnUpdate(targetInventory);
+            OnUpdate(TargetInventory);
         }
 
         void SwitchSelection(int index) {
-            if(index < 0 || index >= targetInventory.Size) return;
+            if(index < 0 || index >= TargetInventory.Size) return;
             //Debug.Log("Pressed: " + index);
             if(InventorySlotUI.HeldItemEmpty) {
                 //Debug.Log("Empty held item");
-                if(targetInventory.items[index + PageOffset].IsEmpty) return;
-                InventorySlotUI.heldItem = targetInventory.items[index + PageOffset].Copy();
-                targetInventory.ResetSlot(index + PageOffset);
+                if(TargetInventory.items[index + PageOffset].IsEmpty) return;
+                InventorySlotUI.heldItem = TargetInventory.items[index + PageOffset].Copy();
+                TargetInventory.ResetSlot(index + PageOffset);
 
-                if(IsEquipment) {
-                    AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, targetEntity);
+                if(TargetInventory.IsEquipment) {
+                    AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, TargetInventory.targetEntity);
                 }
-            } else if(InventorySlotUI.heldItem.Matches(targetInventory.items[index + PageOffset])) {
+            } else if(InventorySlotUI.heldItem.Matches(TargetInventory.items[index + PageOffset])) {
                 //Debug.Log("Matching held item");
-                int remainder = targetInventory.AddAt(index + PageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+                int remainder = TargetInventory.AddAt(index + PageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 if(remainder > 0) InventorySlotUI.heldItem.count = remainder;
                 else InventorySlotUI.heldItem = new Item(GameManager.Instance.emptyItem);
             } else {
                 //Debug.Log("Different held item");
                 var tempItem = InventorySlotUI.heldItem.Copy();
-                InventorySlotUI.heldItem = targetInventory.items[index + PageOffset].Copy();
-                if(!targetInventory.SetSlot(index + PageOffset, tempItem, tempItem.count)) {
+                InventorySlotUI.heldItem = TargetInventory.items[index + PageOffset].Copy();
+                if(!TargetInventory.SetSlot(index + PageOffset, tempItem, tempItem.count)) {
                     InventorySlotUI.heldItem = tempItem.Copy();
-                } else if(IsEquipment) {
-                    AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, targetEntity);
-                    AdditionalDataManager.Instance.OnEquip(targetInventory.items[index + PageOffset], targetEntity);
+                } else if(TargetInventory.IsEquipment) {
+                    AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, TargetInventory.targetEntity);
+                    AdditionalDataManager.Instance.OnEquip(TargetInventory.items[index + PageOffset], TargetInventory.targetEntity);
                 }
             }
         }
@@ -124,14 +122,11 @@ namespace UtilsModule {
                     break;
             }
 
-            OnUpdate(targetInventory);
+            OnUpdate(TargetInventory);
         }
 
-        public bool IsActive() {
-            foreach(var slot in slots) {
-                if(slot.IsSelected) return true;
-            }
-            return false;
+        private bool IsActive() {
+            return slots.Any(slot => slot.IsSelected);
         }
 
         public void OnPageChange(int direction) {
@@ -144,7 +139,7 @@ namespace UtilsModule {
             else if(page + direction < 1) page = PageCount;
             else page += direction;
 
-            OnUpdate(targetInventory);
+            OnUpdate(TargetInventory);
         }
     }
 }

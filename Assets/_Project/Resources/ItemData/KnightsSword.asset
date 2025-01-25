@@ -20,7 +20,7 @@ MonoBehaviour:
   - data: {fileID: 11400000, guid: f21ebf7095669ab4e83f3415fd7f7bcd, type: 2}
     value: 20
   - data: {fileID: 11400000, guid: c158e2bfff85b3c49b26d47c09dfab81, type: 2}
-    value: 0.45
+    value: 0.4
   - data: {fileID: 11400000, guid: 1938c5ee7542fff40bc3148a5d6a093e, type: 2}
     value: 0
   - data: {fileID: 11400000, guid: 4d0b1ee4633e4b7489b5f8f9c89cfaa4, type: 2}

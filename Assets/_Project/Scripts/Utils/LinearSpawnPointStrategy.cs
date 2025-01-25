@@ -3,7 +3,7 @@ using UnityEngine;
 namespace UtilsModule {
     public class LinearSpawnPointStrategy : ISpawnPointStrategy {
         int index = 0;
-        Transform[] spawnPoints;
+        readonly Transform[] spawnPoints;
 
         public LinearSpawnPointStrategy(Transform[] spawnPoints) {
             this.spawnPoints = spawnPoints;

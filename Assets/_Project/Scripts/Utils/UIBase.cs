@@ -9,9 +9,9 @@ namespace UtilsModule {
         [SerializeField] protected List<UIBase> children = new List<UIBase>();
         protected GameObject StartElement => !IsParent? startElement: children[0].startElement;
         protected bool open => handledUI? handledUI.activeSelf: Parent.open;
-        protected UIBase Parent;
-        protected bool IsParent => children.Count > 0;
-        protected bool IsChild => Parent != null;
+        private UIBase Parent;
+        private bool IsParent => children.Count > 0;
+        private bool IsChild => Parent != null;
 
         protected virtual void Awake() {
             foreach(UIBase child in children) {
@@ -43,7 +43,7 @@ namespace UtilsModule {
             //Implement in children
         }
 
-        public void Close() {
+        protected void Close() {
             if(!IsChild) {
                 if(GameManager.Instance.openUI != handledUI) return;
                 handledUI.SetActive(false);

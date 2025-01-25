@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game {
     public abstract class BaseState : IState {
         protected readonly Animator Animator;
-        protected readonly float CrossFadeDuration = 0f;
+        protected const float CrossFadeDuration = 0f;
         protected readonly PlayerController Player;
 
         protected static readonly int LocomotionHash = Animator.StringToHash("Locomotion");

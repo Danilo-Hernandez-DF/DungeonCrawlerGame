@@ -1,7 +1,7 @@
 namespace UtilsModule {
     public class StatusEffect {
-        public bool ToRemove { get; protected set; }
-        protected int Ticks = 0;
+        public bool ToRemove { get; private set; }
+        private int Ticks = 0;
         public StatusEffectData Data { get; private set; }
         public StatusEffect(StatusEffectData data) { 
             this.Data = data; 
@@ -14,7 +14,7 @@ namespace UtilsModule {
             Data.OnTick(entity, Ticks);
         }
 
-        public void OnExpire(Entity entity) {
+        private void OnExpire(Entity entity) {
             Data.OnExpire(entity);
             ToRemove = true; 
         }

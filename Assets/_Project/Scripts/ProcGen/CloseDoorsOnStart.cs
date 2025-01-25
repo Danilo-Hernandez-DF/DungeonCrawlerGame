@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace ProcGen {
     [CreateAssetMenu(menuName = "RoomBehaviour/CloseDoorsOnEnter")]
-    public class CloseDoorsOnEnter : RoomBehaviour { 
-        public override void OnPlayerEnter(RoomController room){ 
+    public class CloseDoorsOnStart : RoomBehaviour { 
+        public override void OnStart(RoomController room){ 
             room.CloseDoors();
         } 
     }

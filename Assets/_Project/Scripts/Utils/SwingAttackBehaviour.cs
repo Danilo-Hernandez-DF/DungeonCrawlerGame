@@ -15,7 +15,7 @@ namespace UtilsModule {
         //bool ApplyStatus => statusEffectData != null;
 
         protected override void OnUse(Inventory source, int indexSource, Entity entitySource, int addData = 0) {
-            if(entitySource == null) return;
+            if(!entitySource) return;
             Transform atkOrigin = entitySource.transform;
 
             var aimDirection = entitySource.FacingDirection;
@@ -26,7 +26,7 @@ namespace UtilsModule {
             var effectModifiers = AdditionalDataManager.Instance.GetAdditionalsFromItem(sourceItem);
             var statusEffectData = AdditionalDataManager.Instance.GetStatusFromItem(sourceItem);
 
-            Debug.Log($"Swing Attack {addData}");
+            //Debug.Log($"Swing Attack {addData}");
             GameObject weapon = Instantiate(weaponPrefab, atkOrigin.position, Quaternion.Euler(0f, 0f, actionAngle));
             weapon.GetComponentInChildren<SpriteRenderer>().sprite = sourceItem.data.DisplaySprite;
             weapon.transform.parent = atkOrigin;

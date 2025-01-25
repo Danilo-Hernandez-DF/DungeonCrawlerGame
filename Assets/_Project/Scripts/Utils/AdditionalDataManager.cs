@@ -46,13 +46,13 @@ namespace UtilsModule {
             entity.Stats.Mediator.AddModifier(modifier, id);
         }
 
-        public void RemoveEffects(Entity entity) {
+        private void RemoveEffects(Entity entity) {
             entity.Stats.Mediator.RemoveModifiers(id);
         }
 
-        void ApplyQueuedEffects(Entity entity) {
-            foreach(var effect in queuedEffects) {
-                var modifierEffect = new ModifierEffect(effect);
+        void ApplyQueuedEffects(Entity entity)
+        {
+            foreach (var modifierEffect in queuedEffects.Select(effect => new ModifierEffect(effect))) {
                 ApplyEffect(entity, modifierEffect);
             }
         }
@@ -83,22 +83,22 @@ namespace UtilsModule {
             }
         }
 
-        public List<ModifierEffect> GetEffectsFromItem(Item item) {
+        private List<ModifierEffect> GetEffectsFromItem(Item item) {
             var effects = new List<ModifierEffect>();
 
-            foreach(var tag in item.tags) {
-                if(dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) {
-                    foreach(var effect in data.effects) {
-                        var tempEffect = new ModifierEffect(effect);
+            foreach(var tag in item.tags)
+            {
+                if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                foreach(var effect in data.effects) {
+                    var tempEffect = new ModifierEffect(effect);
 
-                        if(tag.Type == TagData.TagType.Float) {
-                            tempEffect.value = tag.GetValue();
-                        } else if(tag.Type == TagData.TagType.Int) {
-                            tempEffect.value = Mathf.FloorToInt(tag.GetValue());
-                        }
+                    tempEffect.value = tag.Type switch {
+                        TagData.TagType.Float => tag.GetValue(),
+                        TagData.TagType.Int => Mathf.FloorToInt(tag.GetValue()),
+                        _ => tempEffect.value
+                    };
 
-                        effects.Add(tempEffect);
-                    }
+                    effects.Add(tempEffect);
                 }
             }
 
@@ -108,19 +108,19 @@ namespace UtilsModule {
         public List<ModifierEffect> GetAdditionalsFromItem(Item item) {
             var effects = new List<ModifierEffect>();
 
-            foreach(var tag in item.tags) {
-                if(dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) {
-                    foreach(var effect in data.additionalEffects) {
-                        var tempEffect = new ModifierEffect(effect);
+            foreach(var tag in item.tags)
+            {
+                if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                foreach(var effect in data.additionalEffects) {
+                    var tempEffect = new ModifierEffect(effect);
 
-                        if(tag.Type == TagData.TagType.Float) {
-                            tempEffect.value = tag.GetValue();
-                        } else if(tag.Type == TagData.TagType.Int) {
-                            tempEffect.value = Mathf.FloorToInt(tag.GetValue());
-                        }
+                    tempEffect.value = tag.Type switch {
+                        TagData.TagType.Float => tag.GetValue(),
+                        TagData.TagType.Int => Mathf.FloorToInt(tag.GetValue()),
+                        _ => tempEffect.value
+                    };
 
-                        effects.Add(tempEffect);
-                    }
+                    effects.Add(tempEffect);
                 }
             }
 
@@ -130,12 +130,10 @@ namespace UtilsModule {
         public List<StatusEffectData> GetStatusFromItem(Item item) {
             var effects = new List<StatusEffectData>();
 
-            foreach(var tag in item.tags) {
-                if(dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) {
-                    foreach(var effect in data.statusEffects) {
-                        effects.Add(effect);
-                    }
-                }
+            foreach(var tag in item.tags)
+            {
+                if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                effects.AddRange(data.statusEffects);
             }
 
             return effects;

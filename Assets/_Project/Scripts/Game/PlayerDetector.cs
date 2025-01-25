@@ -12,7 +12,7 @@ namespace Game {
 
         Vector3 facingDirection;
 
-        public Transform Player {get; private set;}
+        public Transform Player;
         public PlayerController PlayerComponent => Player.GetComponent<PlayerController>();
         public Health PlayerHealth {get; private set;}
         CountdownTimer detectionTimer;

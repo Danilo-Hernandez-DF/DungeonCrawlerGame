@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace UtilsModule {
     public class Status {
-        public List<StatusEffect> Effects = new List<StatusEffect>();
-        private CountdownTimer timer;
-        public Entity Entity;
+        private readonly List<StatusEffect> Effects = new List<StatusEffect>();
+        private readonly CountdownTimer timer;
+        private readonly Entity Entity;
 
         public Status(Entity entity) { 
             this.Entity = entity;

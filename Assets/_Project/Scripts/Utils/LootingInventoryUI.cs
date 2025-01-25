@@ -20,22 +20,15 @@ namespace UtilsModule {
             }
         }
 
-        protected override void OnOpen() {
-            foreach(InventoryUI child in children) {
-                //child.Refresh();
-            }
-        }
-
         protected override void OnClose() {
-            if(!InventorySlotUI.HeldItemEmpty) {
-                if(playerInventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
-                    otherInventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
-                } else {
-                    playerInventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
-                }
-                
-                InventorySlotUI.heldItem = null;
+            if(InventorySlotUI.HeldItemEmpty) return;
+            if(playerInventory.TargetInventory.AvailableCount(InventorySlotUI.heldItem) < InventorySlotUI.heldItem.count) {
+                otherInventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+            } else {
+                playerInventory.TargetInventory.Add(InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
             }
+                
+            InventorySlotUI.heldItem = null;
         }
     }
 }

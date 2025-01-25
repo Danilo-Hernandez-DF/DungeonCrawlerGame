@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UtilsModule {
     public class RandomSpawnPointSrategy : ISpawnPointStrategy {
         List<Transform> unusedSpawnPoints;
-        Transform[] spawnPoints;
+        readonly Transform[] spawnPoints;
 
         public RandomSpawnPointSrategy(Transform[] spawnPoints) {
             this.spawnPoints = spawnPoints;

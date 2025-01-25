@@ -42,9 +42,7 @@ namespace Game {
         }
 
         void PublishHealthPercentage() {
-            if(healthChannel != null) {
-                healthChannel.Invoke(currentHealth / (float)maxHealth);
-            }
+            healthChannel?.Invoke(currentHealth / (float)maxHealth);
         }
     }
 }

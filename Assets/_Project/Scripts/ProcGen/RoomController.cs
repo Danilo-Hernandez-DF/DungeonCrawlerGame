@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,27 +19,38 @@ namespace ProcGen {
         [Header("Tilemap Settings")]
         [SerializeField] Tilemap[] tilemaps;
         [SerializeField] bool replaceTiles = true;
-        List<TilemapBuilder> tilemapBuilders = new List<TilemapBuilder>();
+        readonly List<TilemapBuilder> tilemapBuilders = new List<TilemapBuilder>();
         List<Door> doors;
         BoxCollider2D col;
         bool active = false;
+        bool cleared = false;
+        
+        public List<EnemySpawnManager> EnemySpawners => enemySpawners;
+        public List<Lootable> Lootables => lootables;
+        public List<Collectible> Collectibles => collectibles;
+        
+        public void Reset() {
+            active = false;
+            cleared = false;
+            
+            foreach(EnemySpawnManager spawner in enemySpawners) {
+                spawner.Reset();
+            }
 
-        int EnemyCount {
-            get {
-                int count = 0;
-                foreach(EnemySpawnManager spawner in enemySpawners) {
-                    count += spawner.EnemyCount;
-                }
-                return count;
+            foreach(Lootable loot in lootables) {
+                loot.Reset();
             }
         }
 
-        bool SpawnersExhausted {
+        public int EnemyCount {
             get {
-                foreach(EnemySpawnManager spawner in enemySpawners) {
-                    if(!spawner.Exhausted) return false;
-                }
-                return true;
+                return enemySpawners.Sum(spawner => spawner.EnemyCount);
+            }
+        }
+
+        public bool SpawnersExhausted {
+            get {
+                return enemySpawners.All(spawner => spawner.Exhausted);
             }
         }
 
@@ -63,10 +75,9 @@ namespace ProcGen {
             
             Vector2Int startPos =  new Vector2Int(-Mathf.FloorToInt(roomSize.x/2), -Mathf.FloorToInt(roomSize.y/2));
 
-            if(replaceTiles) {
-                foreach(TilemapBuilder builder in tilemapBuilders)
-                    builder.RemovePlaceholders(startPos, roomSize);
-            }
+            if(!replaceTiles) return;
+            foreach(TilemapBuilder builder in tilemapBuilders)
+                builder.RemovePlaceholders(startPos, roomSize);
 
             //CloseDoors();
         }
@@ -100,25 +111,25 @@ namespace ProcGen {
             }
         }
 
-        protected virtual void OnEnd() {
+        public virtual void End() {
             active = false;
+            cleared = true;
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnEnd(this);
             }
+            GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.RoomsCleared, 1);
         }
 
-        protected virtual void OnStart() {
+        public virtual void StartRoom() {
+            if(cleared) return;
             active = true;
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnStart(this);
             }
-
-            foreach(EnemySpawnManager spawner in enemySpawners) {
-                spawner.Activate();
-            }
         }
 
         protected virtual void Update() {
+            if(!active) return;
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnUpdate(this);
             }
@@ -126,15 +137,14 @@ namespace ProcGen {
 
         void OnTriggerEnter2D(Collider2D other) {
             if(!other.CompareTag("Player")) return;
-
-            OnPlayerEnter();
-            Invoke("OnStart", 0.7f);
+            
+            Invoke(nameof(OnPlayerEnter), 0.7f);
         }
 
         void OnTriggerExit2D(Collider2D other) {
             if(!other.CompareTag("Player")) return;
 
-            OnPlayerExit();
+            Invoke(nameof(OnPlayerExit), 0.7f);
         }
     }
 }

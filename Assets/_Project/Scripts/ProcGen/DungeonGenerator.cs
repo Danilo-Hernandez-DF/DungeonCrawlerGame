@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UtilsModule;
 
 namespace ProcGen {
@@ -12,25 +11,22 @@ namespace ProcGen {
         [SerializeField] GOLootTable roomPrefabs;
         [SerializeField] GOLootTable bossRooms;
         [SerializeField] LayerMask roomMask;
-        Dictionary<Vector2, RoomController> roomPositions;
-        List<RoomController> rooms;
+        //Dictionary<Vector2, RoomController> roomPositions;
+        public List<RoomController> rooms { get; private set; }
         List<RoomEntrance> entrances;
-        [SerializeField] int seed = 0;
+        [SerializeField] int seed;
 
-        void Start() => Generate();
+        //void Start() => Generate();
 
         public void Generate() {
             SeededRandom.SetSeed(seed > 0 ? seed : Random.Range(0, int.MaxValue));
             seed = SeededRandom.GetSeed();
 
             rooms = new List<RoomController>();
-            roomPositions = new Dictionary<Vector2, RoomController>();
+            //roomPositions = new Dictionary<Vector2, RoomController>();
             entrances = new List<RoomEntrance>();
 
-            int requiredRooms = 0;
-            foreach(var requirement in specialRoomRequirements) {
-                requiredRooms += requirement.count;
-            }
+            int requiredRooms = specialRoomRequirements.Sum(requirement => requirement.count);
 
             targetRooms = targetRooms >= requiredRooms + 4 ? targetRooms : requiredRooms + 4;
             Vector2 roomPos = Vector2.zero;
@@ -57,18 +53,18 @@ namespace ProcGen {
             NavMeshManager.BakeNavMesh();
         }
 
-        bool TryGenerateRoom(GOLootTable roomPrefabs, Vector2 roomPos, List<RoomEntrance> entrances, bool addEntrances = true) {
+        bool TryGenerateRoom(GOLootTable prefabs, Vector2 roomPos, List<RoomEntrance> roomEntrances, bool addEntrances = true) {
             bool validEntrance = false;
 
             RoomController room = null;
-            RoomEntrance targetEntrance = null;
+            RoomEntrance targetEntrance;
 
             var invalidEntrances = new List<RoomEntrance>();
-            RoomEntrance entrance = null;
+            RoomEntrance entrance;
             bool noEntrances = false;
 
             do {
-                entrance = entrances[SeededRandom.GetRange(0, entrances.Count)];
+                entrance = roomEntrances[SeededRandom.GetRange(0, roomEntrances.Count)];
                 var invalidRooms = new List<RoomController>();
                 bool roomsRemaining = true;
                 targetEntrance = null;
@@ -76,7 +72,7 @@ namespace ProcGen {
                 if(invalidEntrances.Contains(entrance)) continue;
 
                 do {
-                    room = roomPrefabs.GetWeightedItem(seeded: true).GetComponent<RoomController>();
+                    room = prefabs.GetWeightedItem(seeded: true).GetComponent<RoomController>();
                     if(invalidRooms.Contains(room)) continue;
                         
                     do {
@@ -87,22 +83,17 @@ namespace ProcGen {
                         }
                         roomPos = new Vector2(entrance.Pos.x - targetEntrance.Pos.x, entrance.Pos.y - targetEntrance.Pos.y);
                         if(Physics2D.OverlapBox(roomPos, room.roomSize - (Vector2.one/10), 0, roomMask) == null) validEntrance = true;
-                        else {
-                            //Debug.Log("Overlapping with existing room");
-                            break;
-                        }
+                        else break;
                     } while(!validEntrance);
 
-                    if(!validEntrance) {
-                        if(!invalidRooms.Contains(room)) invalidRooms.Add(room);
-                        if(invalidRooms.Count == roomPrefabs.GetList().Count) roomsRemaining = false;
-                    }
+                    if(validEntrance) continue;
+                    if(!invalidRooms.Contains(room)) invalidRooms.Add(room);
+                    if(invalidRooms.Count == prefabs.GetList().Count) roomsRemaining = false;
                 } while(roomsRemaining && !validEntrance);
 
-                if(!validEntrance) {
-                    if(!invalidEntrances.Contains(entrance)) invalidEntrances.Add(entrance);
-                    if(invalidEntrances.Count == entrances.Count) noEntrances = true;
-                }
+                if(validEntrance) continue;
+                if(!invalidEntrances.Contains(entrance)) invalidEntrances.Add(entrance);
+                if(invalidEntrances.Count == roomEntrances.Count) noEntrances = true;
             } while(!validEntrance && !noEntrances);
 
             if(noEntrances) {
@@ -118,12 +109,12 @@ namespace ProcGen {
                 var foundEntrances = otherEntrance.GetOverlappingEntrances();
                 if(foundEntrances.Count > 0) {
                     otherEntrance.DeActivate();
-                    if(entrances.Contains(otherEntrance)) entrances.Remove(otherEntrance);
+                    if(roomEntrances.Contains(otherEntrance)) roomEntrances.Remove(otherEntrance);
                 }
 
                 foreach(RoomEntrance foundEntrance in foundEntrances) {
                     foundEntrance.DeActivate();
-                    if(entrances.Contains(foundEntrance)) entrances.Remove(foundEntrance);
+                    if(roomEntrances.Contains(foundEntrance)) roomEntrances.Remove(foundEntrance);
                 }
             }
 
@@ -132,14 +123,12 @@ namespace ProcGen {
         }
 
         void AddRoom(RoomController room, bool addEntrances = true) {
-            roomPositions.Add(room.transform.position, room);
+            //roomPositions.Add(room.transform.position, room);
             rooms.Add(room);
 
-            if(addEntrances) {
-                foreach(RoomEntrance entrance in room.doorPositions) {
-                    if(!entrance.Active) continue;
-                    entrances.Add(entrance);
-                }
+            if(!addEntrances) return;
+            foreach(var entrance in room.doorPositions.Where(entrance => entrance.Active)) {
+                entrances.Add(entrance);
             }
         }
     }

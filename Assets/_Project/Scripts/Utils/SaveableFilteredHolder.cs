@@ -9,7 +9,7 @@ namespace UtilsModule {
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 
         void Update() {
-            inventoryData.items = Inventory.items.ToArray();
+            if(inventoryData?.items != null) inventoryData.items = Inventory.items.ToArray();
         }
 
         public void Bind(InventoryData data) {
@@ -17,9 +17,14 @@ namespace UtilsModule {
             inventoryData.Id = Id;
 
             Inventory = new FilteredInventory(slotFilters, inventoryChannel);
+            
+            if(targetEntity) {
+                Inventory.targetEntity = targetEntity;
+            }
 
             for(int i = 0; i < inventoryData.items.Length; i++) {
                 Inventory.SetSlot(i, inventoryData.items[i], inventoryData.items[i].count, true);
+                if(Inventory.IsEquipment) AdditionalDataManager.Instance.OnEquip(inventoryData.items[i], Inventory.targetEntity);
             }
 
             inventoryChannel?.Invoke(Inventory);

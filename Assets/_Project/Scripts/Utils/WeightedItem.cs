@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UtilsModule {
     [System.Serializable]
@@ -16,13 +17,7 @@ namespace UtilsModule {
         }
 
         public static List<WeightedItem> GetListFromBase(List<WeightedObject<ItemData>> toConvert) {
-            List<WeightedItem> toReturn = new List<WeightedItem> ();
-
-            foreach(WeightedObject<ItemData> item in toConvert) {
-                toReturn.Add(GetFromBase(item));
-            }
-
-            return toReturn;
+            return toConvert.Select(GetFromBase).ToList();
         }
     }
 }

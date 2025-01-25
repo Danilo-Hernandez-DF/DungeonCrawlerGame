@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Systems.Persistence {
-    public class FileDataService : IDataService { 
-        ISerializer serializer;
-        string dataPath;
-        string fileExtension;
+    public class FileDataService : IDataService {
+        readonly ISerializer serializer;
+        readonly string dataPath;
+        readonly string fileExtension;
 
         public FileDataService(ISerializer serializer) { 
             this.dataPath = Application.persistentDataPath;
@@ -26,18 +27,14 @@ namespace Systems.Persistence {
         }
 
         public IEnumerable<string> ListSaves() {
-            foreach(string path in Directory.EnumerateFiles(dataPath)) {
-                if(Path.GetExtension(path) == fileExtension) {
-                    yield return Path.GetFileNameWithoutExtension(path);
-                }
-            }
+            return from path in Directory.EnumerateFiles(dataPath) where Path.GetExtension(path) == fileExtension select Path.GetFileNameWithoutExtension(path);
         }
 
         public GameData Load(string name) {
             string fileLocation = GetPathToFile(name);
 
             if(!File.Exists(fileLocation)) {
-                throw new ArgumentException($"No persisted GameData with name '{name}'");
+                return new GameData();
             }
 
             return serializer.Deserialize<GameData>(File.ReadAllText(fileLocation));
