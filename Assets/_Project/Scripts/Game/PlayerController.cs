@@ -236,6 +236,10 @@ namespace Game {
         protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
+            Entity sourceEntity = dmgSource.GetComponent<Entity>();
+            if(sourceEntity) {
+                GameManager.Instance.TrackEntity(sourceEntity.entityData, new EntityTrack() {damageDealt = damage});
+            }
             //Debug.Log($"{name} took {damage} damage");
         }
     }

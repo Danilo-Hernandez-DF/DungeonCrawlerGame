@@ -7,6 +7,6 @@ namespace UtilsModule {
     [Serializable]
     public class InventoryData : ISaveable{
         [field: SerializeField] public SerializableGuid Id { get; set; }
-        [FormerlySerializedAs("Items")] public Item[] items = Array.Empty<Item>();
+        public SavedItem[] items = Array.Empty<SavedItem>();
     }
 }

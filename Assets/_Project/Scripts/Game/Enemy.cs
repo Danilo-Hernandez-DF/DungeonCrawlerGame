@@ -60,7 +60,7 @@ namespace Game {
         }
         
         protected override void OnDeath() {
-            GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.KilledEnemies, 1);
+            GameManager.Instance.TrackEntity(entityData, new() {timesKilled = 1});
             base.OnDeath();
         }
         

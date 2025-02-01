@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5ce17c315846f58addfac6cc5fb751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseStats: {fileID: 11400000, guid: 82097f39efd5d6e468956a94d5da6601, type: 2}
+  entityData: {fileID: 11400000, guid: fe55aa539a5c6fb44a9e1338fa97b173, type: 2}
   health: {fileID: 642384067663306967}
   agent: {fileID: 930437915148375264}
   playerDetector: {fileID: 8540144676955948400}
@@ -74,6 +74,7 @@ MonoBehaviour:
   detectionRadius: 5.5
   innerDetectionradius: 2.5
   detectionCooldown: 1
+  Player: {fileID: 0}
 --- !u!114 &642384067663306967
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Cinemachine;
 using UnityEngine;
 using UtilsModule;
 
@@ -13,18 +12,21 @@ namespace Game {
             CollectiblesCollected,
             RoomsCleared,
             DamageTaken,
-            DamageDealt
+            DamageDealt,
+            ItemsFound
         }
 
         public Dictionary<TrackedStat, int> trackedStats;
         public Dictionary<ItemData, int> trackedItems;
+        public Dictionary<EntityData, EntityTrack> trackedEntities;
         public string name;
         public Quest quest;
         
         public StatisticsTracker Copy() {
             var tracker = new StatisticsTracker(name) {
                 trackedStats = trackedStats,
-                trackedItems = trackedItems
+                trackedItems = trackedItems,
+                trackedEntities = trackedEntities
             };
 
             return tracker;
@@ -53,6 +55,21 @@ namespace Game {
             } else {
                 trackedItems.Add(stat, value);
             }
+            TrackStat(TrackedStat.ItemsFound, value);
+        }
+        
+        public void TrackEntity(EntityData stat, EntityTrack value, GameObject source = null) {
+            if(trackedEntities.TryGetValue(stat, out EntityTrack currentValue)) {
+                trackedEntities[stat] = currentValue + value;
+            } else {
+                trackedEntities.Add(stat, value);
+            }
+
+            if(stat.HasTag("Enemy")) {
+                TrackStat(TrackedStat.KilledEnemies, value.timesKilled);
+            } else if(stat.HasTag("Collectible")) {
+                TrackStat(TrackedStat.CollectiblesCollected, value.timesKilled);
+            }
         }
 
         public int GetTracked(ItemData stat) {
@@ -61,6 +78,10 @@ namespace Game {
         
         public int GetTracked(TrackedStat stat) {
             return trackedStats.GetValueOrDefault(stat, 0);
+        }
+
+        public EntityTrack GetTracked(EntityData stat) {
+            return trackedEntities.GetValueOrDefault(stat, new());
         }
         
         public StatisticsTracker(string name, Quest quest = null) {
@@ -73,6 +94,7 @@ namespace Game {
         public void Reset() {
             trackedStats = new Dictionary<TrackedStat, int>();
             trackedItems = new Dictionary<ItemData, int>();
+            trackedEntities = new Dictionary<EntityData, EntityTrack>();
             foreach(TrackedStat stat in Enum.GetValues(typeof(TrackedStat))) {
                 trackedStats.Add(stat, 0);
             }
@@ -94,12 +116,51 @@ namespace Game {
             var itemKeyPairs = new List<ItemKeyPair>();
             foreach(KeyValuePair<ItemData, int> pair in trackedItems) {
                 itemKeyPairs.Add(new ItemKeyPair {
-                    stat = pair.Key, 
+                    stat = pair.Key.id, 
                     value = pair.Value
                 });
             }
 
             return itemKeyPairs.ToArray();
+        }
+        
+        public EntityKeyPair[] GetEntityKeyPairs() {
+            var entityKeyPairs = new List<EntityKeyPair>();
+            foreach(KeyValuePair<EntityData, EntityTrack> pair in trackedEntities) {
+                entityKeyPairs.Add(new EntityKeyPair {
+                    stat = pair.Key.id, 
+                    value = pair.Value
+                });
+            }
+
+            return entityKeyPairs.ToArray();
+        }
+    }
+    
+    [Serializable]
+    public struct EntityTrack {
+        public int damageTaken;
+        public int damageDealt;
+        public int timesKilled;
+
+        public static implicit operator int(EntityTrack arg) {
+            return arg.damageDealt + arg.damageTaken + arg.timesKilled;
+        }
+
+        public static EntityTrack operator +(EntityTrack arg1, EntityTrack arg2) {
+            return new EntityTrack() {
+                damageDealt = arg1.damageDealt + arg2.damageDealt,
+                damageTaken = arg1.damageTaken + arg2.damageTaken,
+                timesKilled = arg1.timesKilled + arg2.timesKilled
+            };
+        }
+        
+        public static EntityTrack operator -(EntityTrack arg1, EntityTrack arg2) {
+           return new EntityTrack() {
+               damageDealt = Mathf.Clamp(arg1.damageDealt - arg2.damageDealt, 0, Int32.MaxValue),
+               damageTaken = Mathf.Clamp(arg1.damageTaken - arg2.damageTaken, 0, Int32.MaxValue),
+               timesKilled = Mathf.Clamp(arg1.timesKilled - arg2.timesKilled, 0, Int32.MaxValue)
+            };
         }
     }
 }

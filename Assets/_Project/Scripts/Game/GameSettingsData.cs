@@ -10,11 +10,12 @@ namespace Game {
         public StatisticsTracker statisticsTracker;
         public StatKeyPair[] statKeyPairs = Array.Empty<StatKeyPair>();
         public ItemKeyPair[] itemKeyPairs = Array.Empty<ItemKeyPair>();
+        public EntityKeyPair[] entityKeyPairs = Array.Empty<EntityKeyPair>();
     }
 
     [Serializable]
     public struct ItemKeyPair {
-        public ItemData stat;
+        public SerializableGuid stat;
         public int value;
     }
     
@@ -22,5 +23,11 @@ namespace Game {
     public struct StatKeyPair {
         public StatisticsTracker.TrackedStat stat;
         public int value;
+    }
+    
+    [Serializable]
+    public struct EntityKeyPair {
+        public SerializableGuid stat;
+        public EntityTrack value;
     }
 }

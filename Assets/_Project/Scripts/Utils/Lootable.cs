@@ -15,13 +15,15 @@ namespace UtilsModule {
         public void OnInteract() {
             if(GameManager.Instance.Paused) return;
             if(!InRange()) return;
-            if(!opened) GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.LootablesOpened, 1);
+            if(!opened) {
+                GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.LootablesOpened, 1);
 
-            foreach(Item item in Inventory.items) {
-                if(item.IsEmpty) continue;
-                GameManager.Instance.TrackItem(item.data, item.count);
+                foreach(Item item in Inventory.items) {
+                    if (item.IsEmpty) continue;
+                    GameManager.Instance.TrackItem(item.data, item.count);
+                }
             }
-            
+
             opened = true;
             
             inventoryChannel?.Invoke(Inventory);

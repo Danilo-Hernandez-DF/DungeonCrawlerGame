@@ -27,6 +27,7 @@ namespace _Project.Scripts.Utils {
             data.statisticsTracker = statisticsTracker;
             data.statKeyPairs = statisticsTracker.GetStatKeyPairs();
             data.itemKeyPairs = statisticsTracker.GetItemKeyPairs();
+            data.entityKeyPairs = statisticsTracker.GetEntityKeyPairs();
         }
         
         void FixedUpdate() {
@@ -55,7 +56,11 @@ namespace _Project.Scripts.Utils {
                 }
                 
                 foreach(var keyPair in data.itemKeyPairs) {
-                    statisticsTracker.TrackItem(keyPair.stat, keyPair.value);
+                    statisticsTracker.TrackItem(GameManager.Instance.ItemDatabase.GetData(keyPair.stat), keyPair.value);
+                }
+                
+                foreach(var keyPair in data.entityKeyPairs) {
+                    statisticsTracker.TrackEntity(GameManager.Instance.EntityDatabase.GetData(keyPair.stat), keyPair.value);
                 }
                 
                 Debug.Log($"Binding GameManagers data, Id:{Id.ToHexString()}");
@@ -65,11 +70,13 @@ namespace _Project.Scripts.Utils {
         void OnEnable() {
             GameManager.Instance.TrackStat += TrackStat;
             GameManager.Instance.TrackItem += TrackItem;
+            GameManager.Instance.TrackEntity += TrackEntity;
         }
         
         void OnDisable() {
             GameManager.Instance.TrackStat -= TrackStat;
             GameManager.Instance.TrackItem -= TrackItem;
+            GameManager.Instance.TrackEntity -= TrackEntity;
         }
         
         public void TrackStat(StatisticsTracker.TrackedStat stat, int amount) {
@@ -83,6 +90,13 @@ namespace _Project.Scripts.Utils {
             statisticsTracker.TrackItem(stat, amount);
             foreach(StatisticsTracker tracker in statsTrackers) {
                 tracker.TrackItem(stat, amount);
+            }
+        }
+        
+        public void TrackEntity(EntityData stat, EntityTrack amount) {
+            statisticsTracker.TrackEntity(stat, amount);
+            foreach(StatisticsTracker tracker in statsTrackers) {
+                tracker.TrackEntity(stat, amount);
             }
         }
     }

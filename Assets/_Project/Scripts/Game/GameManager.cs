@@ -15,11 +15,14 @@ namespace Game {
         [FormerlySerializedAs("EmptyItem")] public ItemData emptyItem;
         public EventSystem eventSystem;
         public ItemDatabase ItemDatabase;
+        public EntityDatabase EntityDatabase;
+        public TagDatabase TagDatabase;
         public GameObject openUI;
         public InputReader input;
 
         public UnityAction<StatisticsTracker.TrackedStat, int> TrackStat;
         public UnityAction<ItemData, int> TrackItem;
+        public UnityAction<EntityData, EntityTrack> TrackEntity;
         
         public bool Paused => openUI != null;
 
@@ -33,8 +36,19 @@ namespace Game {
             ItemDatabase = new ItemDatabase();
 
             foreach(ItemData data in Resources.LoadAll<ItemData>("ItemData")) {
-                //Debug.Log("Adding item: " + data.name);
                 ItemDatabase.AddItem(data);
+            }
+
+            EntityDatabase = new EntityDatabase();
+            
+            foreach(EntityData data in Resources.LoadAll<EntityData>("EntityData")) {
+                EntityDatabase.AddItem(data);
+            }
+            
+            TagDatabase = new TagDatabase();
+            
+            foreach(TagData data in Resources.LoadAll<TagData>("TagData")) {
+                TagDatabase.AddItem(data);
             }
         }
 
@@ -56,6 +70,10 @@ namespace Game {
 
         public void TrackStats(StatisticsTracker.TrackedStat stat, int value) {
             TrackStat?.Invoke(stat, value);
+        }
+        
+        public void TrackEntities(EntityData stat, EntityTrack value) {
+            TrackEntity?.Invoke(stat, value);
         }
         
         public void TrackItems(ItemData item, int value) {

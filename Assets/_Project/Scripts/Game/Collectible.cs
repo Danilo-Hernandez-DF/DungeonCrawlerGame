@@ -10,7 +10,7 @@ namespace Game {
 
         public void OnTriggerEnter2D(Collider2D other) {
            other.GetComponent<IVisitable>()?.Accept(this);
-           GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.CollectiblesCollected, 1);
+           GameManager.Instance.TrackEntity(entityData, new() {timesKilled = 1});
            Destroy(gameObject);
         }
 

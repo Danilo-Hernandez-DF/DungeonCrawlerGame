@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3185427915845474539}
   - component: {fileID: 2237490116500820359}
   m_Layer: 0
-  m_Name: StatusCollectibleTest
+  m_Name: KeyCollectible
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606dce4d7f7edaf48b64eb71a6b8c9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseStats: {fileID: 11400000, guid: be303fc5a20ba204d8d99acdcc26112d, type: 2}
+  entityData: {fileID: 11400000, guid: 9dbc51967ad0ab64ba44145c4bb14de5, type: 2}
   health: {fileID: 0}
   statusEffectData: {fileID: 11400000, guid: b03e25189cbcabd4b9479675b32e1990, type: 2}
 --- !u!58 &3185427915845474539
@@ -73,6 +73,7 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4571744787490160446}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -96,9 +97,9 @@ CircleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
   m_Radius: 0.614426
 --- !u!82 &2237490116500820359
 AudioSource:
@@ -111,6 +112,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -245,6 +247,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

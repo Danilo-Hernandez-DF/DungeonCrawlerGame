@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace UtilsModule {
     public abstract class Entity : MonoBehaviour, IVisitable {
-        [SerializeField] BaseStats baseStats; 
+        public EntityData entityData;
+        public BaseStats baseStats => entityData.stats;
         public Health health;
         protected Rigidbody2D Rb {get; private set;}
         public Stats Stats {get; private set;}
@@ -36,7 +37,7 @@ namespace UtilsModule {
 
         protected virtual void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
-            GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageDealt, damage);
+            GameManager.Instance.TrackEntity(entityData, new() {damageTaken = damage});
             //Debug.Log($"{name} took {damage} damage");
         } 
 

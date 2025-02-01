@@ -10,6 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
-  m_Name: ClayBlobData
+  m_Name: KeyCollectible
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
+  entityName: Key (Collectible)
+  stats: {fileID: 11400000, guid: be303fc5a20ba204d8d99acdcc26112d, type: 2}
+  prefab: {fileID: 4571744787490160446, guid: c19202b779758fe46b755f1752ca91af, type: 3}
+  tags:
+  - value: 0
+    inherent: 0
+    data: {fileID: 11400000, guid: aec5a3bd89a6294428dd16bdccbf7052, type: 2}

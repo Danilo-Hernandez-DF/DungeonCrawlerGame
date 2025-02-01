@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,18 +7,21 @@ namespace UtilsModule {
     public class ItemDisplay : MonoBehaviour {
         [SerializeField] Image sprite;
         [SerializeField] TextMeshProUGUI itemName;
-        [SerializeField] TextMeshProUGUI description;
         [SerializeField] TextMeshProUGUI tags;
-        [SerializeField] Color inherentTagColor;
-        [SerializeField] Color defaultTagColor;
+        [SerializeField] private GameObject panel;
+        private RectTransform panelT;
+
+        private void Awake() {
+            panelT = panel.GetComponent<RectTransform>();
+        }
 
         public void UpdateDisplay(Item item) {
             if(item?.data == null || item.IsEmpty) {
                 sprite.sprite = null;
                 sprite.color = Color.clear;
-                itemName.text = "---";
-                description.text = "---\n---\n---\n---";
-                tags.text = "<color=#A1A1A1><size=60%>-----Tags-----</size></color><size=30%>\n\n</size>---";
+                itemName.text = "";
+                tags.text = "";
+                panel.SetActive(false);
 
                 return;
             }
@@ -25,20 +29,40 @@ namespace UtilsModule {
             sprite.sprite = item.data.DisplaySprite;
             sprite.color = Color.white;
             itemName.text = item.data.name;
-            description.text = item.data.description;
+            panel.SetActive(true);
 
-            string tagString = $"<color=#{ColorUtility.ToHtmlStringRGB(defaultTagColor)}>";
-            string inherentTags = $"<color=#{ColorUtility.ToHtmlStringRGB(inherentTagColor)}>";
+            string tagString = "<size=60%><color=#AAAAAA>-----Tags-----\n\n</size></color>";
+            string inherentTags = "<size=60%><color=#AAAAAA>-----Inherent-----\n\n</size></color>";
+            int inherent = 0;
+            int regular = 0;
             foreach(var tag in item.tags) {
-                if(tag.inherent) inherentTags += tag.ToString() + "\n";
-                else tagString += tag.ToString() + "\n";
+                if(tag.data.hidden) continue;
+                
+                if(tag.inherent) {
+                    inherentTags += tag + "\n";
+                    inherent++;
+                } else {
+                    tagString += tag + "\n";
+                    regular++;
+                }
             }
 
-            tagString += "</color>"; 
-            inherentTags += "</color>";
-
-            tags.text = "<color=#A1A1A1><size=60%>-----Tags-----</size></color><size=30%>\n\n</size>" +
-                tagString + "<size=30%>\n<color=#A1A1A1><size=60%>-----Inherent-----</size></color>\n\n</size>" + inherentTags;
+            tags.text = "";
+            float panelH = 0;
+            
+            if(regular > 0) {
+                tags.text += tagString + "\n";
+                panelH += 61.2f;
+            }
+            
+            if(inherent > 0) {
+                tags.text += inherentTags + "\n";
+                panelH += 61.2f;
+            }
+            
+            panelH += 27.8f * (regular + inherent);
+            
+            panelT.sizeDelta = new Vector2(panelT.sizeDelta.x, panelH + 112);
         }
     }
 }

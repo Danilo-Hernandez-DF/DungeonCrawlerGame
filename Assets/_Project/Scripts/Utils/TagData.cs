@@ -10,10 +10,19 @@ namespace UtilsModule {
             Float,
             Equipment
         }
+        
+        public SerializableGuid id = SerializableGuid.Empty;
+        private void OnValidate() {
+            if(id == SerializableGuid.Empty) id = SerializableGuid.NewGuid();
+            Debug.Log($"Assigned {name} with id: {id.ToString()}");
+        }
+
+        public bool hidden;
         public TagType type;
         public string valPrefix;
         public string valSuffix;
         public new string name;
+        
         public Tag GetTag(float value, bool inherent = false) {
             return new Tag(this, inherent, value);
         }
