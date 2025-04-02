@@ -1,18 +1,23 @@
+using _Project.Scripts.Utils;
 using StateMachines;
 using UnityEngine;
 
 namespace Game {
     public abstract class BaseState : IState {
-        protected readonly Animator Animator;
-        protected const float CrossFadeDuration = 0f;
         protected readonly PlayerController Player;
+        protected Animator animator;
+        protected int animHash;
 
-        protected static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
-        protected static readonly int DashHash = Animator.StringToHash("Dash");
+        public static readonly int LocomotionHash = Animator.StringToHash("PlayerLocomotion");
+        public static readonly int DashHash = Animator.StringToHash("PlayerDash");
 
-        protected BaseState(PlayerController player, Animator animator) {
+        protected BaseState(PlayerController player, int animhash = 0) {
+            if (animhash != 0) {
+                this.animHash = animhash;
+            }
+            
             this.Player = player;
-            this.Animator = animator;
+            animator = player.GetComponent<Animator>();
         }
 
         public void Update() {
@@ -24,11 +29,11 @@ namespace Game {
         }
 
         public virtual void OnEnter() {
-
+            animator.CrossFade(animHash, 0f);
         }
 
         public virtual void OnExit() {
-
+            
         }
     }
 }

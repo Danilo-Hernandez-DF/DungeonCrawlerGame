@@ -145,6 +145,15 @@ namespace Game
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CheckQuests"",
+                    ""type"": ""Button"",
+                    ""id"": ""32deb131-7021-499f-851f-ea412ce243a6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -587,6 +596,28 @@ namespace Game
                     ""action"": ""UIInteract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7ef9dad-7e07-4f75-af5d-fcdd30d1b92f"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard-Mouse"",
+                    ""action"": ""CheckQuests"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""421b20ea-a551-47a5-9593-f404204625ad"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Switch Pro Controller;Controller-Generic"",
+                    ""action"": ""CheckQuests"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -941,6 +972,7 @@ namespace Game
             m_Player_OpenMenu = m_Player.FindAction("OpenMenu", throwIfNotFound: true);
             m_Player_PageNavigation = m_Player.FindAction("PageNavigation", throwIfNotFound: true);
             m_Player_UIInteract = m_Player.FindAction("UIInteract", throwIfNotFound: true);
+            m_Player_CheckQuests = m_Player.FindAction("CheckQuests", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1030,6 +1062,7 @@ namespace Game
         private readonly InputAction m_Player_OpenMenu;
         private readonly InputAction m_Player_PageNavigation;
         private readonly InputAction m_Player_UIInteract;
+        private readonly InputAction m_Player_CheckQuests;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -1047,6 +1080,7 @@ namespace Game
             public InputAction @OpenMenu => m_Wrapper.m_Player_OpenMenu;
             public InputAction @PageNavigation => m_Wrapper.m_Player_PageNavigation;
             public InputAction @UIInteract => m_Wrapper.m_Player_UIInteract;
+            public InputAction @CheckQuests => m_Wrapper.m_Player_CheckQuests;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1095,6 +1129,9 @@ namespace Game
                 @UIInteract.started += instance.OnUIInteract;
                 @UIInteract.performed += instance.OnUIInteract;
                 @UIInteract.canceled += instance.OnUIInteract;
+                @CheckQuests.started += instance.OnCheckQuests;
+                @CheckQuests.performed += instance.OnCheckQuests;
+                @CheckQuests.canceled += instance.OnCheckQuests;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1138,6 +1175,9 @@ namespace Game
                 @UIInteract.started -= instance.OnUIInteract;
                 @UIInteract.performed -= instance.OnUIInteract;
                 @UIInteract.canceled -= instance.OnUIInteract;
+                @CheckQuests.started -= instance.OnCheckQuests;
+                @CheckQuests.performed -= instance.OnCheckQuests;
+                @CheckQuests.canceled -= instance.OnCheckQuests;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1305,6 +1345,7 @@ namespace Game
             void OnOpenMenu(InputAction.CallbackContext context);
             void OnPageNavigation(InputAction.CallbackContext context);
             void OnUIInteract(InputAction.CallbackContext context);
+            void OnCheckQuests(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

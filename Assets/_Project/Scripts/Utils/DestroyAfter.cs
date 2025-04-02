@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UtilsModule {
     public class DestroyAfter : MonoBehaviour {
-        [SerializeField] float time;
+        public float time;
         CountdownTimer timer;
 
         public void Awake() {

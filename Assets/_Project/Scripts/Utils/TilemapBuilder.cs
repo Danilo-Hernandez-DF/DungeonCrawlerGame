@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Game;
 using ProcGen;
 using UnityEngine;
@@ -57,9 +56,9 @@ namespace UtilsModule {
             }
         }
 
-        public void RemovePlaceholders(Vector2Int pos, Vector2Int areaSize) {
+        public List<GameObject> RemovePlaceholders(Vector2Int pos, Vector2Int areaSize) {
             AddPoIs(pos, areaSize);
-            SpawnEntities(pos, areaSize, tilemap.transform.position);
+            List<GameObject> returned = SpawnEntities(pos, areaSize, tilemap.transform.position);
             List<TileBase> boundsArea = GetTiles(tilemap, pos, areaSize);
             List<TileBase> replaceArea = new List<TileBase>();
 
@@ -82,10 +81,12 @@ namespace UtilsModule {
             }
 
             SetTiles(tilemap, pos, replaceArea, areaSize);
+            return returned;
         }
 
-        private void SpawnEntities(Vector2Int pos, Vector2Int areaSize, Vector2 centerPos) {
+        private List<GameObject> SpawnEntities(Vector2Int pos, Vector2Int areaSize, Vector2 centerPos) {
             List<List<TileBase>> boundsArea = GetTiles2D(tilemap, pos, areaSize);
+            List<GameObject> entities = new();
 
             for(int x = 0; x < areaSize.x; x++) {
                 for(int y = 0; y < areaSize.y; y++) {
@@ -99,7 +100,10 @@ namespace UtilsModule {
                     var prefab = tile.prefabs.GetWeightedItem(seeded: true);
                     Vector2 position = new Vector2Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
                         -Mathf.FloorToInt(areaSize.y/2) + y) + new Vector2(0.5f, 0.5f) + centerPos;
+                    //Vector2 position = new Vector2(x + 0.5f, y + 0.5f) + centerPos;
                     var entity = Object.Instantiate(prefab, position, Quaternion.identity);
+                    entity.transform.SetParent(roomController.transform);
+                    entities.Add(entity);
 
                     if(entity.GetComponent<EnemySpawnManager>() != null)
                         roomController?.AddSpawner(entity.GetComponent<EnemySpawnManager>());
@@ -111,6 +115,8 @@ namespace UtilsModule {
                         roomController?.AddLoot(entity.GetComponent<Lootable>());
                 }
             }
+            
+            return entities;
         }
 
         private void AddPoIs(Vector2Int pos, Vector2Int areaSize) {

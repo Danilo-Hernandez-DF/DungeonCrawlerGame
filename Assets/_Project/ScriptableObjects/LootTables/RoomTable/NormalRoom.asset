@@ -15,13 +15,15 @@ MonoBehaviour:
   weight: 10
   items:
   - Item: {fileID: 3974854122743024291, guid: e9ffc5eea0de65b43ad09c702b8b740e, type: 3}
-    Weight: 10
-  - Item: {fileID: 3974854122743024291, guid: e7aa8f486789d4b44a7b3f659fdd5961, type: 3}
-    Weight: 8
-  - Item: {fileID: 3974854122743024291, guid: 707b6ff21360a224fa2290bab9bb4ed2, type: 3}
     Weight: 5
+  - Item: {fileID: 3974854122743024291, guid: 707b6ff21360a224fa2290bab9bb4ed2, type: 3}
+    Weight: 3
   - Item: {fileID: 3974854122743024291, guid: c674909499c991e4389417289368cff8, type: 3}
     Weight: 2
   - Item: {fileID: 3974854122743024291, guid: 9e3648d633606064584f6a967d5cab3a, type: 3}
     Weight: 2
+  - Item: {fileID: 3974854122743024291, guid: 954c1a1e12c9a044d957eece8b64940f, type: 3}
+    Weight: 5
+  - Item: {fileID: 3974854122743024291, guid: e7aa8f486789d4b44a7b3f659fdd5961, type: 3}
+    Weight: 5
   secondaryTables: []

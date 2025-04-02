@@ -1,11 +1,11 @@
+using _Project.Scripts.Utils;
 using UnityEngine;
 
 namespace Game {
     public class AttackState : BaseState {
-        public AttackState(PlayerController player, Animator animator) : base(player, animator) { }
+        public AttackState(PlayerController player, int animhash = 0) : base(player, animhash) { }
 
         public override void OnEnter() {
-            //Animator stuff
             Player.Attack();
         }
 

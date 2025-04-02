@@ -121,6 +121,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "CheckQuests",
+                    "type": "Button",
+                    "id": "32deb131-7021-499f-851f-ea412ce243a6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -563,6 +572,28 @@
                     "action": "UIInteract",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "d7ef9dad-7e07-4f75-af5d-fcdd30d1b92f",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard-Mouse",
+                    "action": "CheckQuests",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "421b20ea-a551-47a5-9593-f404204625ad",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Switch Pro Controller;Controller-Generic",
+                    "action": "CheckQuests",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

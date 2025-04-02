@@ -96,7 +96,7 @@ namespace UtilsModule {
                 //Debug.Log("Matching held item");
                 int remainder = TargetInventory.AddAt(index + PageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 if(remainder > 0) InventorySlotUI.heldItem.count = remainder;
-                else InventorySlotUI.heldItem = new Item(GameManager.Instance.emptyItem);
+                else InventorySlotUI.heldItem = new Item(GameManager.emptyItem);
             } else {
                 //Debug.Log("Different held item");
                 var tempItem = InventorySlotUI.heldItem.Copy();

@@ -34,7 +34,7 @@ namespace UtilsModule {
             if(inventoryData.items.Length == 0) {
                 inventoryData.items = new SavedItem[inventorySize];
                 for(int i = 0; i < inventoryData.items.Length; i++) {
-                    inventoryData.items[i] = new SavedItem(GameManager.Instance.emptyItem.GetItem());
+                    inventoryData.items[i] = new SavedItem(GameManager.emptyItem.GetItem());
                 }
             }
 

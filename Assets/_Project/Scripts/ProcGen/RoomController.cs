@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UtilsModule;
@@ -62,12 +61,16 @@ namespace ProcGen {
         public void Init() {
             foreach(RoomEntrance entrance in doorPositions) {
                 if(entrance.Active) {
-                    Instantiate(entrance.wallPrefab, entrance.transform.position, Quaternion.identity);
+                    Instantiate(entrance.wallPrefab, entrance.transform.position, Quaternion.identity).transform.SetParent(this.transform);
                     continue;
                 }
 
                 doors.Add(Instantiate(entrance.doorPrefab, entrance.transform.position, Quaternion.identity)
                     .GetComponent<Door>());
+            }
+            
+            foreach(Door door in doors) {
+                door.gameObject.transform.SetParent(this.transform);
             }
 
             foreach(Tilemap tilemap in tilemaps)
@@ -76,8 +79,11 @@ namespace ProcGen {
             Vector2Int startPos =  new Vector2Int(-Mathf.FloorToInt(roomSize.x/2), -Mathf.FloorToInt(roomSize.y/2));
 
             if(!replaceTiles) return;
-            foreach(TilemapBuilder builder in tilemapBuilders)
-                builder.RemovePlaceholders(startPos, roomSize);
+            foreach (TilemapBuilder builder in tilemapBuilders) {
+                foreach (GameObject child in builder.RemovePlaceholders(startPos, roomSize)) {
+                    child.transform.SetParent(this.transform);
+                }
+            }
 
             //CloseDoors();
         }
@@ -118,10 +124,12 @@ namespace ProcGen {
                 behaviour.OnEnd(this);
             }
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.RoomsCleared, 1);
+            DungeonController.Instance.OnRoomClear(this);
         }
 
         public virtual void StartRoom() {
             if(cleared) return;
+            DungeonController.Instance.OnRoomStart(this);
             active = true;
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnStart(this);

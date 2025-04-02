@@ -20,8 +20,14 @@ namespace ProcGen {
         }
 
         public List<RoomEntrance> GetOverlappingEntrances() {
-            List<RoomEntrance> result = Physics2D.OverlapBoxAll(Pos, col.bounds.size, 0, entraceMask)
-                .Select(x => x.GetComponent<RoomEntrance>()).Where(x => x != this).ToList();
+            Collider2D[] overlaps = Physics2D.OverlapBoxAll(Pos, col.bounds.size, 0, entraceMask);
+            List<RoomEntrance> result = new();
+                
+            foreach(var overlap in overlaps) {
+                var entrance = overlap.GetComponent<RoomEntrance>();
+                if(!entrance) continue;
+                if(entrance != this) result.Add(entrance);
+            }
 
             return result;
         }

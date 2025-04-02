@@ -12,12 +12,6 @@ namespace UtilsModule {
         public List<TagDefault> inherentTags;
         public Sprite DisplaySprite {get => sprite;}
 
-        public SerializableGuid id = SerializableGuid.Empty;
-        private void OnValidate() {
-            if(id == SerializableGuid.Empty) id = SerializableGuid.NewGuid();
-            Debug.Log($"Assigned {name} with id: {id.ToString()}");
-        }
-
         public Item GetItem(int count = 1, List<Tag> tags = null) {
             return new Item(this, count, tags);
         }

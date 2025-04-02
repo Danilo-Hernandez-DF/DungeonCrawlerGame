@@ -10,12 +10,6 @@ namespace UtilsModule {
             Float,
             Equipment
         }
-        
-        public SerializableGuid id = SerializableGuid.Empty;
-        private void OnValidate() {
-            if(id == SerializableGuid.Empty) id = SerializableGuid.NewGuid();
-            Debug.Log($"Assigned {name} with id: {id.ToString()}");
-        }
 
         public bool hidden;
         public TagType type;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace UtilsModule {
     [System.Serializable]
@@ -8,6 +9,36 @@ namespace UtilsModule {
         public int countMax;
         public List<OverrideTag> additionalTags;
 
+        public Item GetItem(int count) {
+            Item temp = Item.GetItem(count);
+            
+            foreach (OverrideTag tag in additionalTags)
+            {
+                switch (tag.tag.data.type)
+                {
+                    case TagData.TagType.Int:
+                    case TagData.TagType.Equipment:
+                    {
+                        var tagInt = new Tag(tag.tag.data, tag.tag.inherent, Mathf.FloorToInt(tag.value));
+                        temp.AddTag(tagInt);
+                        continue;
+                    }
+                    case TagData.TagType.Float:
+                    {
+                        var tagFloat = new Tag(tag.tag.data, tag.tag.inherent, tag.value);
+                        temp.AddTag(tagFloat);
+                        continue;
+                    }
+                    case TagData.TagType.None:
+                    default:
+                        temp.AddTag(tag.tag);
+                        break;
+                }
+            }
+
+            return temp;
+        }
+        
         public static WeightedItem GetFromBase(WeightedObject<ItemData> toConvert) {
             return new WeightedItem {Item = toConvert.Item, Weight = toConvert.Weight};
         }

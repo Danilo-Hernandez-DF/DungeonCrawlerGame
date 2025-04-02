@@ -20,6 +20,14 @@ namespace UtilsModule {
             PopulateInventory();
         }
 
+        public Inventory Copy() {
+            Inventory inv = new Inventory(Size, InventoryChannel);
+            inv.targetEntity = targetEntity;
+            inv.items = new List<Item>(items);
+
+            return inv;
+        }
+
         public virtual int Add(Item item, int count = 1) {
             if(items == null) PopulateInventory();
 
@@ -86,7 +94,7 @@ namespace UtilsModule {
 
         protected int NextEmpty(int start = 0) {
             for(int i = start; i < items.Count; i++) {
-                if(items[i].data == GameManager.Instance.emptyItem) return i;
+                if(items[i].data == GameManager.emptyItem) return i;
             }
             return items.Count;
         }
@@ -95,7 +103,7 @@ namespace UtilsModule {
             items = new List<Item>(Size);
 
             for(int i = 0; i < Size; i++) {
-                items.Add(new Item(GameManager.Instance.emptyItem));
+                items.Add(new Item(GameManager.emptyItem));
             }
         }
 
@@ -103,6 +111,20 @@ namespace UtilsModule {
             if(AvailableCount(item) < count) return false;
 
             Add(item, count);
+            return true;
+        }
+        
+        public virtual bool TryAddBulk(Item[] items) {
+            Inventory temp = Copy();
+
+            foreach(Item item in items) {
+                if(!temp.TryAdd(item, item.count)) return false;
+            }
+
+            foreach(Item item in items) {
+                Add(item, item.count);
+            }
+
             return true;
         }
 
@@ -160,7 +182,7 @@ namespace UtilsModule {
         }
 
         public void ResetSlot(int index) {
-            items[index] = new Item(GameManager.Instance.emptyItem, 0);
+            items[index] = new Item(GameManager.emptyItem, 0);
             InventoryChannel?.Invoke(this);
         }
 
@@ -180,7 +202,7 @@ namespace UtilsModule {
         }
 
         public int EmptySlots() {
-            return items.Count(i => i.data == GameManager.Instance.emptyItem);
+            return items.Count(i => i.data == GameManager.emptyItem);
         }
 
         public void Clear() {

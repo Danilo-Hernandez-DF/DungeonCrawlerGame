@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4ed984d696d417288fa688a0600a4e7, type: 3}
+  m_Name: DungeonModifier
+  m_EditorClassIdentifier: 
+  item:
+    data: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
+    count: 1
+    tags:
+    - value: 0
+      inherent: 0
+      data: {fileID: 11400000, guid: ae86d307db912384ba343e9c416cfb2c, type: 2}
+    - value: 2
+      inherent: 0
+      data: {fileID: 11400000, guid: f3e83f5a01a73894ca10a454701edf7e, type: 2}

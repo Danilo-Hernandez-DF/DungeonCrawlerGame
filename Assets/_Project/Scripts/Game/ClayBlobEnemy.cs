@@ -1,16 +1,17 @@
+using _Project.Scripts.Utils;
 using UnityEngine;
 using UtilsModule;
 
 namespace Game  {
-    public class ClayBlobEnemy : Enemy{
+    public class ClayBlobEnemy : Enemy {
         [Header("ClayBlob Settings")]
         [SerializeField] float wanderRadius = 10f;
 
-        protected override void InitStates()  {
-            var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
-            var chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
-            var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
-            var stunnedState = new EnemyStunnedState(this, animator, agent, playerDetector.Player);
+        protected override void InitStates() {
+            var wanderState = new ClayBlobWanderState(this, agent, wanderRadius, ClayBlobBaseState.ClayBlobWanderHash);
+            var chaseState = new ClayBlobChaseState(this, agent, playerDetector.Player, ClayBlobBaseState.ClayBlobChaseHash);
+            var attackState = new ClayBlobAttackState(this, agent, playerDetector.Player);
+            var stunnedState = new ClayBlobStunnedState(this, agent, playerDetector.Player);
 
             At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer(MovementDirection)));
             At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer(MovementDirection)));

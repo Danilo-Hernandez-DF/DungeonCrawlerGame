@@ -5,7 +5,6 @@ using UnityEngine;
 namespace UtilsModule {
     public class Lootable : InventoryHolder, IInteractable {
         [SerializeField] private InventoryGenrator inventoryGenrator;
-        [SerializeField] EventChannel lootUIChannel;
         bool opened = false;
         private bool InRange() {
             var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
@@ -16,7 +15,7 @@ namespace UtilsModule {
             if(GameManager.Instance.Paused) return;
             if(!InRange()) return;
             if(!opened) {
-                GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.LootablesOpened, 1);
+                GameManager.Instance.TrackLoot(entityData, 1);
 
                 foreach(Item item in Inventory.items) {
                     if (item.IsEmpty) continue;
@@ -33,6 +32,7 @@ namespace UtilsModule {
         public void Reset() {
             Inventory.Clear();
             inventoryGenrator.Generate();
+            DungeonController.Instance.OnLootGenerated(this);
         }
 
         void OnEnable() {

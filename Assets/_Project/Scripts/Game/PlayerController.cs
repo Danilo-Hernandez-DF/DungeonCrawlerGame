@@ -1,6 +1,7 @@
 using UnityEngine;
 using UtilsModule;
 using System.Collections.Generic;
+using _Project.Scripts.Utils;
 using StateMachines;
 using Systems.Persistence;
 using Unity.Cinemachine;
@@ -8,7 +9,6 @@ using Unity.Cinemachine;
 namespace Game {
     public class PlayerController : Entity, IBind<PlayerData> {
         [Header("References")]
-        [SerializeField] Animator animator;
         [SerializeField] CinemachineCamera vCam;
         static InputReader Input => GameManager.Instance.input;
 
@@ -60,7 +60,6 @@ namespace Game {
         }
 
         new protected void Awake() {
-            animator = GetComponent<Animator>();
             base.Awake();
             mainCam = CameraManager.Instance.camera.transform;
             vCam.Follow = transform;
@@ -75,19 +74,20 @@ namespace Game {
             SetupTimers();
             SetupStateMachine();
         }
+        
+        public void GiveItem(Item item, int amount) => playerInv.TryAdd(item, amount);
 
         private void SetupStateMachine() {
             stateMachine = new StateMachine();
-
+            
             // Declare States
-            var locomotionState = new LocomotionState(this, animator);
-            var dashState = new DashState(this, animator);
-            var attackState = new AttackState(this, animator);
+            var locomotionState = new LocomotionState(this, BaseState.LocomotionHash);
+            var dashState = new DashState(this, BaseState.DashHash);
+            var attackState = new AttackState(this);
 
             // Define Transitions
             At(locomotionState, dashState, new FuncPredicate(() => dashTimer.IsRunning));
             At(locomotionState, attackState, new FuncPredicate(() => attackTimer.IsRunning));
-            At(attackState, locomotionState, new FuncPredicate(() => !attackTimer.IsRunning));
 
             Any(locomotionState, new FuncPredicate(ReturnToLocomotionState));
 
@@ -130,18 +130,14 @@ namespace Game {
         void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
         void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
-        void OnDash(bool performed) {
+        void OnDash() {
             if(GameManager.Instance.Paused) return;
+            if(dashTimer.IsRunning) return;
             attackStep = 0;
-            switch(performed) {
-                case true when !dashTimer.IsRunning && !dashCooldownTimer.IsRunning:
-                    dashTimer.Reset(DashDuration);
-                    dashTimer.Start();
-                    break;
-                case false when dashTimer.IsRunning:
-                    dashTimer.Stop();
-                    break;
-            }
+            
+            dashTimer.Reset(DashDuration);
+            dashTimer.Start();
+            
             Debug.Log(Stats.ToString());
         }
 
@@ -152,14 +148,14 @@ namespace Game {
             base.Update();
 
             if(!GameManager.Instance.Paused) {
-                if(animator.speed == 0f) {
-                    animator.speed = 1f;
+                if(animationSpeed == 0f) {
+                    animationSpeed = 1f;
                 }
                 movement = new Vector2(Input.Direction.x, Input.Direction.y);
                 stateMachine.Update();
                 HandleTimers();
             } else {
-                animator.speed = 0f;
+                animationSpeed = 0f;
             }
         }
 
@@ -191,16 +187,19 @@ namespace Game {
 
         void OnAttack() {
             if(GameManager.Instance.Paused) return;
-            Item weapon = equipmentInv.GetItem(equipmentInv.NextMatch(GameManager.Instance.ItemDatabase.GetEquipment(Tag.Equipment.Weapon)));
+            //Debug.Log("not paused");
+            Item weapon = equipmentInv.GetItem(equipmentInv.NextMatch(GameManager.GetEquipment(Tag.Equipment.Weapon)));
             if(weapon?.IsEmpty ?? true) return;
+            //Debug.Log($"weapon exists: {weapon.data.name}");
             if(attackTimer.IsRunning) return;
+            //Debug.Log("timer not running");
             attackTimer.Reset(AttackCooldown);
             attackTimer.Start();
         }
 
         public void Attack() {
             AdditionalDataManager.Instance.TriggerItemBehaviour(equipmentInv, 
-                equipmentInv.NextMatch(GameManager.Instance.ItemDatabase.GetEquipment(Tag.Equipment.Weapon)), BehaviourType.OnUse, this, attackStep);
+                equipmentInv.NextMatch(GameManager.GetEquipment(Tag.Equipment.Weapon)), BehaviourType.OnUse, this, attackStep);
             if(++attackStep > 2) attackStep = 0;
         }
 
@@ -235,6 +234,7 @@ namespace Game {
 
         protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
+            DungeonController.Instance.OnPlayerHit();
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
             Entity sourceEntity = dmgSource.GetComponent<Entity>();
             if(sourceEntity) {

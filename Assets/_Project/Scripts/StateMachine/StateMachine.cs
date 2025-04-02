@@ -64,7 +64,7 @@ namespace StateMachines {
 
             return node;
         }
-
+        
         class StateNode {
             public IState State {get;}
             public HashSet<ITransition> Transitions {get;}

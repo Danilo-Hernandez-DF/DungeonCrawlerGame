@@ -36,10 +36,30 @@ namespace Systems.Persistence {
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if(scene.name == "Menu") return;
+            BindAll();
+        }
+
+        void BindAll() {
             Bind<PlayerController, PlayerData>(gameData.playerData);
             Bind<SaveableInventoryHolder, InventoryData>(gameData.inventoryData);
             Bind<SaveableFilteredHolder, InventoryData>(gameData.filteredInventoryData);
             Bind<GameSettings, GameSettingsData>(gameData.gameSettingsData);
+            Bind<NPC, NPCData>(gameData.NpcDatas);
+        }
+
+        public ISaveable GetData(SerializableGuid id) {
+            SaveGame();
+            GameData temp = dataService.Load(gameData.name);
+            return temp.MatchID(id);
+        }
+
+        public void SetData(SerializableGuid id, ISaveable newVal) {
+            SaveGame();
+            GameData temp = dataService.Load(gameData.name);
+            temp.MatchIDAndUpdate(id, newVal);
+            gameData = temp;
+            SaveGame();
+            BindAll();
         }
 
         static void Bind<T, TData>(TData data) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new() {

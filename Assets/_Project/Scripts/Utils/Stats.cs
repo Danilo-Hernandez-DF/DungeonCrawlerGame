@@ -13,7 +13,8 @@ namespace UtilsModule {
         AttackCooldown,
         AttackRange,
         AttackDistance,
-        StunDuration
+        StunDuration,
+        ChargeDuration
     }
 
     [Serializable]
@@ -99,6 +100,13 @@ namespace UtilsModule {
         public float StunDuration {
             get {
                 var q = new Query(StatType.StunDuration, baseStats.stunDuration);
+                return StatCalculation(q);
+            }
+        }
+        
+        public float ChargeDuration {
+            get {
+                var q = new Query(StatType.ChargeDuration, baseStats.chargeDuration);
                 return StatCalculation(q);
             }
         }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
+  m_Name: TestLootable
+  m_EditorClassIdentifier: 
+  entityName: Test Lootable
+  stats: {fileID: 11400000, guid: be303fc5a20ba204d8d99acdcc26112d, type: 2}
+  prefab: {fileID: 8051316908950360065, guid: 7983e546d0796374a9079a59bf1cf2a3, type: 3}
+  tags:
+  - value: 0
+    inherent: 0
+    data: {fileID: 11400000, guid: 3d28f00d6e3bb784eaa81909ed72c0e0, type: 2}

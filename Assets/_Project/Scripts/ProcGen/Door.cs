@@ -1,23 +1,16 @@
-using System.Linq;
 using Game;
-using Unity.VisualScripting;
 using UnityEngine;
 using UtilsModule;
 
 namespace ProcGen {
     public class Door : MonoBehaviour, IInteractable {
-        private static readonly int CloseStr = Animator.StringToHash("Close");
-        private static readonly int OpenStr = Animator.StringToHash("Open");
-        
         Collider2D col;
-        Animator anim;
         SpriteRenderer sprite;
         [SerializeField] bool isLocked = false;
         [SerializeField] Item key;
         [SerializeField] PlayerDetector playerDetector;
         void Awake() {
             col = GetComponent<Collider2D>();
-            anim = GetComponent<Animator>();
             sprite = GetComponent<SpriteRenderer>();
 
             if(!isLocked) Open();
@@ -25,18 +18,21 @@ namespace ProcGen {
         }
         public void Open() { 
             col.enabled = false;
-            anim.SetTrigger(OpenStr);
             sprite.enabled = false;
         }
         public void Close() { 
             col.enabled = true;
-            anim.SetTrigger(CloseStr);
             sprite.enabled = true;
         }
         
         private bool InRange() {
-            var colliders = Physics2D.OverlapCircleAll(transform.position, 1.5f);
-            return colliders.Any(collider => collider.CompareTag("Player"));
+            var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+
+            foreach(Collider2D col in colliders) {
+                if(col.CompareTag("Player")) return true;
+            }
+
+            return false;
         }
         
         public void OnInteract() {

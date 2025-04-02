@@ -12,17 +12,19 @@ namespace Game {
         //Variables
         //------------------------------------------------
 
-        [FormerlySerializedAs("EmptyItem")] public ItemData emptyItem;
+        public static ItemData emptyItem => Instance.ItemDatabase.GetData("Empty");
         public EventSystem eventSystem;
-        public ItemDatabase ItemDatabase;
-        public EntityDatabase EntityDatabase;
-        public TagDatabase TagDatabase;
+        private ItemDatabase ItemDatabase;
+        private EntityDatabase EntityDatabase;
+        private TagDatabase TagDatabase;
+        private QuestDatabase QuestDatabase;
         public GameObject openUI;
         public InputReader input;
 
         public UnityAction<StatisticsTracker.TrackedStat, int> TrackStat;
         public UnityAction<ItemData, int> TrackItem;
         public UnityAction<EntityData, EntityTrack> TrackEntity;
+        public UnityAction<EntityData, int> TrackLoot;
         
         public bool Paused => openUI != null;
 
@@ -30,9 +32,29 @@ namespace Game {
         //Methods
         //------------------------------------------------
 
+        public static ItemData GetItem(string name) {
+            return Instance.ItemDatabase.GetData(name);
+        }
+        
+        public static Item GetEquipment(Tag.Equipment name) {
+            return Instance.ItemDatabase.GetEquipment(name);
+        }
+        
+        public static EntityData GetEntity(string name) {
+            return Instance.EntityDatabase.GetData(name);
+        }
+        
+        public static TagData GetTag(string name) {
+            return Instance.TagDatabase.GetData(name);
+        }
+        
+        public static Quest GetQuest(string name) {
+            return Instance.QuestDatabase.GetData(name);
+        }
+        
         protected override void Awake() {
             base.Awake();
-
+            
             ItemDatabase = new ItemDatabase();
 
             foreach(ItemData data in Resources.LoadAll<ItemData>("ItemData")) {
@@ -49,6 +71,12 @@ namespace Game {
             
             foreach(TagData data in Resources.LoadAll<TagData>("TagData")) {
                 TagDatabase.AddItem(data);
+            }
+            
+            QuestDatabase = new QuestDatabase();
+            
+            foreach(Quest data in Resources.LoadAll<Quest>("Quest")) {
+                QuestDatabase.AddItem(data);
             }
         }
 
@@ -78,6 +106,10 @@ namespace Game {
         
         public void TrackItems(ItemData item, int value) {
             TrackItem?.Invoke(item, value);
+        }
+        
+        public void TrackLoots(EntityData item, int value) {
+            TrackLoot?.Invoke(item, value);
         }
     }
 

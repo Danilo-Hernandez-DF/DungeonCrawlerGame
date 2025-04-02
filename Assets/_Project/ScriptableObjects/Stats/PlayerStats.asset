@@ -16,10 +16,11 @@ MonoBehaviour:
   speed: 3.5
   defense: 0
   health: 30
-  DashForce: 3
-  DashDuration: 0.2
-  DashCooldown: 0.8
-  AttackCooldown: 0
-  AttackRange: 1
-  AttackDistance: 0.75
-  StunDuration: 0.5
+  dashForce: 4
+  dashDuration: 0.3
+  dashCooldown: 1.5
+  attackCooldown: 0.15
+  attackRange: 1
+  attackDistance: 0.75
+  stunDuration: 0.5
+  chargeDuration: 0.75

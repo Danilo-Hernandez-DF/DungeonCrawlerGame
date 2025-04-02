@@ -9,7 +9,7 @@ namespace UtilsModule {
         bool isInitialized = false;
 
         private void Init() {
-            predicate = new FuncPredicate<Item>((Item i) => Evaluate(toEval));
+            predicate = new FuncPredicate<Item>(i => Evaluate(toEval));
             isInitialized = true;
             //Debug.Log("Initialized");
         }

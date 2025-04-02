@@ -6,12 +6,13 @@ namespace UtilsModule
 {
     [Serializable]
     public class SavedItem {
-        public SerializableGuid data;
+        public string data;
         public int count;
         public List<SavedTag> savedTags;
 
         public SavedItem(Item toCopy) {
-            data = toCopy.data.id;
+            if(toCopy == null || !toCopy.data) toCopy = GameManager.emptyItem.GetItem(tags: new List<Tag>());
+            data = toCopy.data.name;
             count = toCopy.count;
             savedTags = new List<SavedTag>();
 
@@ -27,7 +28,7 @@ namespace UtilsModule
                 tags.Add(tag.ToTag());
             }
             
-            return new Item(GameManager.Instance.ItemDatabase.GetData(data), count, tags);
+            return new Item(GameManager.GetItem(data), count, tags);
         }
     }
 }

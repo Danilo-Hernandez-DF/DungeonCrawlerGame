@@ -10,8 +10,6 @@ namespace Game {
         [Header("Behaviour Settings")]
         [SerializeField] protected NavMeshAgent agent;
         [SerializeField] protected PlayerDetector playerDetector;
-        [SerializeField] protected Animator animator;
-        
         protected GameObject LastDamageSource { get;  set; }
 
         protected float TimeBetweenAttacks => Stats.AttackCooldown;
@@ -28,6 +26,7 @@ namespace Game {
             stateMachine = new StateMachine();
 
             InitStates();
+            DungeonController.Instance.OnEnemySpawn(this);
         }
         
         virtual protected void InitStates() { }
@@ -44,13 +43,13 @@ namespace Game {
             if(!GameManager.Instance.Paused) {
                 if(agent.isActiveAndEnabled && agent.isStopped) {
                     agent.isStopped = false;
-                    animator.speed = 1f;
+                    animationSpeed = 1f;
                 }
                 stateMachine.Update();
                 attackTimer.Tick(Time.deltaTime);
             } else {
                 agent.isStopped = true;
-                animator.speed = 0f;
+                animationSpeed = 0f;
             }
         }
 
@@ -61,7 +60,13 @@ namespace Game {
         
         protected override void OnDeath() {
             GameManager.Instance.TrackEntity(entityData, new() {timesKilled = 1});
+            DungeonController.Instance.OnEnemyDeath(this);
             base.OnDeath();
+        }
+        
+        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
+            base.OnDamage(damage, dmgSource, ignoreKnockback);
+            DungeonController.Instance.OnEnemyHit(this);
         }
         
         public virtual void Attack() { }

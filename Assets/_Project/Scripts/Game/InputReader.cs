@@ -3,9 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using UtilsModule;
-using UnityEditor;
-using System.Threading.Tasks;
-using System.Linq;
 using UnityEngine.Serialization;
 
 namespace Game {
@@ -17,11 +14,12 @@ namespace Game {
         public event UnityAction DebugRefresh = delegate { };
         public event UnityAction EnableMouseControlCursor = delegate { };
         public event UnityAction DisableMouseControlCursor = delegate { };
-        public event UnityAction<bool> Dash = delegate { };
+        public event UnityAction Dash = delegate { };
         public event UnityAction Attack = delegate { };
         public event UnityAction Pause = delegate { };
         public event UnityAction OpenMenu = delegate { };
         public event UnityAction Interact = delegate { };
+        public event UnityAction CheckQuests = delegate { }; 
         
         [FormerlySerializedAs("PageChangeCahnnel")] [SerializeField] IntEventChannel pageChangeCahnnel;
 
@@ -33,7 +31,11 @@ namespace Game {
         public Vector2 AimPosition => CameraManager.Instance.camera.ScreenToWorldPoint(inputActions.Player.Aim.ReadValue<Vector2>());
 
         string GetContolScheme(InputAction.CallbackContext context) {
-            return context.action.actionMap.controlSchemes.First(x => x.SupportsDevice(context.control.device)).name;
+            foreach(var scheme in context.action.actionMap.controlSchemes) {
+                if (scheme.SupportsDevice(context.control.device)) return scheme.name;
+            }
+
+            return null;
         }
 
         void OnEnable() {
@@ -76,16 +78,8 @@ namespace Game {
             //noop
         }
 
-        public void OnDash(InputAction.CallbackContext context)
-        {
-            switch(context.phase) {
-                case InputActionPhase.Started:
-                    Dash.Invoke(true);
-                    break;
-                case InputActionPhase.Canceled:
-                    Dash.Invoke(false);
-                    break;
-            }
+        public void OnDash(InputAction.CallbackContext context) {
+            if(context.phase == InputActionPhase.Started) Dash.Invoke();
         }
 
         public void OnInteract(InputAction.CallbackContext context) {
@@ -116,6 +110,10 @@ namespace Game {
 
         public void OnUIInteract(InputAction.CallbackContext context) {
             if(context.phase == InputActionPhase.Started) UIInteract.Invoke((int)context.ReadValue<float>());
+        }
+
+        public void OnCheckQuests(InputAction.CallbackContext context) {
+            if(context.phase == InputActionPhase.Canceled) CheckQuests.Invoke();
         }
     }
 }

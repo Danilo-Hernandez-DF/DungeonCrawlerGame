@@ -68,10 +68,11 @@ namespace UtilsModule {
             return ((T)foundTag).GetValue();
         }
 
-        public Item Copy() { 
+        public Item Copy() {
             var copy = new Item(data, count) {
-                tags = new List<Tag>(tags)
+                tags = tags == null ? new List<Tag>() : new List<Tag>(tags)
             };
+
             return copy;
         }
 
@@ -79,6 +80,6 @@ namespace UtilsModule {
             return $"{data.name} x{count}";
         }
 
-        public bool IsEmpty => data == GameManager.Instance.emptyItem;
+        public bool IsEmpty => data == GameManager.emptyItem;
     }
 }

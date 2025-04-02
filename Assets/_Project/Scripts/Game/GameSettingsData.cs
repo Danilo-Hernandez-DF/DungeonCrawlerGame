@@ -7,15 +7,20 @@ namespace Game {
     [Serializable]
     public class GameSettingsData : ISaveable {
         [field: SerializeField] public SerializableGuid Id { get; set; }
-        public StatisticsTracker statisticsTracker;
-        public StatKeyPair[] statKeyPairs = Array.Empty<StatKeyPair>();
-        public ItemKeyPair[] itemKeyPairs = Array.Empty<ItemKeyPair>();
-        public EntityKeyPair[] entityKeyPairs = Array.Empty<EntityKeyPair>();
+
+        public TrackerData mainTracker = new TrackerData() {
+            statKeyPairs = Array.Empty<StatKeyPair>(),
+            itemKeyPairs = Array.Empty<ItemKeyPair>(),
+            entityKeyPairs = Array.Empty<EntityKeyPair>(),
+            lootKeyPairs = Array.Empty<LootKeyPair>()
+        };
+
+        public TrackerData[] trackers = Array.Empty<TrackerData>();
     }
 
     [Serializable]
     public struct ItemKeyPair {
-        public SerializableGuid stat;
+        public string stat;
         public int value;
     }
     
@@ -27,7 +32,23 @@ namespace Game {
     
     [Serializable]
     public struct EntityKeyPair {
-        public SerializableGuid stat;
+        public string stat;
         public EntityTrack value;
+    }
+    
+    [Serializable]
+    public struct LootKeyPair {
+        public string stat;
+        public int value;
+    }
+
+    [Serializable]
+    public struct TrackerData {
+        public string trackerName;
+        public string questName;
+        public StatKeyPair[] statKeyPairs;
+        public ItemKeyPair[] itemKeyPairs;
+        public EntityKeyPair[] entityKeyPairs;
+        public LootKeyPair[] lootKeyPairs;
     }
 }

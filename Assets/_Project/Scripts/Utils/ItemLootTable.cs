@@ -11,7 +11,7 @@ namespace UtilsModule {
         [SerializeField] private List<ItemLootTable> secondaryTables;
 
         public override Item GetWeightedItem(int lowerLimit = 0, uint upperLimit = int.MaxValue, bool seeded = false) {
-            if(items?.Count == 0 && secondaryTables?.Count == 0) return GameManager.Instance.emptyItem.GetItem();
+            if(items?.Count == 0 && secondaryTables?.Count == 0) return GameManager.emptyItem.GetItem();
 
             int sumWeights = (from wItem in items where wItem.Weight >= lowerLimit where wItem.Weight <= upperLimit select wItem.Weight).Sum() + 
                              (from lootTable in secondaryTables where lootTable.weight >= lowerLimit where lootTable.weight <= upperLimit select lootTable.weight).Sum();
@@ -26,36 +26,11 @@ namespace UtilsModule {
                     int randCount = seeded
                         ? SeededRandom.GetRange(wItem.countMin, wItem.countMax + 1)
                         : Random.Range(wItem.countMin, wItem.countMax + 1);
-                    var toReturn = wItem.Item.GetItem(randCount);
-
-                    foreach (OverrideTag tag in wItem.additionalTags)
-                    {
-                        switch (tag.tag.data.type)
-                        {
-                            case TagData.TagType.Int:
-                            case TagData.TagType.Equipment:
-                            {
-                                var tagInt = new Tag(tag.tag.data, tag.tag.inherent, Mathf.FloorToInt(tag.value));
-                                toReturn.AddTag(tagInt);
-                                continue;
-                            }
-                            case TagData.TagType.Float:
-                            {
-                                var tagFloat = new Tag(tag.tag.data, tag.tag.inherent, tag.value);
-                                toReturn.AddTag(tagFloat);
-                                continue;
-                            }
-                            case TagData.TagType.None:
-                            default:
-                                toReturn.AddTag(tag.tag);
-                                break;
-                        }
-                    }
-
-                    return toReturn;
+                    
+                    return wItem.GetItem(randCount);
                 }
 
-            if(secondaryTables == null) return GameManager.Instance.emptyItem.GetItem();
+            if(secondaryTables == null) return GameManager.emptyItem.GetItem();
             foreach (var lootTable in secondaryTables.Where(lootTable => lootTable.weight >= lowerLimit)
                          .Where(lootTable => lootTable.weight <= upperLimit)) {
                 added += lootTable.weight;
@@ -65,7 +40,7 @@ namespace UtilsModule {
                 }
             }
 
-            return GameManager.Instance.emptyItem.GetItem();
+            return GameManager.emptyItem.GetItem();
         }
     }
 }

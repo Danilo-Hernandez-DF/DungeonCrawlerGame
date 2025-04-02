@@ -12,6 +12,12 @@ namespace UtilsModule {
         public Transform origin;
         public bool playerDamage = false;
         readonly List<Entity> affected = new List<Entity>();
+        
+        [SerializeField] List<TagData> filter = new List<TagData>();
+        [SerializeField] bool ignoreSelf = true;
+        [SerializeField] bool isFiltered = false;
+        [SerializeField] bool isWhiteList = false;
+        [SerializeField] bool ignorePlayer = false;
 
         public void ApplyEffect(Entity entity, ModifierEffect modifierEffect) {
             foreach(var modifier in hitEffects.Select(hitEffect => hitEffect.operatorType switch {
@@ -35,13 +41,31 @@ namespace UtilsModule {
             affected.Add(entity);
             if(hitEffects?.Count > 0) ApplyEffect(entity, null);
             if(hitStatus?.Count > 0) ApplyStatus(entity);
-            entity.TakeDamage(damage, dmgSource: gameObject);
+            
+            Debug.Log($"{entity.name} took {damage} damage and {hitEffects?.Count} effects");
+            if(damage <= 0) return;
+            entity.TakeDamage(damage, dmgSource: playerDamage ? PlayerDetector.GetPlayer() : gameObject);
         }
 
         void OnTriggerEnter2D(Collider2D other) {
             if(!other.gameObject.TryGetComponent(out Entity entity)) return;
-            if(!playerDamage && entity.gameObject.CompareTag("Player")) return;
-            Visit(entity);
+            if(ignoreSelf && entity.gameObject == gameObject) return;
+            if(ignorePlayer && entity.gameObject.CompareTag("Player")) return;
+            if (!isFiltered) {
+                Visit(entity);
+                return;
+            }
+
+            foreach(TagData filterTag in filter) {
+                if (!entity.entityData.HasTag(filterTag.name)) continue;
+                if (!isWhiteList) continue;
+                Visit(entity);
+                return;
+            }
+
+            if (!isWhiteList) { 
+                Visit(entity);
+            }
         }
     } 
 }

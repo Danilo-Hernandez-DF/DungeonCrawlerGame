@@ -18,7 +18,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 9319ab13db0593040aa0c14ffdcb48b9, type: 3}
   inherentTags:
   - data: {fileID: 11400000, guid: f21ebf7095669ab4e83f3415fd7f7bcd, type: 2}
-    value: 20
+    value: 7
   - data: {fileID: 11400000, guid: c158e2bfff85b3c49b26d47c09dfab81, type: 2}
     value: 0.4
   - data: {fileID: 11400000, guid: 1938c5ee7542fff40bc3148a5d6a093e, type: 2}

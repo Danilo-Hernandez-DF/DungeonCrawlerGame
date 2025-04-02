@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game;
 using UnityEngine;
 using UtilsModule;
 
@@ -26,7 +27,7 @@ namespace ProcGen {
             //roomPositions = new Dictionary<Vector2, RoomController>();
             entrances = new List<RoomEntrance>();
 
-            int requiredRooms = specialRoomRequirements.Sum(requirement => requirement.count);
+            int requiredRooms = specialRoomRequirements.Sum(req => req.count);
 
             targetRooms = targetRooms >= requiredRooms + 4 ? targetRooms : requiredRooms + 4;
             Vector2 roomPos = Vector2.zero;
@@ -119,6 +120,7 @@ namespace ProcGen {
             }
 
             AddRoom(newRoom, addEntrances);
+            DungeonController.Instance.OnRoomGeneration(newRoom);
             return true;
         }
 
@@ -127,7 +129,8 @@ namespace ProcGen {
             rooms.Add(room);
 
             if(!addEntrances) return;
-            foreach(var entrance in room.doorPositions.Where(entrance => entrance.Active)) {
+            foreach(var entrance in room.doorPositions) {
+                if(!entrance.Active) continue;
                 entrances.Add(entrance);
             }
         }

@@ -19,14 +19,17 @@ namespace Game {
         public Dictionary<TrackedStat, int> trackedStats;
         public Dictionary<ItemData, int> trackedItems;
         public Dictionary<EntityData, EntityTrack> trackedEntities;
+        public Dictionary<string, int> trackedLoot;
         public string name;
         public Quest quest;
+        public NPC questGiver;
         
         public StatisticsTracker Copy() {
             var tracker = new StatisticsTracker(name) {
                 trackedStats = trackedStats,
                 trackedItems = trackedItems,
-                trackedEntities = trackedEntities
+                trackedEntities = trackedEntities,
+                trackedLoot = trackedLoot
             };
 
             return tracker;
@@ -58,7 +61,21 @@ namespace Game {
             TrackStat(TrackedStat.ItemsFound, value);
         }
         
-        public void TrackEntity(EntityData stat, EntityTrack value, GameObject source = null) {
+        public void TrackLoot(string stat, int value = 1) {
+            if(trackedLoot.TryGetValue(stat, out int currentValue)) {
+                trackedLoot[stat] = currentValue + value;
+            } else {
+                trackedLoot.Add(stat, value);
+            }
+            TrackStat(TrackedStat.LootablesOpened, value);
+        }
+        
+        public void TrackEntity(EntityData stat, EntityTrack value = default, GameObject source = null) {
+            if(stat.HasTag("Lootable")) {
+                TrackLoot(stat.name);
+                return;
+            }
+            
             if(trackedEntities.TryGetValue(stat, out EntityTrack currentValue)) {
                 trackedEntities[stat] = currentValue + value;
             } else {
@@ -79,22 +96,28 @@ namespace Game {
         public int GetTracked(TrackedStat stat) {
             return trackedStats.GetValueOrDefault(stat, 0);
         }
+        
+        public int GetTracked(string stat) {
+            return trackedLoot.GetValueOrDefault(stat, 0);
+        }
 
         public EntityTrack GetTracked(EntityData stat) {
             return trackedEntities.GetValueOrDefault(stat, new());
         }
         
-        public StatisticsTracker(string name, Quest quest = null) {
+        public StatisticsTracker(string name, Quest quest = null, NPC questGiver = null) {
             this.name = name;
             Reset();
             
             this.quest = quest;
+            this.questGiver = questGiver;
         }
 
         public void Reset() {
             trackedStats = new Dictionary<TrackedStat, int>();
             trackedItems = new Dictionary<ItemData, int>();
             trackedEntities = new Dictionary<EntityData, EntityTrack>();
+            trackedLoot = new Dictionary<string, int>();
             foreach(TrackedStat stat in Enum.GetValues(typeof(TrackedStat))) {
                 trackedStats.Add(stat, 0);
             }
@@ -116,7 +139,7 @@ namespace Game {
             var itemKeyPairs = new List<ItemKeyPair>();
             foreach(KeyValuePair<ItemData, int> pair in trackedItems) {
                 itemKeyPairs.Add(new ItemKeyPair {
-                    stat = pair.Key.id, 
+                    stat = pair.Key.name, 
                     value = pair.Value
                 });
             }
@@ -128,12 +151,24 @@ namespace Game {
             var entityKeyPairs = new List<EntityKeyPair>();
             foreach(KeyValuePair<EntityData, EntityTrack> pair in trackedEntities) {
                 entityKeyPairs.Add(new EntityKeyPair {
-                    stat = pair.Key.id, 
+                    stat = pair.Key.name, 
                     value = pair.Value
                 });
             }
 
             return entityKeyPairs.ToArray();
+        }
+
+        public LootKeyPair[] GetLootKeyPairs() {
+            var lootKeyPairs = new List<LootKeyPair>();
+            foreach(KeyValuePair<string, int> pair in trackedLoot) {
+                lootKeyPairs.Add(new LootKeyPair {
+                    stat = pair.Key, 
+                    value = pair.Value
+                });
+            }
+
+            return lootKeyPairs.ToArray();
         }
     }
     

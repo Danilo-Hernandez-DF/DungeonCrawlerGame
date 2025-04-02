@@ -7,17 +7,17 @@ namespace UtilsModule
     public class SavedTag {
         public float value;
         public bool inherent;
-        public SerializableGuid data;
+        public string data;
 
         public SavedTag(Tag toCopy)
         {
             value = toCopy.value;
             inherent = toCopy.inherent;
-            data = toCopy.data.id;
+            data = toCopy.data.name;
         }
 
         public Tag ToTag() {
-            return new Tag(GameManager.Instance.TagDatabase.GetData(data), inherent, value);
+            return new Tag(GameManager.GetTag(data), inherent, value);
         }
     }
 }
