@@ -29,7 +29,7 @@ namespace UtilsModule {
             }
         }
 
-        private void ApplyStatus(Entity entity) {
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect) {
             foreach(StatusEffectData hitEffect in hitStatus) {
                 entity.Status.Add(new StatusEffect(hitEffect));
             }
@@ -40,7 +40,7 @@ namespace UtilsModule {
             if(affected.Contains(entity)) return;
             affected.Add(entity);
             if(hitEffects?.Count > 0) ApplyEffect(entity, null);
-            if(hitStatus?.Count > 0) ApplyStatus(entity);
+            if(hitStatus?.Count > 0) ApplyStatus(entity, null);
             
             Debug.Log($"{entity.name} took {damage} damage and {hitEffects?.Count} effects");
             if(damage <= 0) return;

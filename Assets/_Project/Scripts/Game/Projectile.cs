@@ -12,7 +12,7 @@ namespace Game
         private int pierced = 0;
         [SerializeField] private int damage = 1;
         [SerializeField] LayerMask collidable;
-        private Transform target;
+        private Vector3 target;
         [SerializeField] private List<ModifierEffect> hitEffects = new List<ModifierEffect>();
         [SerializeField] private List<StatusEffectData> hitStatus = new List<StatusEffectData>();
         
@@ -23,13 +23,14 @@ namespace Game
         
         private List<Entity> affectedEntities = new List<Entity>();
         
-        public void SetTarget(Transform target) {
+        public void SetTarget(Vector3 target) {
             this.target = target;
         }
         
         void Update() {
             if(target == null) return;
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            if(transform.position == target) Destroy(gameObject);
         }
         
         private void OnTriggerEnter2D(Collider2D other) {

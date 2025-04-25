@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7461059220379428196}
   - component: {fileID: 3493032404448525273}
   - component: {fileID: 3976430732334053482}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

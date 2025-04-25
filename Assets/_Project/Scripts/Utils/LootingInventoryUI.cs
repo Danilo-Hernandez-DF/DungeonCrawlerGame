@@ -6,6 +6,9 @@ namespace UtilsModule {
     public class LootingInventoryUI : UIBase {
         [SerializeField] InventoryUI playerInventory;
         [SerializeField] InventoryUI otherInventory;
+        
+        public InventoryUI PlayerInventory => playerInventory;
+        public InventoryUI OtherInventory => otherInventory;
 
         protected override void Awake() {
             base.Awake();

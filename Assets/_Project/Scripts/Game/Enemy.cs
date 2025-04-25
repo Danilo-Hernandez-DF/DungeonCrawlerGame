@@ -1,4 +1,5 @@
 using StateMachines;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UtilsModule;
@@ -10,6 +11,10 @@ namespace Game {
         [Header("Behaviour Settings")]
         [SerializeField] protected NavMeshAgent agent;
         [SerializeField] protected PlayerDetector playerDetector;
+        
+        [Header("Debug")]
+        [SerializeField] private TMP_Text stateViewer;
+        [SerializeField] private bool doDebug = false;
         protected GameObject LastDamageSource { get;  set; }
 
         protected float TimeBetweenAttacks => Stats.AttackCooldown;
@@ -51,6 +56,18 @@ namespace Game {
                 agent.isStopped = true;
                 animationSpeed = 0f;
             }
+
+#if UNITY_EDITOR
+            if (!stateViewer) return;
+            
+            if(!doDebug) {
+                stateViewer.gameObject.SetActive(false);
+                return;
+            }
+
+            stateViewer.gameObject.SetActive(true);
+            stateViewer.text = stateMachine.GetState().ToString();
+#endif
         }
 
         void FixedUpdate() {

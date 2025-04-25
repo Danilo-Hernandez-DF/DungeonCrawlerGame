@@ -98,7 +98,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6897459064746769479}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -187,4 +187,6 @@ MonoBehaviour:
   detectionRadius: 1
   innerDetectionradius: 1
   detectionCooldown: 0
+  rememberTime: 1
+  showDebug: 0
   Player: {fileID: 0}

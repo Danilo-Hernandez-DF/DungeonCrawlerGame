@@ -15,4 +15,7 @@ MonoBehaviour:
   entityName: Player
   stats: {fileID: 11400000, guid: eff3f4141cdcb114b9fd984d772a9b15, type: 2}
   prefab: {fileID: 0}
-  tags: []
+  tags:
+  - value: 0
+    inherent: 0
+    data: {fileID: 11400000, guid: a3298d8d2110a2b44a7396a4402875d5, type: 2}

@@ -14,7 +14,7 @@ namespace Systems.Persistence {
         [SerializeField] private bool loadDevGame;
         [SerializeField] private bool loadOnStart;
 
-        IDataService dataService;
+        FileDataService dataService;
         
         protected override void Awake() {
             base.Awake();
@@ -35,8 +35,9 @@ namespace Systems.Persistence {
         void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            if(scene.name == "Menu") return;
+            if(scene.name == "MainMenuScene") return;
             BindAll();
+            Debug.Log("binded");
         }
 
         void BindAll() {
@@ -85,11 +86,16 @@ namespace Systems.Persistence {
         }
 
         public void NewGame(string gameName = "New Game") {
+            if (gameName == "New Game") {
+                gameName = "Game " + (GetSavedGames().Count + 1);
+            }
+            
             gameData = new GameData {
                 name = gameName,
                 currentLevelName = "DevScene"
             };
-            SceneManager.LoadScene(gameData.currentLevelName);
+            SaveGame();
+            LoadGame(gameData.name);
         }
 
         public void SaveGame() => dataService.Save(gameData, true);
@@ -107,5 +113,14 @@ namespace Systems.Persistence {
         public void ReloadGame() => LoadGame(gameData.name);
 
         public void DeleteGame(string gameName) => dataService.Delete(gameName);
+
+        public List<GameData> GetSavedGames() {
+            List<GameData> games = new List<GameData>();
+            foreach (string fileName in dataService.ListSaves()) {
+                games.Add(dataService.Load(fileName));
+            }
+            
+            return games;
+        }
     }
 }

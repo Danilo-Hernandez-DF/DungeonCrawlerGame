@@ -1,35 +1,70 @@
+using System;
 using UnityEngine;
 
 namespace UtilsModule {
-    [RequireComponent(typeof(IInventoryHolder))]
+    //[RequireComponent(typeof(IInventoryHolder))]
     public class InventoryGenrator : MonoBehaviour {
         [SerializeField] InventoryHolder inventoryHolder;
         [SerializeField] LootTable<Item> lootTable;
         [SerializeField] int rolls = 2;
-        [SerializeField] bool isSeeded = false;
+        [SerializeField] bool isSeeded;
+        [SerializeField] bool prioritizeEmpty;
+        
+        [Header("Fixed Drops")]
+        [SerializeField] FixedDrop[] fixedDrops;
         private Inventory Inventory => inventoryHolder.Inventory;
 
         public void Generate() {
+            if(prioritizeEmpty) {
+                for(int i = 0; i < rolls; i++) {
+                    var toAdd = lootTable.GetWeightedItem(seeded: isSeeded);
+                    if(Inventory.EmptySlots() == 0) {
+                        inventoryHolder.OnGenerate();
+                        return;
+                    }
+                    Inventory.SetSlot(Inventory.NextEmpty(), toAdd, toAdd.count, true);
+                }
+
+                foreach(FixedDrop drop in fixedDrops) {
+                    for (int i = 0; i < drop.count; i++) {
+                        var toAdd = drop.table.GetWeightedItem(seeded: isSeeded);
+                        if(Inventory.EmptySlots() == 0) {
+                            inventoryHolder.OnGenerate();
+                            return;
+                        }
+                        Inventory.SetSlot(Inventory.NextEmpty(), toAdd, toAdd.count, true);
+                    }
+                }
+
+                inventoryHolder.OnGenerate();
+                return;
+            }
+
             for(int i = 0; i < rolls; i++) {
                 var toAdd = lootTable.GetWeightedItem(seeded: isSeeded);
                 Inventory.SetAtRandom(toAdd, toAdd.count, true);
             }
 
-            //Debug.Log(inventory.items.Count);
-
-            /*foreach(var i in Inventory.items) {
-                string tagString = "";
-                for(int j = 0; j < i.tags.Count; j++) {
-                    tagString += i.tags[j].ToString() + (j == i.tags.Count - 1 ? "" : ", ");
+            foreach(FixedDrop drop in fixedDrops) {
+                for (int i = 0; i < drop.count; i++) {
+                    var toAdd = drop.table.GetWeightedItem(seeded: isSeeded);
+                    Inventory.SetAtRandom(toAdd, toAdd.count, true);
                 }
+            }
 
-                Debug.Log($"{i.data.name}: [Tags: [{tagString}], Count: {i.count}]");
-            }*/
+            inventoryHolder.OnGenerate();
         }
 
         public void Init(LootTable<Item> lootTable, int rolls) {
             this.lootTable = lootTable;
             this.rolls = rolls;
         }
+    }
+    
+    [Serializable]
+    public struct FixedDrop
+    {
+        public LootTable<Item> table;
+        public int count;
     }
 }

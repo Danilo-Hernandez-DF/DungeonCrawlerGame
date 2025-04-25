@@ -10,19 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31433ed36a09d8c4fa769cd219e49556, type: 3}
-  m_Name: testTable
+  m_Name: CommonSwordTable
   m_EditorClassIdentifier: 
-  weight: 0
+  weight: 70
   items:
-  - Item: {fileID: 11400000, guid: b2992e78ae1d08f458438345ee5ddcac, type: 2}
-    Weight: 5
-    countMin: 1
-    countMax: 1
-    additionalTags: []
   - Item: {fileID: 11400000, guid: f28ea8931da617d43be08d6c23322c9d, type: 2}
-    Weight: 5
+    Weight: 10
     countMin: 1
     countMax: 1
     additionalTags: []
-  secondaryTables:
-  - {fileID: 11400000, guid: d9d51ec6d5694c5469f9630ab5a8a321, type: 2}
+  secondaryTables: []

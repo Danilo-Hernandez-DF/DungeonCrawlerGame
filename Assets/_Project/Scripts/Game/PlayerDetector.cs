@@ -1,3 +1,4 @@
+using Unity.Mathematics.Geometry;
 using UnityEngine;
 using UnityEngine.AI;
 using UtilsModule;
@@ -5,10 +6,11 @@ using UtilsModule;
 namespace Game {
     public class PlayerDetector : MonoBehaviour {
         [SerializeField] float detectionAngle = 60f;
-        [SerializeField] float detectionRadius = 10f;
+        public float detectionRadius = 10f;
         [SerializeField] float innerDetectionradius = 5f;
         [SerializeField] float detectionCooldown = 1f;
         [SerializeField] float rememberTime = 1f;
+        [SerializeField] bool showDebug = false;
         float attackRange;
 
         Vector3 facingDirection;
@@ -48,6 +50,12 @@ namespace Game {
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer, facingDirection);
         }
 
+        public bool HasLineOfSight(Vector2 position) {
+            RaycastHit2D hit = Physics2D.Raycast(position, DirectionToPlayerNormalized, attackRange, LayerMask.GetMask("Player", "Wall"));
+            Debug.Log(hit.collider?.name);
+            return hit.collider && hit.transform.CompareTag("Player");
+        }
+
         public static GameObject GetPlayer() {
             return GameObject.FindGameObjectWithTag("Player");
         }
@@ -55,13 +63,33 @@ namespace Game {
         public static PlayerController GetPlayerComponent() => GetPlayer().GetComponent<PlayerController>();
 
         public bool CanAttackPlayer() {
-            var directionToPlayer = Player.position - transform.position;
-            return directionToPlayer.magnitude <= attackRange;
+            return DirectionToPlayer.magnitude <= attackRange;
         }
+        
+        public Vector2 DirectionToPlayer => Player.position - transform.position;
+        public Vector2 DirectionToPlayerNormalized => DirectionToPlayer.normalized;
+        public float DistanceToPlayer => Vector3.Distance(transform.position, Player.position);
 
         public void SetDetectionStrategy(IDetectionStrategy detectionStrategy) => this.detectionStrategy = detectionStrategy;
 
-        void OnDrawGizmos() {
+        void OnDrawGizmosSelected() {
+            if (!showDebug) return;
+            
+            // Calculate our cone directions
+            Vector3 forwardConeDirection = Quaternion.Euler(0, 0, detectionAngle / 2) * facingDirection * detectionRadius;
+            Vector3 backwardConeDirection = Quaternion.Euler(0, 0, -detectionAngle / 2) * facingDirection * detectionRadius;
+
+            Gizmos.color = Color.yellow;
+
+            // Draw lines to represent the cone
+            Gizmos.DrawLine(transform.position, transform.position + forwardConeDirection);
+            Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
+            
+            Gizmos.color = Color.blue;
+            
+            // Draw lines to represent the line of sight
+            Gizmos.DrawLine(transform.position, transform.position + (detectionRadius * facingDirection));
+            
             Gizmos.color = Color.green;
 
             // Draw a spheres for the radii
@@ -72,16 +100,11 @@ namespace Game {
 
             Gizmos.DrawWireSphere(transform.position, attackRange);
             
-
-            // Calculate our cone directions
-            Vector3 forwardConeDirection = Quaternion.Euler(0, 0, detectionAngle / 2) * facingDirection * detectionRadius;
-            Vector3 backwardConeDirection = Quaternion.Euler(0, 0, -detectionAngle / 2) * facingDirection * detectionRadius;
-
-            Gizmos.color = Color.yellow;
-
-            // Draw lines to represent the cone
-            Gizmos.DrawLine(transform.position, transform.position + forwardConeDirection);
-            Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
+            // Draw a line to the player
+            Gizmos.color = Color.magenta;
+            if (Player) {
+                Gizmos.DrawLine(transform.position, transform.position + (Vector3)(DirectionToPlayerNormalized * attackRange));
+            }
         }
     }
 }

@@ -25,15 +25,7 @@ namespace ProcGen {
             sprite.enabled = true;
         }
         
-        private bool InRange() {
-            var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
-
-            foreach(Collider2D col in colliders) {
-                if(col.CompareTag("Player")) return true;
-            }
-
-            return false;
-        }
+        bool InRange() => IInteractable.InRange(transform.position);
         
         public void OnInteract() {
             Debug.Log("Interacting with door");

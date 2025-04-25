@@ -46,6 +46,10 @@ namespace UtilsModule {
             entity.Stats.Mediator.AddModifier(modifier, id);
         }
 
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect) {
+            return;
+        }
+
         private void RemoveEffects(Entity entity) {
             entity.Stats.Mediator.RemoveModifiers(id);
         }
@@ -85,7 +89,8 @@ namespace UtilsModule {
 
         private List<ModifierEffect> GetEffectsFromItem(Item item) {
             var effects = new List<ModifierEffect>();
-
+            
+            if(item.data == null || item.tags == null) return effects;
             foreach(var tag in item.tags)
             {
                 if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;

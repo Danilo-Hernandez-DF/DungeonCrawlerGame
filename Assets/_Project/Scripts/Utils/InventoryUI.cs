@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Scripts.Utils;
 using Game;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,7 +72,7 @@ namespace UtilsModule {
                 if(i < PageSize) {
                     slots[i].gameObject.SetActive(true);
                     slots[i].Refresh(PageOffset);
-                    slots[i].OnUpdate(this);
+                    slots[i].OnUpdate(this, gameObject.GetComponent<ShopInventoryUI>());
                 } else slots[i].gameObject.SetActive(false);
             }
         }
@@ -85,44 +86,77 @@ namespace UtilsModule {
             //Debug.Log("Pressed: " + index);
             if(InventorySlotUI.HeldItemEmpty) {
                 //Debug.Log("Empty held item");
-                if(TargetInventory.items[index + PageOffset].IsEmpty) return;
-                InventorySlotUI.heldItem = TargetInventory.items[index + PageOffset].Copy();
-                TargetInventory.ResetSlot(index + PageOffset);
+                if(TargetInventory.items[index].IsEmpty) return;
+                InventorySlotUI.heldItem = TargetInventory.items[index].Copy();
+                TargetInventory.ResetSlot(index);
 
                 if(TargetInventory.IsEquipment) {
                     AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, TargetInventory.targetEntity);
                 }
-            } else if(InventorySlotUI.heldItem.Matches(TargetInventory.items[index + PageOffset])) {
+            } else if(InventorySlotUI.heldItem.Matches(TargetInventory.items[index])) {
                 //Debug.Log("Matching held item");
-                int remainder = TargetInventory.AddAt(index + PageOffset, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
+                int remainder = TargetInventory.AddAt(index, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 if(remainder > 0) InventorySlotUI.heldItem.count = remainder;
                 else InventorySlotUI.heldItem = new Item(GameManager.emptyItem);
             } else {
                 //Debug.Log("Different held item");
                 var tempItem = InventorySlotUI.heldItem.Copy();
-                InventorySlotUI.heldItem = TargetInventory.items[index + PageOffset].Copy();
-                if(!TargetInventory.SetSlot(index + PageOffset, tempItem, tempItem.count)) {
+                InventorySlotUI.heldItem = TargetInventory.items[index].Copy();
+                if(!TargetInventory.SetSlot(index, tempItem, tempItem.count)) {
                     InventorySlotUI.heldItem = tempItem.Copy();
                 } else if(TargetInventory.IsEquipment) {
                     AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, TargetInventory.targetEntity);
-                    AdditionalDataManager.Instance.OnEquip(TargetInventory.items[index + PageOffset], TargetInventory.targetEntity);
+                    AdditionalDataManager.Instance.OnEquip(TargetInventory.items[index], TargetInventory.targetEntity);
                 }
             }
         }
 
-        public void OnSlotPressed(int index, int action) {
+        public virtual void OnSlotPressed(int index, int action) {
             if(!open) return;
             switch(action) {
                 case -1:
                     SwitchSelection(index);
                     break;
                 case 1:
-                    //Split stack
-                default:
+                    if(!IsChild) return;
+                    var parentAsLoot = Parent.GetComponent<LootingInventoryUI>();
+                    var parentAsPlayer = Parent.GetComponent<PlayerInventoryUI>();
+                    
+                    if (!parentAsLoot && !parentAsPlayer) return;
+
+                    if (parentAsLoot) {
+                        if (parentAsLoot.PlayerInventory == this) TransferItem(index, parentAsLoot.OtherInventory);
+                        else TransferItem(index, parentAsLoot.PlayerInventory);
+                    } else if(parentAsPlayer) {
+                        if (parentAsPlayer.Inventory == this) TransferItem(index, parentAsPlayer.Equipment);
+                        else TransferItem(index, parentAsPlayer.Inventory); 
+                    }
+
                     break;
             }
 
             OnUpdate(TargetInventory);
+        }
+        
+        protected void TransferItem(int index, InventoryUI other) {
+            if(index < 0 || index >= TargetInventory.Size) return;
+            var tempItem = TargetInventory.items[index].Copy();
+            int remainder = other.TargetInventory.Add(tempItem, tempItem.count);
+
+            if (remainder == tempItem.count) return;
+            
+            if (remainder > 0) TargetInventory.items[index].count = remainder;
+            else {
+                TargetInventory.ResetSlot(index);
+                
+                if (TargetInventory.IsEquipment) {
+                    AdditionalDataManager.Instance.OnUnequip(tempItem, TargetInventory.targetEntity);
+                }
+            }
+            
+            if(other.TargetInventory.IsEquipment) {
+                AdditionalDataManager.Instance.OnEquip(tempItem, other.TargetInventory.targetEntity);
+            }
         }
 
         private bool IsActive() {

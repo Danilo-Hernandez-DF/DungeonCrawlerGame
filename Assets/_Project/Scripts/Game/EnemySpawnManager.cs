@@ -30,6 +30,12 @@ namespace Game {
                         for(int i = 0; i < enemiesPerWave; i++) {
                             Spawn();
                         }
+
+                        if (spawnedEnemies == targetEnemies) {
+                            spawnTimer.Stop();
+                            Exhausted = true;
+                            return;
+                        }
                     } else if(spawnedEnemies < targetEnemies) {
                         for(int i = 0; i < targetEnemies - spawnedEnemies; i++) {
                             Spawn();
@@ -37,7 +43,6 @@ namespace Game {
 
                         spawnTimer.Stop();
                         Exhausted = true;
-                        //Debug.Log("All Enemies Spawned, spawner exhausted");
                         return;
                     }
                 }

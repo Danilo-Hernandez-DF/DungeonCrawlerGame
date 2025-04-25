@@ -13,7 +13,17 @@ namespace Game
         }
 
         public override void Update() {
-            if(agent.isActiveAndEnabled) agent.SetDestination(target.position);
+            if (!agent.isActiveAndEnabled) return;
+
+            if (enemy.CanDetectTarget()) {
+                agent.SetDestination(target.position);
+                enemy.lastPlayerPosition = target; 
+                
+                enemy.rememberTimer.Reset();
+                enemy.rememberTimer.Start();
+            } else if(enemy.lastPlayerPosition) {
+                agent.SetDestination(enemy.lastPlayerPosition.position);
+            }
             base.Update();
         }
     }

@@ -77,7 +77,7 @@ MonoBehaviour:
   inventoryHolder: {fileID: 1147412483401445751}
   lootTable: {fileID: 11400000, guid: ad0a43bc70e9f734cb0394afb1eefed6, type: 2}
   rolls: 10
-  isSeeded: 0
+  isSeeded: 1
 --- !u!212 &4499921466147522123
 SpriteRenderer:
   m_ObjectHideFlags: 0

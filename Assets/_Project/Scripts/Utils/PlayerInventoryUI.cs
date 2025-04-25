@@ -7,6 +7,9 @@ namespace UtilsModule {
     public class PlayerInventoryUI: UIBase { 
         [SerializeField] private InventoryUI inventory;
         [SerializeField] private InventoryUI equipmentUI;
+        
+        public InventoryUI Inventory => inventory;
+        public InventoryUI Equipment => equipmentUI;
 
         protected override void Awake() {
             base.Awake();

@@ -2,6 +2,7 @@ using UtilsModule;
 
 namespace UtilsModule {
     public interface IEffector : IVisitor {
-        public abstract void ApplyEffect(Entity entity, ModifierEffect modifierEffect);
+        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect);
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect);
     }
 }

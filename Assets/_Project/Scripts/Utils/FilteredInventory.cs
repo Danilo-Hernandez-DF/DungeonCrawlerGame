@@ -19,34 +19,31 @@ namespace UtilsModule {
 
         public override int Add(Item item, int count = 1) {
             if(items == null) PopulateInventory();
-            if(!Allowed(item)) {
-                //Debug.Log("Item not allowed");
-                return count;
-            }
-
-            var foundMatch = items[NextAllowed(item)];
+            if (item.IsEmpty) return 0;
             
-            if(foundMatch != null) {
-                int remainder = foundMatch.count + count - item.data.maxCount;
-                if(remainder < 0) remainder = 0;
-                count -= remainder; 
-                foundMatch.count += count;
+            for(int i = 0; i < slotFilters.Count; i++) {
+                if (!slotFilters[i].Evaluate(item)) continue;
+                if (!items[i].IsEmpty && !items[i].Matches(item)) continue;
 
-                if(remainder > 0) return Add(item, remainder);
-                inventoryChannel?.Invoke(this);
-                return 0;
-            } else if(EmptySlots() > 0) {
-                int remainder = count - item.data.maxCount;
+                if (items[i].IsEmpty) {
+                    SetSlot(i, item, Mathf.Max(item.data.maxCount, count));
+                    if (item.data.maxCount >= count) {
+                        count = 0;
+                        break;
+                    }
+                    count -= item.data.maxCount;
+                    continue;
+                }
+                
+                int remainder = items[i].count + count - item.data.maxCount;
                 if(remainder < 0) remainder = 0;
                 count -= remainder;
-                SetSlot(NextEmpty(), item, count);
+                items[i].count += count;
+                count = remainder;
 
-                if(remainder > 0) return Add(item, remainder);
-                inventoryChannel?.Invoke(this);
-                return 0;
+                if (count == 0) break;
             }
-
-            //Debug.Log("Inventory is full");
+            
             inventoryChannel?.Invoke(this);
             return count;
         }
@@ -121,7 +118,7 @@ namespace UtilsModule {
         }
 
         private bool Allowed(Item item) {
-            return slotFilters.All(filter => filter.Evaluate(item));
+            return slotFilters.Any(filter => filter.Evaluate(item));
         }
 
         private int NextAllowed(Item item, int start = 0) {

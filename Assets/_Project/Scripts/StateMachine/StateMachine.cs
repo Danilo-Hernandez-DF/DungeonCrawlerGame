@@ -25,6 +25,8 @@ namespace StateMachines {
             current = nodes[state.GetType()];
             current.State?.OnEnter();
         }
+        
+        public IState GetState() => current.State;
 
         void ChangeState(IState state) {
             if(state == current.State)

@@ -20,5 +20,7 @@ namespace UtilsModule {
             GetComponent<InventoryGenrator>()?.Generate();
             inventoryChannel?.Invoke(Inventory);
         }
+
+        public virtual void OnGenerate() { }
     }
 }

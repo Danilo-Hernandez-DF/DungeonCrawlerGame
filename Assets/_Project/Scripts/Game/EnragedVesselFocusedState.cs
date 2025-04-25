@@ -23,5 +23,10 @@ namespace Game
             timer.OnTimerStop += () => enemy.readyToAttack = true;
             timer.Start();
         }
+
+        public override void Update() {
+            timer.Tick(Time.deltaTime);
+            agent.speed = 0f;
+        }
     }
 }

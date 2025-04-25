@@ -29,5 +29,9 @@ namespace Game {
         public virtual void Update() {
             
         }
+
+        public override string ToString() {
+            return GetType().Name;
+        }
     }
 }

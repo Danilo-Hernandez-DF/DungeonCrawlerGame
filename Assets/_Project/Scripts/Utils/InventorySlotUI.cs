@@ -1,3 +1,4 @@
+using _Project.Scripts.Utils;
 using Game;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,10 @@ namespace UtilsModule {
         [SerializeField] GameObject heldItemDisplay;
         [SerializeField] Image heldItemImage;
         [SerializeField] TextMeshProUGUI heldItemText;
+        [SerializeField] TextMeshProUGUI priceText;
+        [SerializeField] GameObject priceDisplay;
+        [SerializeField] GameObject countDisplay;
+        [SerializeField] Image currencyIcon;
 
         [Header("Events")]
         [SerializeField] ItemEventChannel itemDisplayChannel;
@@ -55,7 +60,7 @@ namespace UtilsModule {
             DeactivateHeldItem();
         }
 
-        public void OnUpdate(InventoryUI inventoryUI) {
+        public void OnUpdate(InventoryUI inventoryUI, ShopInventoryUI shopUI = null) {
             parent = inventoryUI;
             currentItem = inventoryUI.TargetInventory.items[OffsetIndex];
             if(currentItem.IsEmpty) {
@@ -68,6 +73,23 @@ namespace UtilsModule {
                 image.color = Color.white;
                 textBg.color = Color.white;
                 amountText.text = currentItem.count.ToString();
+            }
+
+            if(shopUI != null) {
+                Tag tag = currentItem.GetTag("Buy Price"); 
+                if(tag != null) {
+                    priceText.text = tag.GetValue().ToString();
+                    priceDisplay.SetActive(true);
+                    countDisplay.SetActive(false);
+                    currencyIcon.sprite = shopUI.currencyIcon;
+                } else {
+                    priceDisplay.SetActive(false);
+                    countDisplay.SetActive(true);
+                }
+                
+            } else {
+                priceDisplay.SetActive(false);
+                countDisplay.SetActive(true);
             }
 
             UpdateData();

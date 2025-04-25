@@ -30,6 +30,7 @@ namespace UtilsModule {
 
         public virtual int Add(Item item, int count = 1) {
             if(items == null) PopulateInventory();
+            if (item.IsEmpty) return 0;
 
             var foundMatch = items.Find(x => x.Matches(item) && x.count < item.data.maxCount);
             if(foundMatch != null) {
@@ -41,7 +42,9 @@ namespace UtilsModule {
                 if(remainder > 0) return Add(item, remainder);
                 InventoryChannel?.Invoke(this);
                 return 0;
-            } else if(EmptySlots() > 0) {
+            } 
+            
+            if(EmptySlots() > 0) {
                 int remainder = count - item.data.maxCount;
                 if(remainder < 0) remainder = 0;
                 count -= remainder;
@@ -92,7 +95,7 @@ namespace UtilsModule {
             return true;
         }
 
-        protected int NextEmpty(int start = 0) {
+        public int NextEmpty(int start = 0) {
             for(int i = start; i < items.Count; i++) {
                 if(items[i].data == GameManager.emptyItem) return i;
             }
@@ -149,18 +152,18 @@ namespace UtilsModule {
         public bool TryRemove(Item item, int count = 1, bool fullMatch = true) {
             if(items == null) return false;
             if(!items.Exists(x => x.Matches(item, fullMatch))) return false;
-            Debug.Log("Item exists");
+            //Debug.Log("Item exists");
             if(GetCount(item, fullMatch) < count) return false;
-            Debug.Log("Count is enough");
+            //Debug.Log("Count is enough");
 
-            List<Item> matchingItems = items.FindAll(x => x.Matches(item, fullMatch));
-            matchingItems.Reverse();
-            for(int i = 0; i < matchingItems.Count; i++) {
-                if(matchingItems[i].count <= count) {
-                    ResetSlot(i);
-                    count -= matchingItems[i].count;
+            for(int j = items.Count - 1; j >= 0; j--) {
+                if(items[j].IsEmpty) continue;
+                if(!items[j].Matches(item, fullMatch)) continue;
+                if(items[j].count <= count) {
+                    count -= items[j].count;
+                    ResetSlot(j);
                 } else {
-                    matchingItems[i].count -= count;
+                    items[j].count -= count;
                     count = 0;
                 }
 
@@ -202,7 +205,7 @@ namespace UtilsModule {
         }
 
         public int EmptySlots() {
-            return items.Count(i => i.data == GameManager.emptyItem);
+            return items.Count(i => i.IsEmpty);
         }
 
         public void Clear() {

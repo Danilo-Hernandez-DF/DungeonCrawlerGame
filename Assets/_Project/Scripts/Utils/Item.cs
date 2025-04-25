@@ -39,6 +39,14 @@ namespace UtilsModule {
         public bool HasTag(string tag) {
             return tags.Exists(x => x.data.name == tag);
         }
+        
+        public Tag GetTag(string tag) {
+            return tags.Find(x => x.data.name == tag);
+        }
+        
+        public Tag GetTag(TagData tag) {
+            return tags.Find(x => x.data == tag);
+        }
 
         public bool Matches(Item item, bool fullMatch = true) {
             if(!fullMatch) return data == item.data;

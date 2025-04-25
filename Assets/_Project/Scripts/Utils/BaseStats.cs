@@ -15,5 +15,6 @@ namespace UtilsModule {
         public float attackDistance = 0.75f;
         public float stunDuration = 0.5f;
         public float chargeDuration = 0.75f;
+        public float fleeRange = 0;
     }
 }

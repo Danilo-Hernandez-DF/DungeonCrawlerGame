@@ -14,7 +14,8 @@ namespace UtilsModule {
         AttackRange,
         AttackDistance,
         StunDuration,
-        ChargeDuration
+        ChargeDuration,
+        FleeRange
     }
 
     [Serializable]
@@ -107,6 +108,13 @@ namespace UtilsModule {
         public float ChargeDuration {
             get {
                 var q = new Query(StatType.ChargeDuration, baseStats.chargeDuration);
+                return StatCalculation(q);
+            }
+        }
+        
+        public float FleeRange {
+            get {
+                var q = new Query(StatType.FleeRange, baseStats.fleeRange);
                 return StatCalculation(q);
             }
         }

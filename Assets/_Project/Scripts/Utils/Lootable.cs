@@ -2,15 +2,13 @@ using System.Linq;
 using Game;
 using UnityEngine;
 
-namespace UtilsModule {
+namespace UtilsModule { 
     public class Lootable : InventoryHolder, IInteractable {
         [SerializeField] private InventoryGenrator inventoryGenrator;
         bool opened = false;
-        private bool InRange() {
-            var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
-            return colliders.Any(collider => collider.CompareTag("Player"));
-        }
-
+        
+        bool InRange() => IInteractable.InRange(transform.position);
+        
         public void OnInteract() {
             if(GameManager.Instance.Paused) return;
             if(!InRange()) return;

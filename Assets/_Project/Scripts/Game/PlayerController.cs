@@ -236,7 +236,7 @@ namespace Game {
             Status.OnDamage(damage);
             DungeonController.Instance.OnPlayerHit();
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
-            Entity sourceEntity = dmgSource.GetComponent<Entity>();
+            Entity sourceEntity = dmgSource?.GetComponent<Entity>();
             if(sourceEntity) {
                 GameManager.Instance.TrackEntity(sourceEntity.entityData, new EntityTrack() {damageDealt = damage});
             }

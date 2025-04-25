@@ -485,7 +485,7 @@ GameObject:
   - component: {fileID: 3361070043954076907}
   - component: {fileID: 2934913899765703296}
   - component: {fileID: 5769697275469523575}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,12 +11,12 @@ namespace Systems.Persistence {
         readonly string fileExtension;
 
         public FileDataService(ISerializer serializer) { 
-            this.dataPath = Application.persistentDataPath;
+            this.dataPath = Path.Combine(Application.persistentDataPath, "Saves");
             this.fileExtension = "json";
             this.serializer = serializer;
         }
 
-        string GetPathToFile(string fileName) {
+        public string GetPathToFile(string fileName) {
             return Path.Combine(dataPath, string.Concat(fileName, ".", fileExtension));
         }
 
@@ -27,7 +27,7 @@ namespace Systems.Persistence {
         }
 
         public IEnumerable<string> ListSaves() {
-            return from path in Directory.EnumerateFiles(dataPath) where Path.GetExtension(path) == fileExtension select Path.GetFileNameWithoutExtension(path);
+            return Directory.GetFiles(dataPath, $"*.{fileExtension}").Select(Path.GetFileNameWithoutExtension);
         }
 
         public GameData Load(string name) {

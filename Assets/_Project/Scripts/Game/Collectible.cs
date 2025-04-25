@@ -15,5 +15,6 @@ namespace Game {
         }
 
         public virtual void ApplyEffect(Entity entity, ModifierEffect modifierEffect) { }
+        public virtual void ApplyStatus(Entity entity, StatusEffect statusEffect) { }
     }
 }
