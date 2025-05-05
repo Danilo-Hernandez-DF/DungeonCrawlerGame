@@ -67,7 +67,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -80,12 +80,25 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -103,20 +116,17 @@ TextureImporter:
         x: 0
         y: 0
         width: 32
-        height: 40
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
-      - - {x: -9, y: 20}
-        - {x: -9, y: 12}
-        - {x: -15, y: 12}
-        - {x: -15, y: -15}
-        - {x: 15, y: -15}
-        - {x: 15, y: 12}
-        - {x: 9, y: 12}
-        - {x: 9, y: 20}
+      - - {x: -13, y: 11}
+        - {x: -13, y: -14}
+        - {x: 13, y: -14}
+        - {x: 13, y: 11}
       tessellationDetail: 0
       bones: []
       spriteID: 6e50f2be7cce8264b86e399c310a24f3
@@ -132,20 +142,17 @@ TextureImporter:
         x: 32
         y: 0
         width: 32
-        height: 40
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
-      - - {x: -9, y: 20}
-        - {x: -9, y: 12}
-        - {x: -15, y: 12}
-        - {x: -15, y: -15}
-        - {x: 15, y: -15}
-        - {x: 15, y: 12}
-        - {x: 9, y: 12}
-        - {x: 9, y: 20}
+      - - {x: -13, y: 11}
+        - {x: -13, y: -14}
+        - {x: 13, y: -14}
+        - {x: 13, y: 11}
       tessellationDetail: 0
       bones: []
       spriteID: f8c9abd12aec15d4d895966e2daf4f06
@@ -155,6 +162,7 @@ TextureImporter:
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
@@ -164,6 +172,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
       clayPotTile_0: -1694191915
       clayPotTile_1: 1139055026

@@ -4,10 +4,23 @@ using UnityEngine;
 
 namespace UtilsModule { 
     public class Lootable : InventoryHolder, IInteractable {
-        [SerializeField] private InventoryGenrator inventoryGenrator;
+        [Header("Lootable")]
+        [SerializeField] LootType lootType;
+        [SerializeField] LootSetting defaultLootSetting;
+
+
         bool opened = false;
         
         bool InRange() => IInteractable.InRange(transform.position);
+
+        protected override void Awake() {
+            LootSetting lootSetting = DungeonController.Instance.GetLootTable(lootType);
+            if(lootSetting == null) {
+                lootSetting = defaultLootSetting;
+            }
+            inventoryGenrator.Init(lootSetting.lootTable, lootSetting.rolls);
+            base.Awake();
+        }
         
         public void OnInteract() {
             if(GameManager.Instance.Paused) return;

@@ -10,14 +10,23 @@ namespace UtilsModule {
         public Inventory Inventory;
         
         [SerializeField] protected Entity targetEntity;
+        [SerializeField] protected InventoryGenrator inventoryGenrator;
+
+        [Header("Loot Generation")]
+        [SerializeField] protected bool generateOnAwake = true;
 
         protected override void Awake() {
             base.Awake();
             Inventory = new Inventory(inventorySize, inventoryChannel);
+
             if(targetEntity) {
                   Inventory.targetEntity = targetEntity;
             }
-            GetComponent<InventoryGenrator>()?.Generate();
+
+            if(generateOnAwake) {
+                 inventoryGenrator?.Generate();
+            }
+
             inventoryChannel?.Invoke(Inventory);
         }
 

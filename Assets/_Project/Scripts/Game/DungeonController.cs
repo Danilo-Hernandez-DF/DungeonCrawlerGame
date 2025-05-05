@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _Project.Scripts.Utils;
 using ProcGen;
+using UnityEngine;
 using UtilsModule;
 
 namespace Game {
@@ -9,11 +11,40 @@ namespace Game {
         public DungeonGenerator dungeonGenerator;
         public List<DungeonModifier> modifiers;
         public Quest completionQuest;
-        private bool exitable;
+        private RoomController startRoom;
+        [SerializeField] GameObject floorExit;
+        private int currentLevel => GameManager.Instance.currentLevel;
+        LootSetting[] lootSettings;
         
-        public void Start() {
-            dungeonGenerator.Generate();
+        public void StartFloor(DungeonData dungeonData) {
+            modifiers = dungeonData.modifiers?.ToList() ?? new List<DungeonModifier>();
+            lootSettings = dungeonData.lootSettings;
+            completionQuest = dungeonData.completionQuest;
+            dungeonGenerator.Configure(dungeonData);
+            dungeonGenerator.Generate(out startRoom);
             GameSettings.Instance.AddQuest(completionQuest);
+            GameManager.Instance.currentLevel++;
+        }
+
+        public LootSetting GetLootTable(LootType lootType) {
+            LootSetting currentSetting = null;
+            if(lootSettings == null || lootSettings.Length == 0) {
+                return null;
+            }
+
+            foreach(LootSetting lootSetting in lootSettings) {
+                if(lootSetting.startLevel <= currentLevel && lootSetting.lootType == lootType) {
+                    if(currentSetting == null || lootSetting.startLevel > currentSetting.startLevel) {
+                        currentSetting = lootSetting;
+                    }
+                }
+            }
+
+            if(currentSetting != null) {
+                return currentSetting;
+            }
+           
+            return null;
         }
         
         void ResetRooms() {
@@ -23,7 +54,9 @@ namespace Game {
         }
         
         public void CompleteRequirements() {
-            exitable = true;
+            var exit = Instantiate(floorExit);
+            exit.transform.SetParent(startRoom.transform);
+            exit.transform.localPosition = Vector2.zero;
         }
         
         // Modifier methods

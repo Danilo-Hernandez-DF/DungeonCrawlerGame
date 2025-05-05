@@ -11,24 +11,11 @@ using UtilsModule;
 namespace Systems.Persistence {
     public class SaveLoadSystem : PersistentSingleton<SaveLoadSystem> {
         public GameData gameData;
-        [SerializeField] private bool loadDevGame;
-        [SerializeField] private bool loadOnStart;
-
         FileDataService dataService;
         
         protected override void Awake() {
             base.Awake();
             dataService = new FileDataService(new JsonSerializer());
-        }
-        
-        void Start() {
-            if(loadDevGame) {
-                gameData.name = "DevSaveFile";
-            }
-
-            if (loadOnStart) {
-                LoadGame(gameData.name);
-            }
         }
 
         void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
@@ -37,11 +24,14 @@ namespace Systems.Persistence {
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if(scene.name == "MainMenuScene") return;
             BindAll();
-            Debug.Log("binded");
+            
+            if(SceneData.Instance.canBeSaved) {
+                gameData.currentLevelName = scene.name;
+            }
         }
 
         void BindAll() {
-            Bind<PlayerController, PlayerData>(gameData.playerData);
+            //Bind<PlayerController, PlayerData>(gameData.playerData);
             Bind<SaveableInventoryHolder, InventoryData>(gameData.inventoryData);
             Bind<SaveableFilteredHolder, InventoryData>(gameData.filteredInventoryData);
             Bind<GameSettings, GameSettingsData>(gameData.gameSettingsData);
@@ -92,7 +82,7 @@ namespace Systems.Persistence {
             
             gameData = new GameData {
                 name = gameName,
-                currentLevelName = "DevScene"
+                currentLevelName = "HubScene"
             };
             SaveGame();
             LoadGame(gameData.name);

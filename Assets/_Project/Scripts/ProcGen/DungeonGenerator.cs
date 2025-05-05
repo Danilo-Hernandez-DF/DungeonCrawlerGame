@@ -6,20 +6,22 @@ using UtilsModule;
 
 namespace ProcGen {
     public class DungeonGenerator : MonoBehaviour { 
-        [SerializeField] int targetRooms = 10;
-        [SerializeField] List<RoomRequirements> specialRoomRequirements;
-        [SerializeField] GameObject startRoomPrefab;
+        int targetRooms = 10;
+        List<RoomRequirements> specialRoomRequirements;
+        [SerializeField] GOLootTable startRoomPrefab;
         [SerializeField] GOLootTable roomPrefabs;
-        [SerializeField] GOLootTable bossRooms;
         [SerializeField] LayerMask roomMask;
         //Dictionary<Vector2, RoomController> roomPositions;
         public List<RoomController> rooms { get; private set; }
         List<RoomEntrance> entrances;
         [SerializeField] int seed;
 
-        //void Start() => Generate();
+        public void Configure(DungeonData dungeonData) {
+            targetRooms = dungeonData.roomCount;
+            specialRoomRequirements = dungeonData.roomsPerLevel.ToList();
+        }
 
-        public void Generate() {
+        public void Generate(out RoomController initialRoom) {
             SeededRandom.SetSeed(seed > 0 ? seed : Random.Range(0, int.MaxValue));
             seed = SeededRandom.GetSeed();
 
@@ -32,8 +34,9 @@ namespace ProcGen {
             targetRooms = targetRooms >= requiredRooms + 4 ? targetRooms : requiredRooms + 4;
             Vector2 roomPos = Vector2.zero;
 
-            var startRoom = Instantiate(startRoomPrefab, roomPos, Quaternion.identity);
-            AddRoom(startRoom.GetComponent<RoomController>());
+            var startRoom = Instantiate(startRoomPrefab.GetWeightedItem(seeded: true), roomPos, Quaternion.identity);
+            initialRoom = startRoom.GetComponent<RoomController>();
+            AddRoom(initialRoom);
 
             for(int i = 0; i < targetRooms - requiredRooms; i++) {
                 TryGenerateRoom(roomPrefabs, roomPos, entrances);

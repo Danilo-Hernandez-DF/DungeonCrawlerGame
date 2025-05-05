@@ -47,15 +47,13 @@ MonoBehaviour:
   autoUnparentOnAwake: 1
   gameData:
     name: TestSaveFile
-    currentLevelName: DevScene
+    currentLevelName: MainMenuScene
     playerData:
       <Id>k__BackingField:
         part1: 0
         part2: 0
         part3: 0
         part4: 0
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0, w: 0}
     inventoryData: []
     filteredInventoryData: []
     NpcDatas: []
@@ -73,5 +71,5 @@ MonoBehaviour:
         entityKeyPairs: []
         lootKeyPairs: []
       trackers: []
-  loadDevGame: 1
-  loadOnStart: 1
+  loadDevGame: 0
+  loadOnStart: 0

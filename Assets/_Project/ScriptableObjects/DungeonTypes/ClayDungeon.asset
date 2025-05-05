@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb33eeebdd6e894ea7fd996032aed2e, type: 3}
+  m_Name: ClayDungeon
+  m_EditorClassIdentifier: 
+  dungeonName: Clay Halls
+  sprite: {fileID: -1694191915, guid: 7463a4335b4744d4cbefcdb27662ca5f, type: 3}
+  difficultyLevel: 1

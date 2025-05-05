@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Systems.Persistence;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UtilsModule;
 
@@ -12,6 +14,12 @@ namespace Game {
         //Variables
         //------------------------------------------------
 
+        [Header("Dungeon Settings")]
+        [SerializeField] public DungeonData dungeonData;
+        [SerializeField] private Difficulty difficulty;
+        public int currentLevel = 0;
+
+        [Header("Game Settings")]
         public static ItemData emptyItem => Instance.ItemDatabase.GetData("Empty");
         public EventSystem eventSystem;
         private ItemDatabase ItemDatabase;
@@ -25,12 +33,25 @@ namespace Game {
         public UnityAction<ItemData, int> TrackItem;
         public UnityAction<EntityData, EntityTrack> TrackEntity;
         public UnityAction<EntityData, int> TrackLoot;
-        
         public bool Paused => openUI != null;
 
         //------------------------------------------------
         //Methods
         //------------------------------------------------
+
+        public void StartGame() {
+            DungeonController.Instance.StartFloor(dungeonData);
+            //GameSettings.Instance.SetDifficulty(difficulty);
+        }
+
+        public void FreshGame() {
+            currentLevel = 0;
+            StartGame();
+        }
+
+        public void LoadScene(string sceneName) {
+            SceneManager.LoadScene(sceneName);
+        }
 
         public static ItemData GetItem(string name) {
             return Instance.ItemDatabase.GetData(name);
@@ -87,7 +108,7 @@ namespace Game {
             input.Controls.UI.Disable();
             input.Controls.Debug.Disable();
             
-            MonoBehaviour[] scripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+            MonoBehaviour[] scripts = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
             foreach (MonoBehaviour script in scripts) {
                 if(script is PersistentSingleton<GameManager>) continue;
                 script.enabled = false;
@@ -112,6 +133,8 @@ namespace Game {
             TrackLoot?.Invoke(item, value);
         }
     }
+
+    public enum Difficulty {Easy, Normal, Hard, Cataclysm}
 
     public enum OperatorType {Add, Multiply}
 }

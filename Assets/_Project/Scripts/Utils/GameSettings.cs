@@ -15,7 +15,8 @@ namespace _Project.Scripts.Utils {
 
         public SaveableInventoryHolder questRewardInv;
 
-        void Awake() {
+        new void Awake() {
+            base.Awake();
             statisticsTracker = new StatisticsTracker("Main Tracker");
             questRewardInv = GetComponent<SaveableInventoryHolder>();
         }
@@ -33,10 +34,10 @@ namespace _Project.Scripts.Utils {
                 lootKeyPairs = statisticsTracker.GetLootKeyPairs()
             };
             if(statisticsTracker.quest) data.mainTracker.questName = statisticsTracker.quest.name;
+            else data.mainTracker.questName = null;
 
             data.trackers = new TrackerData[statsTrackers.Count];
-            for (int i = 0; i < statsTrackers.Count; i++)
-            {
+            for (int i = 0; i < statsTrackers.Count; i++) {
                 data.trackers[i] = new TrackerData() {
                     trackerName = statsTrackers[i].name,
                     statKeyPairs = statsTrackers[i].GetStatKeyPairs(),
@@ -44,7 +45,6 @@ namespace _Project.Scripts.Utils {
                     entityKeyPairs = statsTrackers[i].GetEntityKeyPairs(),
                     lootKeyPairs = statsTrackers[i].GetLootKeyPairs()
                 };
-                if(statsTrackers[i].quest) data.mainTracker.questName = statsTrackers[i].quest.name;
             }
         }
         
@@ -52,6 +52,10 @@ namespace _Project.Scripts.Utils {
             var toRemove = new List<StatisticsTracker>();
                 
             foreach(StatisticsTracker tracker in statsTrackers) {
+                if(tracker.quest == null) {
+                    toRemove.Add(tracker);
+                    continue;
+                }
                 if(!tracker.GoalAchieved()) continue;
                 tracker.quest.OnCompletion(tracker.questGiver);
                 toRemove.Add(tracker);
@@ -66,32 +70,40 @@ namespace _Project.Scripts.Utils {
             this.data = data;
             this.data.Id = Id;
 
-            if(data.mainTracker.trackerName != "") {
+            if(data.mainTracker.trackerName != "" && data.mainTracker.trackerName != null) {
                 statisticsTracker = BindTracker(data.mainTracker);
+            } else {
+                statisticsTracker = new StatisticsTracker("Main Tracker");
             }
 
             statsTrackers = new();
             foreach(var keyPair in data.trackers) {
+                if(GameManager.GetQuest(keyPair.questName) is DungeonCompletionQuest) {
+                    continue;
+                }
                 statsTrackers.Add(BindTracker(keyPair));
             }
         }
 
         public StatisticsTracker BindTracker(TrackerData tracker) {
-            var newTracker = new StatisticsTracker(data.mainTracker.trackerName, GameManager.GetQuest(data.mainTracker.questName));
+            var newTracker = new StatisticsTracker(tracker.trackerName);
+            if(tracker.trackerName != null && tracker.trackerName != "") {
+                newTracker.quest = GameManager.GetQuest(tracker.questName);
+            }
 
-            foreach(var keyPair in data.mainTracker.statKeyPairs) {
+            foreach(var keyPair in tracker.statKeyPairs) {
                 newTracker.TrackStat(keyPair.stat, keyPair.value);
             }
                 
-            foreach(var keyPair in data.mainTracker.itemKeyPairs) {
+            foreach(var keyPair in tracker.itemKeyPairs) {
                 newTracker.TrackItem(GameManager.GetItem(keyPair.stat), keyPair.value);
             }
                 
-            foreach(var keyPair in data.mainTracker.entityKeyPairs) {
+            foreach(var keyPair in tracker.entityKeyPairs) {
                 newTracker.TrackEntity(GameManager.GetEntity(keyPair.stat), keyPair.value);
             }
                 
-            foreach(var keyPair in data.mainTracker.lootKeyPairs) {
+            foreach(var keyPair in tracker.lootKeyPairs) {
                 newTracker.TrackEntity(GameManager.GetEntity(keyPair.stat));
             }
 

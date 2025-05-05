@@ -9,9 +9,9 @@ namespace UtilsModule {
         [SerializeField] private Button mainMenuButton;
         [SerializeField] private Button saveButton;
         
-        void Awake() {
+        new void Awake() {
             base.Awake();
-            mainMenuButton.onClick.AddListener((() => SceneManager.LoadScene("MainMenuScene")));
+            mainMenuButton.onClick.AddListener(() => SceneManager.LoadScene("MainMenuScene"));
             saveButton.onClick.AddListener(SaveLoadSystem.Instance.SaveGame);
         }
         

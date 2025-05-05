@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonGenerator: {fileID: 5700763460623081231}
+  modifiers: []
+  completionQuest: {fileID: 11400000, guid: f6cb1edcdd3db0941b533ee880b53514, type: 2}
+  floorExit: {fileID: 7860659464388313199, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
 --- !u!114 &5700763460623081231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,17 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca57f08b3acf804f80457967452e75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRooms: 15
-  specialRoomRequirements:
-  - roomPrefabs: {fileID: 11400000, guid: 48e49d3b73b165041b24b4ddc84279f4, type: 2}
-    type: 5
-    count: 1
-  - roomPrefabs: {fileID: 11400000, guid: 03e853ccc46aa4c48a4df33450dae5f8, type: 2}
-    type: 8
-    count: 2
-  startRoomPrefab: {fileID: 3974854122743024291, guid: e9ffc5eea0de65b43ad09c702b8b740e, type: 3}
+  startRoomPrefab: {fileID: 11400000, guid: c1152255bd8456d46b821edc81cfa5f3, type: 2}
   roomPrefabs: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
-  bossRooms: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
   roomMask:
     serializedVersion: 2
     m_Bits: 128

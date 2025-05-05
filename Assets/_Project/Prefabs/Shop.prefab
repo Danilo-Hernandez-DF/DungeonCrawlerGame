@@ -61,6 +61,8 @@ MonoBehaviour:
     items: []
     targetEntity: {fileID: 0}
   targetEntity: {fileID: 0}
+  inventoryGenrator: {fileID: 121433845972763349}
+  generateOnAwake: 1
   generator: {fileID: 121433845972763349}
 --- !u!212 &8977045561920844073
 SpriteRenderer:

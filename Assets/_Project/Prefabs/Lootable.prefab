@@ -62,6 +62,13 @@ MonoBehaviour:
     targetEntity: {fileID: 0}
   targetEntity: {fileID: 0}
   inventoryGenrator: {fileID: 2968686434369573278}
+  generateOnAwake: 1
+  lootType: 0
+  defaultLootSetting:
+    startLevel: 0
+    lootType: 0
+    lootTable: {fileID: 11400000, guid: d9d51ec6d5694c5469f9630ab5a8a321, type: 2}
+    rolls: 4
 --- !u!114 &2968686434369573278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +85,8 @@ MonoBehaviour:
   lootTable: {fileID: 11400000, guid: ad0a43bc70e9f734cb0394afb1eefed6, type: 2}
   rolls: 10
   isSeeded: 1
+  prioritizeEmpty: 0
+  fixedDrops: []
 --- !u!212 &4499921466147522123
 SpriteRenderer:
   m_ObjectHideFlags: 0

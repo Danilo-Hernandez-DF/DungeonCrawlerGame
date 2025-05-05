@@ -56,7 +56,6 @@ namespace Game {
         public void Bind(PlayerData data) {
             this.data = data;
             this.data.Id = Id;
-            transform.SetPositionAndRotation(data.position, data.rotation);
         }
 
         new protected void Awake() {
@@ -142,9 +141,6 @@ namespace Game {
         }
 
         new void Update() {
-            data.position = transform.position;
-            data.rotation = transform.rotation;
-
             base.Update();
 
             if(!GameManager.Instance.Paused) {

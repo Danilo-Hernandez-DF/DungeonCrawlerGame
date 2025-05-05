@@ -9,14 +9,14 @@ namespace Systems.Persistence {
     [Serializable] public class GameData {
         [FormerlySerializedAs("Name")] public string name;
         [FormerlySerializedAs("CurrentLevelName")] public string currentLevelName;
-        public PlayerData playerData;
+        public Vector3 playerPosition;
         public List<InventoryData> inventoryData;
         public List<InventoryData> filteredInventoryData;
         public List<NPCData> NpcDatas;
         public GameSettingsData gameSettingsData;
 
         public ISaveable MatchID(SerializableGuid id) {
-            if(playerData.Id.Equals(id)) return playerData;
+            //if(playerData.Id.Equals(id)) return playerData;
             if(gameSettingsData.Id.Equals(id)) return gameSettingsData;
 
             for(int i = 0; i < inventoryData.Count; i++) {
@@ -35,10 +35,6 @@ namespace Systems.Persistence {
         }
 
         public void MatchIDAndUpdate(SerializableGuid id, ISaveable newData) {
-            if(playerData.Id.Equals(id)) {
-                if(newData is PlayerData data) playerData = data;
-            }
-
             if(gameSettingsData.Id.Equals(id)) {
                 if(newData is GameSettingsData data) gameSettingsData = data;
             }

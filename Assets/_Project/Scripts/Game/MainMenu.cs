@@ -63,8 +63,9 @@ namespace Game {
             quitButton.gameObject.SetActive(active);
         }
         private void LoadGame(string path) {
-            SaveLoadSystem.Instance.LoadGame(path);
             GameManager.Instance.eventSystem.SetSelectedGameObject(quitLoadMenuButton.gameObject);
+            //GameManager.Instance.Invoke(nameof(GameManager.Instance.FreshGame), 1f);
+            SaveLoadSystem.Instance.LoadGame(path);
         }
         
         private void ReturnToMenu() {
@@ -76,6 +77,7 @@ namespace Game {
         }
         
         private void NewGame() {
+            //GameManager.Instance.Invoke(nameof(GameManager.Instance.FreshGame), 1f);
             SaveLoadSystem.Instance.NewGame();
         }
         
