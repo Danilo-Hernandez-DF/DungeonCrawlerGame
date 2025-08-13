@@ -12,7 +12,7 @@ namespace UtilsModule
 
         public SavedItem(Item toCopy) {
             if(toCopy == null || !toCopy.data) toCopy = GameManager.emptyItem.GetItem(tags: new List<Tag>());
-            data = toCopy.data.name;
+            data = toCopy.data.nameKey;
             count = toCopy.count;
             savedTags = new List<SavedTag>();
 

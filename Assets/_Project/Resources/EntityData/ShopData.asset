@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
   m_Name: ShopData
   m_EditorClassIdentifier: 
-  entityName: Shop
+  nameKey: shop
   stats: {fileID: 11400000, guid: be303fc5a20ba204d8d99acdcc26112d, type: 2}
   prefab: {fileID: 56339608920379905, guid: 4ad40005dc37ada43ab1033218292a76, type: 3}
   tags:

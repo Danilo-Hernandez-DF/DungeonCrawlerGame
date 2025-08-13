@@ -139,7 +139,7 @@ namespace Game {
             var itemKeyPairs = new List<ItemKeyPair>();
             foreach(KeyValuePair<ItemData, int> pair in trackedItems) {
                 itemKeyPairs.Add(new ItemKeyPair {
-                    stat = pair.Key.name, 
+                    stat = pair.Key.nameKey, 
                     value = pair.Value
                 });
             }
@@ -151,7 +151,7 @@ namespace Game {
             var entityKeyPairs = new List<EntityKeyPair>();
             foreach(KeyValuePair<EntityData, EntityTrack> pair in trackedEntities) {
                 entityKeyPairs.Add(new EntityKeyPair {
-                    stat = pair.Key.name, 
+                    stat = pair.Key.nameKey, 
                     value = pair.Value
                 });
             }

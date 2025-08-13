@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Localisation;
 using UnityEngine;
 
 namespace UtilsModule {
@@ -15,9 +16,11 @@ namespace UtilsModule {
         public TagType type;
         public string valPrefix;
         public string valSuffix;
-        public new string name;
+        public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
+        public string nameKey;
         
-        public Tag GetTag(float value, bool inherent = false) {
+        public Tag GetTag(float value, bool inherent = false)
+        {
             return new Tag(this, inherent, value);
         }
 

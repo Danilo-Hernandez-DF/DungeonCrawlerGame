@@ -46,8 +46,13 @@ namespace Game {
             }
             inputActions.Enable();
         }
+        
+        void OnDisable() {
+            inputActions.Disable();
+        }
 
-        public void OnAim(InputAction.CallbackContext context) {
+        public void OnAim(InputAction.CallbackContext context)
+        {
             Aim.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
         }
 

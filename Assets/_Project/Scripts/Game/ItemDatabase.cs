@@ -7,7 +7,7 @@ namespace Game {
         }
 
         public override ItemData GetData(string name) {
-            return Items.Find(item => item.name == name);
+            return Items.Find(item => item.nameKey == name);
         }
     }
 }

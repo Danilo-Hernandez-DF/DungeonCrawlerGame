@@ -18,7 +18,7 @@ namespace UtilsModule {
         }
 
         public void UpdateDisplay(Item item) {
-            if(item?.data == null || item.IsEmpty) {
+            if(item.IsEmpty) {
                 sprite.sprite = null;
                 sprite.color = Color.clear;
                 itemName.text = "";

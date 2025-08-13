@@ -20,7 +20,7 @@ namespace Game {
         public int currentLevel = 0;
 
         [Header("Game Settings")]
-        public static ItemData emptyItem => Instance.ItemDatabase.GetData("Empty");
+        public static ItemData emptyItem => Instance.ItemDatabase.GetData("empty");
         public EventSystem eventSystem;
         private ItemDatabase ItemDatabase;
         private EntityDatabase EntityDatabase;

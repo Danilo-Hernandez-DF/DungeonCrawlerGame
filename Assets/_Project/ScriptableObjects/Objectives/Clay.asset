@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a14b562553b79214daa42cef5ef0728b, type: 3}
-  m_Name: Empty
+  m_Script: {fileID: 11500000, guid: e051038378b74277afa57e34bcfb33fb, type: 3}
+  m_Name: Clay
   m_EditorClassIdentifier: 
-  name: Empty
-  maxCount: 0
-  sprite: {fileID: 0}
-  inherentTags: []
+  target: 1
+  tracked: {fileID: 11400000, guid: 2b3bbcbde3f686545ad5e60a51aeadb1, type: 2}

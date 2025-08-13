@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
   m_Name: ClayBlobData
   m_EditorClassIdentifier: 
-  entityName: ClayBlob
+  nameKey: clay_blob
   stats: {fileID: 11400000, guid: 82097f39efd5d6e468956a94d5da6601, type: 2}
   prefab: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
   tags:

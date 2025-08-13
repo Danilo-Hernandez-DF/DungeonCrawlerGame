@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Localisation;
 using UnityEngine;
 
 namespace UtilsModule {
     [CreateAssetMenu(fileName = "EntityData", menuName = "Data/Entity Data")]
     public class EntityData : ScriptableObject {
-        public string entityName;
+        public string entityName => LocalisationSystem.GetLocalisedValue(nameKey);
+        public string nameKey;
         public EntityStats stats;
         public GameObject prefab;
         public List<Tag> tags;

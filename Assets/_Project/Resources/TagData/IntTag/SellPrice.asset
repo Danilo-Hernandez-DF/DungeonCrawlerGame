@@ -16,4 +16,4 @@ MonoBehaviour:
   type: 1
   valPrefix: 
   valSuffix: g
-  name: Sell Price
+  nameKey: tag_sell_price

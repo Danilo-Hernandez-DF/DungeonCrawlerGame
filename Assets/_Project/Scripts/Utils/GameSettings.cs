@@ -96,7 +96,7 @@ namespace _Project.Scripts.Utils {
             }
                 
             foreach(var keyPair in tracker.itemKeyPairs) {
-                newTracker.TrackItem(GameManager.GetItem(keyPair.stat), keyPair.value);
+                newTracker.TrackItem(GameManager.GetItem(keyPair.stat), keyPair.value); 
             }
                 
             foreach(var keyPair in tracker.entityKeyPairs) {

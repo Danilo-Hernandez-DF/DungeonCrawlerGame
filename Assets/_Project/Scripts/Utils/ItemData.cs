@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Localisation;
 
 namespace UtilsModule {
     [CreateAssetMenu(fileName = "New Item Data", menuName = "Data/Item/Item Data")]
     public class ItemData : ScriptableObject {
-        public new string name;
+        public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
+        public string nameKey;
         [TextArea] public string description;
         public int maxCount;
         [SerializeField] Sprite sprite;

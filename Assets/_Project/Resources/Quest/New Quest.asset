@@ -15,4 +15,4 @@ MonoBehaviour:
   objectives:
   - {fileID: 11400000, guid: 221bf8088558dba4e8c8c5aab8cd5bad, type: 2}
   - {fileID: 11400000, guid: c45b220836dc39e46ad874ab04215572, type: 2}
-  name: crystal n' kills x5
+  nameKey: test_quest

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  entityName: Player
+  nameKey: player
   stats: {fileID: 11400000, guid: eff3f4141cdcb114b9fd984d772a9b15, type: 2}
   prefab: {fileID: 0}
   tags:

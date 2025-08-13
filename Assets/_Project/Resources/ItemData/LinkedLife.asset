@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14b562553b79214daa42cef5ef0728b, type: 3}
   m_Name: LinkedLife
   m_EditorClassIdentifier: 
-  name: Linked Life
+  nameKey: linked_life
   description: This Amulet represents the core aspects of life and survival. It grants
     great vitality to it's holder
   maxCount: 1

@@ -16,4 +16,4 @@ MonoBehaviour:
   type: 0
   valPrefix: 
   valSuffix: 
-  name: Lootable
+  nameKey: tag_lootable

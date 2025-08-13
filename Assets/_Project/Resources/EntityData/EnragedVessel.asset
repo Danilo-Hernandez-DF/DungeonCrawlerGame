@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
   m_Name: EnragedVessel
   m_EditorClassIdentifier: 
-  entityName: EnragedVessel
+  nameKey: enraged_vessel
   stats: {fileID: 11400000, guid: a546f3353e59f754b8e1acf1caeec68b, type: 2}
   prefab: {fileID: 6356083494339734611, guid: 948e175c173f5b049b92e613479de37f, type: 3}
   tags:

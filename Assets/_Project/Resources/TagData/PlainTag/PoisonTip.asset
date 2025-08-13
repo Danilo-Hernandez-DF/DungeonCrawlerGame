@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08b93b73740fb43a4bcd4f83fbdead, type: 3}
   m_Name: PoisonTip
   m_EditorClassIdentifier: 
-  name: Poison Tip
+  hidden: 0
+  type: 0
+  valPrefix: 
+  valSuffix: 
+  nameKey: tag_poison_tip

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08b93b73740fb43a4bcd4f83fbdead, type: 3}
   m_Name: Haste
   m_EditorClassIdentifier: 
+  hidden: 0
   type: 2
   valPrefix: +
   valSuffix: '% Movement Speed'
-  name: Haste
+  nameKey: tag_haste

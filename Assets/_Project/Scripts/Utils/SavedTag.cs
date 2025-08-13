@@ -13,7 +13,7 @@ namespace UtilsModule
         {
             value = toCopy.value;
             inherent = toCopy.inherent;
-            data = toCopy.data.name;
+            data = toCopy.data.nameKey;
         }
 
         public Tag ToTag() {

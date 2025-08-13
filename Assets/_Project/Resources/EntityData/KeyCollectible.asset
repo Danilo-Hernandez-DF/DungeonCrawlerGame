@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2642c4a6c4672944e9c3a7bb3a8fec84, type: 3}
   m_Name: KeyCollectible
   m_EditorClassIdentifier: 
-  entityName: Key (Collectible)
+  nameKey: key_collectible
   stats: {fileID: 11400000, guid: be303fc5a20ba204d8d99acdcc26112d, type: 2}
   prefab: {fileID: 4571744787490160446, guid: c19202b779758fe46b755f1752ca91af, type: 3}
   tags:

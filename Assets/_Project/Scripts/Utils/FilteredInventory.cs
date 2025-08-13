@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 namespace UtilsModule {
     public class FilteredInventory : Inventory {
         private readonly List<SlotFilter> slotFilters;
-        private new readonly FilteredInventoryEventChannel inventoryChannel;
+        private readonly FilteredInventoryEventChannel inventoryChannel;
 
         public FilteredInventory(List<SlotFilter> slotFilters, FilteredInventoryEventChannel inventoryChannel = null) {
             this.slotFilters = slotFilters;

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectives:
   - {fileID: 11400000, guid: 221bf8088558dba4e8c8c5aab8cd5bad, type: 2}
-  name: 
+  nameKey: test_dungeon_quest

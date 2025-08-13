@@ -38,29 +38,45 @@ namespace Game {
 
         protected void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
         protected void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
+        protected Vector2 DirectionToTarget(Vector2 target)
+        {
+            var direction = target - (Vector2)transform.position;
+            return direction.normalized;
+        }
+        public Vector2 GetFurthestPoint(Vector2 target, float radius)
+        {
+            var furthestPoint = target + (Vector2)(DirectionToTarget(target) * radius);
+            return furthestPoint;
+        }
 
-        new void Update() {
+        new void Update()
+        {
             base.Update();
 
             agent.speed = Stats.Speed;
             playerDetector.Init(Stats.AttackRange);
 
-            if(!GameManager.Instance.Paused) {
-                if(agent.isActiveAndEnabled && agent.isStopped) {
+            if (!GameManager.Instance.Paused)
+            {
+                if (agent.isActiveAndEnabled && agent.isStopped)
+                {
                     agent.isStopped = false;
                     animationSpeed = 1f;
                 }
                 stateMachine.Update();
                 attackTimer.Tick(Time.deltaTime);
-            } else {
+            }
+            else
+            {
                 agent.isStopped = true;
                 animationSpeed = 0f;
             }
 
 #if UNITY_EDITOR
             if (!stateViewer) return;
-            
-            if(!doDebug) {
+
+            if (!doDebug)
+            {
                 stateViewer.gameObject.SetActive(false);
                 return;
             }

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08b93b73740fb43a4bcd4f83fbdead, type: 3}
   m_Name: AttackCooldownAdd
   m_EditorClassIdentifier: 
+  hidden: 0
   type: 2
   valPrefix: +
   valSuffix: 
-  name: Attack Cooldown
+  nameKey: tag_attack_cooldown
