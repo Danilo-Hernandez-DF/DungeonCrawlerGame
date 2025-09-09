@@ -12,16 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 045042c75f8e6e349acd5c2e1e6a94ff, type: 3}
   m_Name: EnragedVesselStats
   m_EditorClassIdentifier: 
-  attack: 4
-  speed: 2
+  attack: 5
+  speed: 1
   defense: 2
   health: 24
   dashForce: 10
   dashDuration: 0.5
   dashCooldown: 1.5
   attackCooldown: 5
-  attackRange: 10
+  attackRange: 5
   attackDistance: 6
-  stunDuration: 0.5
-  chargeDuration: 2
+  stunDuration: 0.1
+  chargeDuration: 1.5
   fleeRange: 4
+  detectionRange: 7
+  knockback: 1

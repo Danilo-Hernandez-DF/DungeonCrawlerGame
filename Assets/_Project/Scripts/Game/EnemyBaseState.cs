@@ -3,12 +3,12 @@ using StateMachines;
 using UnityEngine;
 
 namespace Game {
-    public abstract class EnemyBaseState<T> : IState where T : Enemy {
-        protected T enemy;
+    public abstract class EnemyBaseState : IState {
+        protected Enemy enemy;
         protected Animator animator;
         protected int animHash;
 
-        protected EnemyBaseState(T enemy, int animHash = 0) {
+        protected EnemyBaseState(Enemy enemy, int animHash = 0) {
             this.enemy = enemy;
             this.animHash = animHash;
             animator = enemy.GetComponent<Animator>();

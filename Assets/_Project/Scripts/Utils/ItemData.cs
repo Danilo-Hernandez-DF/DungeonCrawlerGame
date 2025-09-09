@@ -24,8 +24,8 @@ namespace UtilsModule {
         }
 
         public bool HasTag(string tag, float value = 0, bool accept0 = false) {
-            if(!accept0 && value == 0) return inherentTags.Exists(x => x.data.name == tag);
-            return inherentTags.Exists(x => x.data.name == tag && x.value == value);
+            if(!accept0 && value == 0) return inherentTags.Exists(x => x.data.nameKey == tag);
+            return inherentTags.Exists(x => x.data.nameKey == tag && x.value == value);
         }
     }
 

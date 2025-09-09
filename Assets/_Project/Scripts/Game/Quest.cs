@@ -7,7 +7,7 @@ namespace Game {
     public class Quest : ScriptableObject {
         public Objective[] objectives;
         public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
-        [SerializeField] string nameKey;
+        public string nameKey;
         
         public virtual void OnCompletion(NPC questGiver = null)
         {

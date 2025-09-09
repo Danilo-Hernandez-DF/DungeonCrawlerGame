@@ -53,8 +53,6 @@ namespace ProcGen {
             foreach(RoomController room in rooms) {
                 room.Init();
             }
-
-            NavMeshManager.BakeNavMesh();
         }
 
         bool TryGenerateRoom(GOLootTable prefabs, Vector2 roomPos, List<RoomEntrance> roomEntrances, bool addEntrances = true) {

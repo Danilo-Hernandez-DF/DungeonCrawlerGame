@@ -13,7 +13,7 @@ namespace UtilsModule {
 
         public bool HasTag(string tag) {
             foreach(Tag t in tags) {
-                if(t.data.name == tag) return true;
+                if(t.data.nameKey == tag) return true;
             }
 
             return false;

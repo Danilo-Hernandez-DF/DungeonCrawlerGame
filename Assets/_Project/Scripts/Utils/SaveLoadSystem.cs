@@ -9,11 +9,13 @@ using UnityEngine.SceneManagement;
 using UtilsModule;
 
 namespace Systems.Persistence {
-    public class SaveLoadSystem : PersistentSingleton<SaveLoadSystem> {
+    public class SaveLoadSystem : PersistentSingleton<SaveLoadSystem>
+    {
         public GameData gameData;
         FileDataService dataService;
-        
-        protected override void Awake() {
+
+        protected override void Awake()
+        {
             base.Awake();
             dataService = new FileDataService(new JsonSerializer());
         }
@@ -21,16 +23,19 @@ namespace Systems.Persistence {
         void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
         void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            if(scene.name == "MainMenuScene") return;
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "MainMenuScene") return;
             BindAll();
-            
-            if(SceneData.Instance.canBeSaved) {
+
+            if (SceneData.Instance.canBeSaved)
+            {
                 gameData.currentLevelName = scene.name;
             }
         }
 
-        void BindAll() {
+        void BindAll()
+        {
             //Bind<PlayerController, PlayerData>(gameData.playerData);
             Bind<SaveableInventoryHolder, InventoryData>(gameData.inventoryData);
             Bind<SaveableFilteredHolder, InventoryData>(gameData.filteredInventoryData);
@@ -38,13 +43,15 @@ namespace Systems.Persistence {
             Bind<NPC, NPCData>(gameData.NpcDatas);
         }
 
-        public ISaveable GetData(SerializableGuid id) {
+        public ISaveable GetData(SerializableGuid id)
+        {
             SaveGame();
             GameData temp = dataService.Load(gameData.name);
             return temp.MatchID(id);
         }
 
-        public void SetData(SerializableGuid id, ISaveable newVal) {
+        public void SetData(SerializableGuid id, ISaveable newVal)
+        {
             SaveGame();
             GameData temp = dataService.Load(gameData.name);
             temp.MatchIDAndUpdate(id, newVal);
@@ -53,21 +60,25 @@ namespace Systems.Persistence {
             BindAll();
         }
 
-        static void Bind<T, TData>(TData data) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new() {
+        static void Bind<T, TData>(TData data) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new()
+        {
             var entity = FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
-            if(entity == null) return;
+            if (entity == null) return;
             data ??= new TData { Id = entity.Id };
             entity.Bind(data);
         }
 
-        static void Bind<T, TData>(List<TData> datas) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new() {
+        static void Bind<T, TData>(List<TData> datas) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new()
+        {
             var entities = FindObjectsByType<T>(FindObjectsSortMode.None);
-            if(datas == null) return;
-            
-            foreach(var entity in entities) {
+            if (datas == null) return;
+
+            foreach (var entity in entities)
+            {
                 if (!entity) continue;
                 var data = datas.FirstOrDefault(d => d.Id == entity.Id);
-                if(data == null) {
+                if (data == null)
+                {
                     data = new TData() { Id = entity.Id };
                     datas.Add(data);
                 }
@@ -75,25 +86,30 @@ namespace Systems.Persistence {
             }
         }
 
-        public void NewGame(string gameName = "New Game") {
-            if (gameName == "New Game") {
+        public void NewGame(string gameName = "New Game")
+        {
+            if (gameName == "New Game")
+            {
                 gameName = "Game " + (GetSavedGames().Count + 1);
             }
-            
-            gameData = new GameData {
+
+            gameData = new GameData
+            {
                 name = gameName,
                 currentLevelName = "HubScene"
             };
             SaveGame();
-            LoadGame(gameData.name);
+            LoadGame(gameData.name + "_temp");
         }
 
-        public void SaveGame() => dataService.Save(gameData, true);
+        public void SaveGame(bool tempSave = true) => dataService.Save(gameData, true, tempSave);
 
-        public void LoadGame(string gameName) {
+        public void LoadGame(string gameName)
+        {
             gameData = dataService.Load(gameName);
 
-            if(String.IsNullOrWhiteSpace(gameData.currentLevelName)) {
+            if (String.IsNullOrWhiteSpace(gameData.currentLevelName))
+            {
                 NewGame(gameName);
             }
 
@@ -104,13 +120,34 @@ namespace Systems.Persistence {
 
         public void DeleteGame(string gameName) => dataService.Delete(gameName);
 
-        public List<GameData> GetSavedGames() {
+        public List<GameData> GetSavedGames()
+        {
             List<GameData> games = new List<GameData>();
-            foreach (string fileName in dataService.ListSaves()) {
+            foreach (string fileName in dataService.ListSaves())
+            {
+                if (fileName.EndsWith("_temp")) continue;
                 games.Add(dataService.Load(fileName));
             }
-            
+
             return games;
+        }
+
+        void OnApplicationQuit()
+        {
+            DeleteTempSaves();         
+        }
+
+        public void DeleteTempSaves()
+        {
+            List<string> saves = dataService.ListSaves().ToList();
+            foreach (string save in saves)
+            {
+                if (save.EndsWith("_temp"))
+                {
+                    dataService.Delete(save);
+                    Debug.Log($"Deleted {save}");
+                }
+            }
         }
     }
 }

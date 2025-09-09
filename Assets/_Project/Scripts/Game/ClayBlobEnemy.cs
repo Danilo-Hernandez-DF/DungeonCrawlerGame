@@ -4,42 +4,44 @@ using UtilsModule;
 
 namespace Game  {
     public class ClayBlobEnemy : Enemy {
+        // Animation Hashes
+        public static int ChaseHash = Animator.StringToHash("ClayBlobChase");
+        public static int WanderHash = Animator.StringToHash("ClayBlobWander");
+
+        //------------------------
+
         [Header("ClayBlob Settings")]
         [SerializeField] float wanderRadius = 10f;
+        private Vector2 patrolPoint;
 
-        protected override void InitStates() {
-            var wanderState = new ClayBlobWanderState(this, agent, wanderRadius, ClayBlobBaseState.ClayBlobWanderHash);
-            var chaseState = new ClayBlobChaseState(this, agent, playerDetector.Player, ClayBlobBaseState.ClayBlobChaseHash);
-            var attackState = new ClayBlobAttackState(this, agent, playerDetector.Player);
-            var stunnedState = new ClayBlobStunnedState(this, agent, playerDetector.Player);
+        protected override void InitStates()
+        {
+            patrolPoint = transform.position;
+            SetTarget(PlayerDetector.GetPlayerComponent());
 
-            At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer(MovementDirection)));
-            At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer(MovementDirection)));
-            At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
-            At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
+            var wanderState = new EnemyWanderState(this, patrolPoint, wanderRadius, WanderHash);
+            var chaseState = new EnemyChaseState(this, target.transform, ChaseHash);
+            var attackState = new EnemyAttackState(this, target.transform);
+            var stunnedState = new EnemyStunnedState(this);
+            var deathState = new EnemyDeathState(this);
+
+            At(wanderState, chaseState, new FuncPredicate(() => CanDetectTarget(Stats.DetectionRange)));
+            At(chaseState, wanderState, new FuncPredicate(() => !CanDetectTarget(Stats.DetectionRange) && GetDistanceToTarget(lastTargetPosition) < 0.1f));
+            At(chaseState, attackState, new FuncPredicate(() => GetDistanceToTarget() < Stats.AttackRange && !attackTimer.IsRunning));
+            At(attackState, chaseState, new FuncPredicate(() => attackTimer.IsRunning || GetDistanceToTarget() > Stats.AttackRange));
             At(stunnedState, wanderState, new FuncPredicate(() => !wasStunned));
 
             Any(stunnedState, new FuncPredicate(() => wasStunned));
+            Any(deathState, new FuncPredicate(() => hasDied));
 
             stateMachine.SetState(wanderState);
-        }
-        
-        protected override void OnDeath() {
-            base.OnDeath();
-            Destroy(gameObject);
-        }
-
-        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
-            base.OnDamage(damage, dmgSource, ignoreKnockback);
-            LastDamageSource = dmgSource ? dmgSource : LastDamageSource;
-            if(!ignoreKnockback) wasStunned = true;
         }
         
         public override void Attack() {
             if(attackTimer.IsRunning) return;
 
             attackTimer.Start();
-            playerDetector.PlayerComponent.TakeDamage(AttackDamage, dmgSource: gameObject);
+            target.TakeDamage(AttackDamage, dmgSource: gameObject);
         }
     }
 }

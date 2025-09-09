@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 namespace UtilsModule {
-    public enum StatType { 
+    public enum StatType
+    {
         Defense,
         Speed,
         Health,
@@ -15,7 +16,9 @@ namespace UtilsModule {
         AttackDistance,
         StunDuration,
         ChargeDuration,
-        FleeRange
+        FleeRange,
+        DetectionRange,
+        Knockback
     }
 
     [Serializable]
@@ -118,8 +121,23 @@ namespace UtilsModule {
                 return StatCalculation(q);
             }
         }
+        
+        public float DetectionRange {
+            get {
+                var q = new Query(StatType.DetectionRange, baseStats.detectionRange);
+                return StatCalculation(q);
+            }
+        }
 
-        public Stats(StatsMediator mediator, BaseStats baseStats) {
+        public float Knockback {
+            get {
+                var q = new Query(StatType.Knockback, baseStats.knockback);
+                return StatCalculation(q);
+            }
+        }
+
+        public Stats(StatsMediator mediator, BaseStats baseStats)
+        {
             this.Mediator = mediator;
             this.baseStats = baseStats;
         }

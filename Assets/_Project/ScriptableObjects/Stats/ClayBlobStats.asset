@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: ClayBlobStats
   m_EditorClassIdentifier: 
   attack: 2
-  speed: 3
+  speed: 1.25
   defense: 0
   health: 20
-  DashForce: 10
-  DashDuration: 0.5
-  DashCooldown: 1.5
-  AttackCooldown: 0.8
-  AttackRange: 0.6
-  AttackDistance: 0.75
-  StunDuration: 0.5
+  dashForce: 10
+  dashDuration: 0.5
+  dashCooldown: 1.5
+  attackCooldown: 0.6
+  attackRange: 1
+  attackDistance: 0.75
+  stunDuration: 0.2
+  chargeDuration: 0.75
+  fleeRange: 0
+  detectionRange: 4
+  knockback: 2.5

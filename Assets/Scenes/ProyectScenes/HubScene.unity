@@ -3819,7 +3819,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1175946251}
   m_BodyType: 2
-  m_Simulated: 0
+  m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -3845,22 +3845,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1210659271830403531, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1210659271830403531, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1210659271830403531, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1210659271830403531, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1367403579377590887, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
       propertyPath: m_Name
       value: PlayableSceneMake-up
@@ -3904,66 +3888,6 @@ PrefabInstance:
     - target: {fileID: 2619916766270004507, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5023768513866572098, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5023768513866572098, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5023768513866572098, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5023768513866572098, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5243163917559576149, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5243163917559576149, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5243163917559576149, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5243163917559576149, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.70980394
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.6901961
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_NormalizedViewPortRect.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_NormalizedViewPortRect.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
-      propertyPath: m_NormalizedViewPortRect.height
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

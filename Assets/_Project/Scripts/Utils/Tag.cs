@@ -1,4 +1,5 @@
 using System;
+using Localisation;
 
 namespace UtilsModule {
     [Serializable]
@@ -31,12 +32,13 @@ namespace UtilsModule {
         public override string ToString() {
             return Type switch {
                 TagData.TagType.None => data.name,
-                TagData.TagType.Equipment => data.name + $": {(Equipment)value}",
+                TagData.TagType.Equipment => data.name + $": {LocalisationSystem.GetLocalisedValue(((Equipment)value).ToString())}",
                 _ => data.name + $": {data.valPrefix}{value}{data.valSuffix}"
             };
         }
 
-        public enum Equipment {
+        public enum Equipment
+        {
             Weapon, // 0
             Chest, // 1
             Legs, // 2

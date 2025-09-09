@@ -13,44 +13,39 @@ namespace Game {
         [SerializeField] float wanderRadius = 10f;
         [SerializeField] private GameObject aoePrefab;
         [SerializeField] private GameObject projectilePrefab;
+        private Vector2 patrolPoint;
 
-        
+        protected override void InitStates()
+        {
+            patrolPoint = transform.position;
+            SetTarget(PlayerDetector.GetPlayerComponent());
 
-        public float detectionRadius => playerDetector.detectionRadius;
-        public Transform lastPlayerPosition;
-        public bool remembersLastPlayerPosition => rememberTimer.IsRunning;
-        public bool readyToAttack = false;
-        protected bool hasDied = false;
-        public CountdownTimer rememberTimer = new CountdownTimer(2f);
-
-        protected override void InitStates() {
-            var wanderState = new EnragedVesselWanderState(this, agent, wanderRadius);
-            var attackState = new EnragedVesselAttackState(this, agent, playerDetector.Player);
-            var stunnedState = new EnragedVesselStunnedState(this, agent, playerDetector.Player);
-            var focusedState = new EnragedVesselFocusedState(this, agent, playerDetector.Player);
-            var chaseState = new EnragedVesselChaseState(this, agent, playerDetector.Player);
-            var deathState = new EnragedVesselDeathState(this);
+            var wanderState = new EnemyWanderState(this, patrolPoint, wanderRadius);
+            var attackState = new EnemyAttackState(this, target.transform);
+            var stunnedState = new EnemyStunnedState(this);
+            var focusedState = new EnemyChargingState(this);
+            var chaseState = new EnemyChaseState(this, target.transform);
+            var deathState = new EnemyDeathState(this);
             //var fleeState = new EnragedVesselFleeState(this, agent, playerDetector.Player);
 
             At(stunnedState, wanderState, new FuncPredicate(() => !wasStunned));
-            
-            At(wanderState, focusedState, new FuncPredicate(() => !attackTimer.IsRunning && HasLineOfSight())); 
+
+            //At(wanderState, focusedState, new FuncPredicate(() => !attackTimer.IsRunning && GetDistanceToTarget() < Stats.AttackRange));
             //attack timer not running & player in line of sight
-            At(wanderState, chaseState, new FuncPredicate(() => !attackTimer.IsRunning && !HasLineOfSight() &&
-                                                                KnowsPlayerPosition())); 
-            //attack timer not running & player not in line of sight with known position
-            
-            At(chaseState, focusedState, new FuncPredicate(() => !attackTimer.IsRunning && HasLineOfSight())); 
+            At(wanderState, chaseState, new FuncPredicate(() => !attackTimer.IsRunning && CanDetectTarget(Stats.DetectionRange)));
+            //attack timer not running & player within range
+
+            At(chaseState, focusedState, new FuncPredicate(() => !attackTimer.IsRunning && GetDistanceToTarget() < Stats.AttackRange));
             //attack timer not running & player in line of sight
-            At(chaseState, wanderState, new FuncPredicate(() => !KnowsPlayerPosition())); 
+            At(chaseState, wanderState, new FuncPredicate(() => !CanDetectTarget(Stats.DetectionRange) && GetDistanceToTarget(lastTargetPosition) < 0.1f));
             //player position not known
-            
-            At(focusedState, chaseState, new FuncPredicate(() => !HasLineOfSight())); 
+
+            At(focusedState, chaseState, new FuncPredicate(() => GetDistanceToTarget() > Stats.AttackRange));
             //player not in line of sight
-            At(focusedState, attackState, new FuncPredicate(() => readyToAttack)); 
+            At(focusedState, attackState, new FuncPredicate(() => charged));
             //ready to attack
-            
-            At(attackState, wanderState, new FuncPredicate(() => !readyToAttack || attackTimer.IsRunning)); //has attacked
+
+            At(attackState, wanderState, new FuncPredicate(() => !charged || attackTimer.IsRunning)); //has attacked
 
             Any(stunnedState, new FuncPredicate(() => wasStunned));
             Any(deathState, new FuncPredicate(() => hasDied));
@@ -58,14 +53,6 @@ namespace Game {
 
             stateMachine.SetState(wanderState);
         }
-
-        private bool HasLineOfSight() {
-            return playerDetector.HasLineOfSight(transform.position) && CanDetectTarget();
-        }
-        
-        public bool CanDetectTarget() => playerDetector.CanDetectPlayer(FacingDirection);
-        
-        private bool KnowsPlayerPosition() => rememberTimer.IsRunning || playerDetector.CanDetectPlayer(FacingDirection);
 
         /*public bool InFleeRange() {   
             return playerDetector.DistanceToPlayer <= Stats.FleeRange;
@@ -78,25 +65,18 @@ namespace Game {
         
         protected override void OnDeath() {
             base.OnDeath();
-            hasDied = true;
             Instantiate(aoePrefab, transform.position, Quaternion.identity);
-        }
-
-        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
-            base.OnDamage(damage, dmgSource, ignoreKnockback);
-            LastDamageSource = dmgSource ? dmgSource : LastDamageSource;
-            if(!ignoreKnockback) wasStunned = true;
         }
 
         public override void Attack() {
             if(attackTimer.IsRunning) return;
-            readyToAttack = false;
+            charged = false;
 
             attackTimer.Start();
-            Debug.Log("Enraged Vessel Attacking!");
+            //Debug.Log("Enraged Vessel Attacking!");
             
             GameObject proj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-            proj.GetComponent<Projectile>().SetTarget(playerDetector.Player.position);
+            proj.GetComponent<Projectile>().SetTarget(target.transform.position);
         }
     }
 }

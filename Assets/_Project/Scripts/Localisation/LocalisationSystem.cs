@@ -16,7 +16,7 @@ namespace Localisation
         public static bool isInit;
         public static void Init()
         {
-            language = LocalisedLanguage.English;
+            language = LocalisedLanguage.Spanish;
 
             CSVLoader cSVLoader = new CSVLoader();
             cSVLoader.LoadCSV(Resources.Load<TextAsset>("Localisation/" + language.ToString()));

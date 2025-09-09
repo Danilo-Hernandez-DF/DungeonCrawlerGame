@@ -6,7 +6,7 @@ namespace UtilsModule {
             if (string.IsNullOrEmpty(name)) {
                 return null;
             }
-            return Items.Find(item => item.name == name);
+            return Items.Find(item => item.nameKey == name);
         }
     }
 }

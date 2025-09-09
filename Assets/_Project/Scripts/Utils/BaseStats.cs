@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace UtilsModule {
-    public abstract class BaseStats : ScriptableObject {
+    public abstract class BaseStats : ScriptableObject
+    {
         public int attack = 2;
         public float speed = 4f;
         public int defense = 0;
@@ -16,5 +17,7 @@ namespace UtilsModule {
         public float stunDuration = 0.5f;
         public float chargeDuration = 0.75f;
         public float fleeRange = 0;
+        public float detectionRange = 3f;
+        public float knockback = 1f;
     }
 }

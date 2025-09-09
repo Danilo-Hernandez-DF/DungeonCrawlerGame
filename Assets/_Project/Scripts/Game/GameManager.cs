@@ -57,8 +57,8 @@ namespace Game {
             return Instance.ItemDatabase.GetData(name);
         }
         
-        public static Item GetEquipment(Tag.Equipment name) {
-            return Instance.ItemDatabase.GetEquipment(name);
+        public static Item GetEquipment(Tag.Equipment type) {
+            return Instance.ItemDatabase.GetEquipment(type);
         }
         
         public static EntityData GetEntity(string name) {

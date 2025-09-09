@@ -71,8 +71,8 @@ namespace Game {
         }
         
         public void TrackEntity(EntityData stat, EntityTrack value = default, GameObject source = null) {
-            if(stat.HasTag("Lootable")) {
-                TrackLoot(stat.name);
+            if(stat.HasTag("tag_lootable")) {
+                TrackLoot(stat.nameKey);
                 return;
             }
             
@@ -82,9 +82,9 @@ namespace Game {
                 trackedEntities.Add(stat, value);
             }
 
-            if(stat.HasTag("Enemy")) {
+            if(stat.HasTag("tag_enemy")) {
                 TrackStat(TrackedStat.KilledEnemies, value.timesKilled);
-            } else if(stat.HasTag("Collectible")) {
+            } else if(stat.HasTag("tag_collectible")) {
                 TrackStat(TrackedStat.CollectiblesCollected, value.timesKilled);
             }
         }

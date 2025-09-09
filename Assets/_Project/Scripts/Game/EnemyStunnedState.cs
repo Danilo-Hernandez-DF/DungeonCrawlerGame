@@ -1,23 +1,20 @@
+using _Project.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 using UtilsModule;
 
-namespace Game
-{
-    public class EnragedVesselStunnedState : EnragedVesselBaseState {
-        readonly NavMeshAgent agent;
-        readonly Transform target;
-
+namespace Game {
+    public class EnemyStunnedState : EnemyBaseState {
         private CountdownTimer timer;
 
-        public EnragedVesselStunnedState(EnragedVesselEnemy enemy, NavMeshAgent agent, Transform target, int animHash = 0) : base(enemy, animHash) {
-            this.agent = agent;
-            this.target = target;
+        public EnemyStunnedState(Enemy enemy, int animHash = 0) : base(enemy, animHash)
+        {
+           
         }
 
         public override void OnEnter() {
             base.OnEnter();
-            agent.speed = 0f;
+
             timer = new CountdownTimer(enemy.Stats.StunDuration);
             timer.OnTimerStop += () => enemy.wasStunned = false;
             timer.Start();
@@ -25,7 +22,7 @@ namespace Game
 
         public override void OnExit() {
             base.OnExit();
-            agent.speed = enemy.Stats.Speed;
+            
         }
 
         public override void Update() {

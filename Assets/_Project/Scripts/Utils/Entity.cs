@@ -13,7 +13,8 @@ namespace UtilsModule {
         public BaseStats baseStats => entityData.stats;
         public Health health;
         protected Rigidbody2D Rb {get; private set;}
-        public Stats Stats {get; private set;}
+        protected Collider2D Collider {get; private set;}
+        public Stats Stats { get; private set; }
         public Status Status {get; private set;}
         public Vector2 FacingDirection {get; protected set;}
         public GameObject Renderer;
@@ -28,6 +29,7 @@ namespace UtilsModule {
             if(entityData) Stats = new Stats(new StatsMediator(), baseStats);
             Status = new Status(this);
             Rb = GetComponent<Rigidbody2D>();
+            Collider = GetComponent<Collider2D>();
             health = GetComponent<Health>();
             if(Renderer) RendererComponent = Renderer.GetComponent<SpriteRenderer>();
             health?.Init(Stats.Health);
@@ -61,7 +63,7 @@ namespace UtilsModule {
     
         public void ApplyForce(Vector2 force) {
             if(Rb == null) return;
-            Rb.AddForce(force);
+            Rb.AddForce(force, ForceMode2D.Impulse);
         }
 
         protected virtual void OnDeath() {

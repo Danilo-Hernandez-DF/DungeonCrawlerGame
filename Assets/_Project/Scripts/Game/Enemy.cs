@@ -5,12 +5,10 @@ using UnityEngine.AI;
 using UtilsModule;
 
 namespace Game {
-    [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(PlayerDetector))]
     public class Enemy : Entity {
         [Header("Behaviour Settings")]
-        [SerializeField] protected NavMeshAgent agent;
-        [SerializeField] protected PlayerDetector playerDetector;
+        //[SerializeField] protected NavMeshAgent agent;
+        //[SerializeField] protected PlayerDetector playerDetector;
         
         [Header("Debug")]
         [SerializeField] private TMP_Text stateViewer;
@@ -20,7 +18,11 @@ namespace Game {
         protected float TimeBetweenAttacks => Stats.AttackCooldown;
         protected int AttackDamage => Stats.Attack;
         public bool wasStunned;
-        protected Vector3 MovementDirection => agent.velocity.normalized;
+        protected Vector3 MovementDirection;
+        protected Entity target;
+        public Vector3 lastTargetPosition;
+        public bool charged = false;
+        protected bool hasDied = false;
 
         protected StateMachine stateMachine;
         protected CountdownTimer attackTimer;
@@ -38,37 +40,74 @@ namespace Game {
 
         protected void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
         protected void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
-        protected Vector2 DirectionToTarget(Vector2 target)
+        public Vector2 DirectionToTarget(Vector2 target = default)
         {
+            if (target == default) target = this.target.transform.position;
+
             var direction = target - (Vector2)transform.position;
             return direction.normalized;
         }
-        public Vector2 GetFurthestPoint(Vector2 target, float radius)
+
+        public Vector2 GetFurthestPoint(float radius, Vector2 target = default)
         {
-            var furthestPoint = target + (Vector2)(DirectionToTarget(target) * radius);
+            if (target == default) target = this.target.transform.position;
+
+            var furthestPoint = target + (DirectionToTarget(target) * radius);
             return furthestPoint;
+        }
+
+        public void MoveTowards(Vector2 target = default, bool dash = false)
+        {
+            if (target == default) target = this.target.transform.position;
+
+            MovementDirection = DirectionToTarget(target);
+            float speed = dash ? Stats.Speed * 1.5f : Stats.Speed;
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        }
+
+        public bool HasLineOfSight(Vector2 target = default)
+        {
+            if (target == default) target = this.target.transform.position;
+
+            var direction = DirectionToTarget(target);
+            var distance = GetDistanceToTarget(target);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, LayerMask.GetMask("Wall"));
+
+            return !hit.collider;
+        }
+
+        public bool CanDetectTarget(float distance, Vector2 target = default)
+        {
+            if (target == default) target = this.target.transform.position;
+            return GetDistanceToTarget(target) <= distance && HasLineOfSight(target);
+        }
+
+        public void SetTarget(Entity target) => this.target = target;
+
+        public float GetDistanceToTarget(Vector2 target = default)
+        {
+            if (target == default) target = this.target.transform.position;
+            return Vector2.Distance(transform.position, target);
+        }
+
+        public bool IsSpaceAvailable(Vector2 target = default) {
+            if (target == default) target = this.target.transform.position;
+            return !Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Wall"));
         }
 
         new void Update()
         {
             base.Update();
 
-            agent.speed = Stats.Speed;
-            playerDetector.Init(Stats.AttackRange);
+            //playerDetector.Init(Stats.AttackRange);
 
             if (!GameManager.Instance.Paused)
             {
-                if (agent.isActiveAndEnabled && agent.isStopped)
-                {
-                    agent.isStopped = false;
-                    animationSpeed = 1f;
-                }
                 stateMachine.Update();
                 attackTimer.Tick(Time.deltaTime);
             }
             else
             {
-                agent.isStopped = true;
                 animationSpeed = 0f;
             }
 
@@ -94,12 +133,29 @@ namespace Game {
         protected override void OnDeath() {
             GameManager.Instance.TrackEntity(entityData, new() {timesKilled = 1});
             DungeonController.Instance.OnEnemyDeath(this);
+            hasDied = true;
             base.OnDeath();
         }
-        
-        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
+
+        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false)
+        {
             base.OnDamage(damage, dmgSource, ignoreKnockback);
             DungeonController.Instance.OnEnemyHit(this);
+            
+            LastDamageSource = dmgSource ? dmgSource : LastDamageSource;
+            if (!ignoreKnockback)
+            {
+                Vector2 knockbackDirection;
+                if (LastDamageSource)
+                {
+                    knockbackDirection = (transform.position - LastDamageSource.transform.position).normalized;
+                } else
+                {
+                    knockbackDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+                }
+                wasStunned = true;
+                ApplyForce(knockbackDirection * Stats.Knockback);
+            }
         }
         
         public virtual void Attack() { }
