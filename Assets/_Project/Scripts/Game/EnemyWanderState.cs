@@ -29,7 +29,7 @@ namespace Game {
             Vector2 randomDirection;
             do
             {
-                randomDirection = Random.insideUnitSphere * wanderRadius;
+                randomDirection = Random.insideUnitCircle * wanderRadius;
                 randomDirection += patrolPoint;
             } while (!enemy.HasLineOfSight(randomDirection) || !enemy.IsSpaceAvailable(randomDirection));
             

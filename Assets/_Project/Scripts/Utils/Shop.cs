@@ -5,7 +5,7 @@ using UtilsModule;
 namespace _Project.Scripts.Utils {
     public class Shop : InventoryHolder, IInteractable
     {
-        [SerializeField] private InventoryGenrator generator;
+        [SerializeField] private InventoryGenerator generator;
         
         bool InRange() => IInteractable.InRange(transform.position);
         

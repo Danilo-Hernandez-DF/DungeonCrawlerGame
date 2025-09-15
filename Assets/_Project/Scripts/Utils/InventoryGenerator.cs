@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UtilsModule {
     //[RequireComponent(typeof(IInventoryHolder))]
-    public class InventoryGenrator : MonoBehaviour {
+    public class InventoryGenerator : MonoBehaviour {
         [SerializeField] InventoryHolder inventoryHolder;
         [SerializeField] LootTable<Item> lootTable;
         [SerializeField] int rolls = 2;

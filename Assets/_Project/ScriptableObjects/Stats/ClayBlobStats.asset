@@ -16,7 +16,7 @@ MonoBehaviour:
   speed: 1.25
   defense: 0
   health: 20
-  dashForce: 10
+  dashForce: 1.5
   dashDuration: 0.5
   dashCooldown: 1.5
   attackCooldown: 0.6

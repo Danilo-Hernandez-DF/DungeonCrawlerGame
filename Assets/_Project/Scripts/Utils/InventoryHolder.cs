@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace UtilsModule {
     public class InventoryHolder : Entity {
-        [SerializeField] protected int inventorySize = 10;
+        public int inventorySize = 10;
         public InventoryEventChannel inventoryChannel;
         public EventChannel lootUIChannel;
         public Inventory Inventory;
         
         [SerializeField] protected Entity targetEntity;
-        [SerializeField] protected InventoryGenrator inventoryGenrator;
+        [SerializeField] protected InventoryGenerator inventoryGenrator;
 
         [Header("Loot Generation")]
         [SerializeField] protected bool generateOnAwake = true;
@@ -28,6 +28,15 @@ namespace UtilsModule {
             }
 
             inventoryChannel?.Invoke(Inventory);
+        }
+
+        public virtual void Generate(ItemLootTable lootTable, int rolls)
+        {
+            if(inventoryGenrator == null) return;
+
+            Inventory.Clear();
+            inventoryGenrator.Init(lootTable, rolls);
+            inventoryGenrator.Generate();
         }
 
         public virtual void OnGenerate() { }

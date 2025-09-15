@@ -1,8 +1,11 @@
+using Localisation;
 using UnityEngine;
 
 namespace UtilsModule {
     public abstract class StatusEffectData : ScriptableObject {
         public int duration = 0;
+        public string nameKey;
+        public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
 
         public virtual void OnTick(Entity entity, int tickCount) { }
         public virtual void OnApply(Entity entity) { }

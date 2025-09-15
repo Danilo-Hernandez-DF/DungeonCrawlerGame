@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game;
+using Localisation;
 using UnityEditor.Search;
 using UnityEngine;
 
 namespace UtilsModule {
     [CreateAssetMenu(fileName = "New Loot Table", menuName = "LootTable/ItemLootTable")]
     public class ItemLootTable : LootTable<Item> {
+        public string nameKey;
+        public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
         [SerializeField] private List<WeightedItem> items;
         [SerializeField] private List<ItemLootTable> secondaryTables;
 

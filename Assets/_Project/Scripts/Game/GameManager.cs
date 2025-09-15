@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Systems.Persistence;
 using Unity.VisualScripting;
@@ -26,6 +27,8 @@ namespace Game {
         private EntityDatabase EntityDatabase;
         private TagDatabase TagDatabase;
         private QuestDatabase QuestDatabase;
+        private StatusEffectDatabase StatusEffectDatabase;
+        private ItemLootTableDatabase ItemLootTableDatabase;
         public GameObject openUI;
         public InputReader input;
 
@@ -39,21 +42,26 @@ namespace Game {
         //Methods
         //------------------------------------------------
 
-        public void StartGame() {
-            DungeonController.Instance.StartFloor(dungeonData);
+        public IEnumerator StartGame() {
+            yield return null;
+            DungeonController.Instance.StartFloor();
             //GameSettings.Instance.SetDifficulty(difficulty);
         }
 
-        public void FreshGame() {
+        public IEnumerator FreshGame() {
+            yield return null;
             currentLevel = 0;
-            StartGame();
+            StartCoroutine(StartGame());
         }
 
-        public void LoadScene(string sceneName) {
+        public void LoadScene(string sceneName, bool resetLevel) {
             SceneManager.LoadScene(sceneName);
+            if (resetLevel) StartCoroutine(FreshGame());
+            else StartCoroutine(StartGame());
         }
 
-        public static ItemData GetItem(string name) {
+        public static ItemData GetItem(string name)
+        {
             return Instance.ItemDatabase.GetData(name);
         }
         
@@ -73,31 +81,58 @@ namespace Game {
             return Instance.QuestDatabase.GetData(name);
         }
         
-        protected override void Awake() {
+        public static StatusEffectData GetStatusEffect(string name) {
+            return Instance.StatusEffectDatabase.GetData(name);
+        }
+        
+        public static ItemLootTable GetItemLootTable(string name) {
+            return Instance.ItemLootTableDatabase.GetData(name);
+        }
+
+        protected override void Awake()
+        {
             base.Awake();
-            
+
             ItemDatabase = new ItemDatabase();
 
-            foreach(ItemData data in Resources.LoadAll<ItemData>("ItemData")) {
+            foreach (ItemData data in Resources.LoadAll<ItemData>("ItemData"))
+            {
                 ItemDatabase.AddItem(data);
             }
 
             EntityDatabase = new EntityDatabase();
-            
-            foreach(EntityData data in Resources.LoadAll<EntityData>("EntityData")) {
+
+            foreach (EntityData data in Resources.LoadAll<EntityData>("EntityData"))
+            {
                 EntityDatabase.AddItem(data);
             }
-            
+
             TagDatabase = new TagDatabase();
-            
-            foreach(TagData data in Resources.LoadAll<TagData>("TagData")) {
+
+            foreach (TagData data in Resources.LoadAll<TagData>("TagData"))
+            {
                 TagDatabase.AddItem(data);
             }
-            
+
             QuestDatabase = new QuestDatabase();
-            
-            foreach(Quest data in Resources.LoadAll<Quest>("Quest")) {
+
+            foreach (Quest data in Resources.LoadAll<Quest>("Quest"))
+            {
                 QuestDatabase.AddItem(data);
+            }
+
+            StatusEffectDatabase = new StatusEffectDatabase();
+
+            foreach (StatusEffectData data in Resources.LoadAll<StatusEffectData>("StatusEffectData"))
+            {
+                StatusEffectDatabase.AddItem(data);
+            }
+
+            ItemLootTableDatabase = new ItemLootTableDatabase();
+
+            foreach (ItemLootTable data in Resources.LoadAll<ItemLootTable>("LootTables/ItemTables"))
+            {
+                ItemLootTableDatabase.AddItem(data);
             }
         }
 

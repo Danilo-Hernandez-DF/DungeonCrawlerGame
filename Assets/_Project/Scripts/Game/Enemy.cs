@@ -23,6 +23,7 @@ namespace Game {
         public Vector3 lastTargetPosition;
         public bool charged = false;
         protected bool hasDied = false;
+        protected float coliderRadius = 0;
 
         protected StateMachine stateMachine;
         protected CountdownTimer attackTimer;
@@ -31,6 +32,8 @@ namespace Game {
             attackTimer = new CountdownTimer(TimeBetweenAttacks);
             attackTimer.OnTimerStop += () => attackTimer.Reset(TimeBetweenAttacks);
             stateMachine = new StateMachine();
+
+            if(Collider is CircleCollider2D circle) coliderRadius = circle.radius;
 
             InitStates();
             DungeonController.Instance.OnEnemySpawn(this);
@@ -61,7 +64,22 @@ namespace Game {
             if (target == default) target = this.target.transform.position;
 
             MovementDirection = DirectionToTarget(target);
-            float speed = dash ? Stats.Speed * 1.5f : Stats.Speed;
+            
+            RaycastHit2D hit = Physics2D.Raycast(transform.position + (MovementDirection * coliderRadius * 1.25f), MovementDirection, coliderRadius, LayerMask.GetMask("Entity"));
+
+            if (hit.collider)
+            {
+                target += Vector2.Perpendicular(MovementDirection) * 2f;
+                MovementDirection = DirectionToTarget(target);
+            }
+
+            while (!IsSpaceAvailable(target))
+            {
+                target *= 0.9f;
+            }
+
+            float speed = dash ? Stats.Speed * Stats.DashForce : Stats.Speed;
+
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
         }
 
@@ -92,7 +110,7 @@ namespace Game {
 
         public bool IsSpaceAvailable(Vector2 target = default) {
             if (target == default) target = this.target.transform.position;
-            return !Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Wall"));
+            return !Physics2D.OverlapCircle(target, coliderRadius, LayerMask.GetMask("Wall"));
         }
 
         new void Update()

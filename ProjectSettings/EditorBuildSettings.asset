@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProyectScenes/HubScene.unity
     guid: 50e12a168bea48344812662b434e7f01
+  - enabled: 1
+    path: Assets/Scenes/ProyectScenes/DebugScene.unity
+    guid: 458ee3d0d25c901408fe2ea7d56210d1
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: cb718270d3b036f43bf065c7b3a94b2d, type: 2}
   m_UseUCBPForAssetBundles: 0

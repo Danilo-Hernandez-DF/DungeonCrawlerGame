@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f556b80bf41651c4eab7a8ef4a3bcd13, type: 3}
-  m_Name: Poisoned1
+  m_Script: {fileID: 11500000, guid: 5fb33eeebdd6e894ea7fd996032aed2e, type: 3}
+  m_Name: Debug
   m_EditorClassIdentifier: 
-  duration: 25
-  damage: 1
+  dungeonName: debug
+  sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  difficultyLevel: 0

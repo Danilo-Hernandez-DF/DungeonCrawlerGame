@@ -43,7 +43,7 @@ namespace UtilsModule {
             //Implement in children
         }
 
-        protected void Close() {
+        public void Close() {
             if(!IsChild) {
                 if(GameManager.Instance.openUI != handledUI) return;
                 handledUI.SetActive(false);

@@ -35,14 +35,9 @@ public class DungeonExit : MonoBehaviour, IInteractable {
     }
 
     public void TransitionScene(DungeonData dungeonData) {
-        GameManager.Instance.dungeonData = dungeonData;
-        SaveLoadSystem.Instance.SaveGame();
-        if(isEntrance) {
-            GameManager.Instance.Invoke(nameof(GameManager.Instance.FreshGame), 1f);
-        } else {
-            GameManager.Instance.Invoke(nameof(GameManager.Instance.StartGame), 1f);
-        }
-        
+        if(!InRange()) return;
+
+        GameManager.Instance.LoadScene(nextLevelScene.name, isEntrance);
         SceneManager.LoadScene(nextLevelScene.name);
     }
 

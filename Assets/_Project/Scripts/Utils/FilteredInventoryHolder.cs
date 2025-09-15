@@ -14,7 +14,7 @@ namespace UtilsModule {
             if(targetEntity) {
                 Inventory.targetEntity = targetEntity;
             }
-            GetComponent<InventoryGenrator>()?.Generate();
+            GetComponent<InventoryGenerator>()?.Generate();
             inventoryChannel?.Invoke(Inventory);
         }
     }

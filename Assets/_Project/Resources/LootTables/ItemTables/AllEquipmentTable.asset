@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31433ed36a09d8c4fa769cd219e49556, type: 3}
+  m_Name: AllEquipmentTable
+  m_EditorClassIdentifier: 
+  weight: 2
+  nameKey: all_equipment
+  items: []
+  secondaryTables:
+  - {fileID: 11400000, guid: 037b485f3e3920c4b88d270be295a050, type: 2}

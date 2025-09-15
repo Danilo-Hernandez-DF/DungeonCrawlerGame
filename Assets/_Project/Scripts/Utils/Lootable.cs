@@ -18,7 +18,7 @@ namespace UtilsModule {
             if(lootSetting == null) {
                 lootSetting = defaultLootSetting;
             }
-            inventoryGenrator.Init(lootSetting.lootTable, lootSetting.rolls);
+            inventoryGenrator?.Init(lootSetting.lootTable, lootSetting.rolls);
             base.Awake();
         }
         

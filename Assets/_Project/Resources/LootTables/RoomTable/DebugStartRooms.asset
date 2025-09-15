@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31433ed36a09d8c4fa769cd219e49556, type: 3}
-  m_Name: AllSwordTable
+  m_Script: {fileID: 11500000, guid: 3bcf657095d75f744a06f3c3fb1ac2ac, type: 3}
+  m_Name: DebugStartRooms
   m_EditorClassIdentifier: 
-  weight: 10
-  items: []
-  secondaryTables:
-  - {fileID: 11400000, guid: 9e382eac6c2beac45afa606b7624f51f, type: 2}
+  weight: 0
+  items:
+  - Item: {fileID: 3974854122743024291, guid: b7e8ebed2472e3545920f221193c6fec, type: 3}
+    Weight: 10
+  secondaryTables: []

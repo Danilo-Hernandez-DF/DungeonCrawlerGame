@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8660499090711254086
 RectTransform:
   m_ObjectHideFlags: 0
@@ -297,7 +297,7 @@ MonoBehaviour:
   defaultZPos: 0
   animationSpeed: 1
   stateViewer: {fileID: 8197688364312425080}
-  doDebug: 1
+  doDebug: 0
   wasStunned: 0
   lastTargetPosition: {x: 0, y: 0, z: 0}
   charged: 0

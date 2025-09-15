@@ -9,21 +9,31 @@ using UtilsModule;
 namespace Game {
     public class DungeonController : Singleton<DungeonController> {
         public DungeonGenerator dungeonGenerator;
+        [SerializeField] DungeonData dungeonData;
         public List<DungeonModifier> modifiers;
         public Quest completionQuest;
         private RoomController startRoom;
         [SerializeField] GameObject floorExit;
         private int currentLevel => GameManager.Instance.currentLevel;
         LootSetting[] lootSettings;
-        
-        public void StartFloor(DungeonData dungeonData) {
+
+        public void StartFloor()
+        {
             modifiers = dungeonData.modifiers?.ToList() ?? new List<DungeonModifier>();
             lootSettings = dungeonData.lootSettings;
             completionQuest = dungeonData.completionQuest;
             dungeonGenerator.Configure(dungeonData);
             dungeonGenerator.Generate(out startRoom);
-            GameSettings.Instance.AddQuest(completionQuest);
-            GameManager.Instance.currentLevel++;
+            //GameManager.Instance.currentLevel++;
+
+            if (completionQuest == null)
+            {
+                CompleteRequirements();
+            }
+            else
+            {
+                GameSettings.Instance.AddQuest(completionQuest);
+            }
         }
 
         public LootSetting GetLootTable(LootType lootType) {
@@ -54,6 +64,7 @@ namespace Game {
         }
         
         public void CompleteRequirements() {
+            if(floorExit == null) return;
             var exit = Instantiate(floorExit);
             exit.transform.SetParent(startRoom.transform);
             exit.transform.localPosition = Vector2.zero;

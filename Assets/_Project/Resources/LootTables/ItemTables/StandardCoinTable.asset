@@ -10,12 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31433ed36a09d8c4fa769cd219e49556, type: 3}
-  m_Name: CrystalVitalityTable
+  m_Name: StandardCoinTable
   m_EditorClassIdentifier: 
-  weight: 1
+  weight: 3
+  nameKey: standard_coin
   items:
-  - Item: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
+  - Item: {fileID: 11400000, guid: 9258d25f0975fd649a43e565c83e732d, type: 2}
+    Weight: 20
+    countMin: 1
+    countMax: 2
+    additionalTags: []
+  - Item: {fileID: 11400000, guid: 9258d25f0975fd649a43e565c83e732d, type: 2}
     Weight: 1
+    countMin: 5
+    countMax: 6
+    additionalTags: []
+  - Item: {fileID: 11400000, guid: 9258d25f0975fd649a43e565c83e732d, type: 2}
+    Weight: 3
     countMin: 1
     countMax: 1
     additionalTags:
@@ -24,9 +35,4 @@ MonoBehaviour:
         inherent: 0
         data: {fileID: 11400000, guid: ae86d307db912384ba343e9c416cfb2c, type: 2}
       value: 0
-  - Item: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
-    Weight: 9
-    countMin: 1
-    countMax: 1
-    additionalTags: []
   secondaryTables: []

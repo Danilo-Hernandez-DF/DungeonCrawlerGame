@@ -45,11 +45,11 @@ namespace Game
                 
                 if(isFiltered) {
                     if(isWhiteList) {
-                        if(!filterTags.Any(x => entity.entityData.HasTag(x.name))) return;
+                        if(!filterTags.Any(x => entity.entityData.HasTag(x.nameKey))) return;
                         Visit(entity);
                         pierced++;
                     } else {
-                        if(filterTags.Any(x => entity.entityData.HasTag(x.name))) return;
+                        if(filterTags.Any(x => entity.entityData.HasTag(x.nameKey))) return;
                         Visit(entity);
                         pierced++;
                     }

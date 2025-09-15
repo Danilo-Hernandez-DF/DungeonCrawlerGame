@@ -31,14 +31,23 @@ namespace ProcGen {
 
             int requiredRooms = specialRoomRequirements.Sum(req => req.count);
 
-            targetRooms = targetRooms >= requiredRooms + 4 ? targetRooms : requiredRooms + 4;
             Vector2 roomPos = Vector2.zero;
 
             var startRoom = Instantiate(startRoomPrefab.GetWeightedItem(seeded: true), roomPos, Quaternion.identity);
             initialRoom = startRoom.GetComponent<RoomController>();
             AddRoom(initialRoom);
 
-            for(int i = 0; i < targetRooms - requiredRooms; i++) {
+            if (targetRooms == 0)
+            {
+                initialRoom.Init();
+
+                return;
+            }
+
+            targetRooms = Mathf.Max(targetRooms, requiredRooms + 4);
+
+            for (int i = 0; i < targetRooms - requiredRooms; i++)
+            {
                 TryGenerateRoom(roomPrefabs, roomPos, entrances);
             }
 
