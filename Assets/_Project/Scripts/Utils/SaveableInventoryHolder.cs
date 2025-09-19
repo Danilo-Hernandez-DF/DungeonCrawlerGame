@@ -10,7 +10,7 @@ namespace UtilsModule {
 
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 
-        void Update() {
+        new void Update() {
             if (inventoryData?.items != null) {
                 List<SavedItem> savedItems = new List<SavedItem>();
                 foreach (Item item in Inventory.items) {

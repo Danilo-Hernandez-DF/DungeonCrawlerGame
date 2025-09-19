@@ -4,6 +4,7 @@ using Systems.Persistence;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Localisation.LocalisationSystem;
 
 namespace Game {
     public class MainMenu : MonoBehaviour {
@@ -20,6 +21,11 @@ namespace Game {
         [SerializeField] private GameObject optionsMenu;
         [SerializeField] private Button quitOptionsMenuButton;
 
+        [SerializeField] private GameObject languagePanel;
+        [SerializeField] private Button languageButton;
+        [SerializeField] private Button spanishButton;
+        [SerializeField] private Button englishButton;
+
         private int savedGames;
 
         private void Start() {
@@ -34,6 +40,20 @@ namespace Game {
                 button.onClick.AddListener(() => LoadGame(path));
                 loadButtons.Add(button);
             }
+
+            languageButton.onClick.AddListener(() => languagePanel.SetActive(true));
+            spanishButton.onClick.AddListener(() =>
+            {
+                SetLanguage(LocalisedLanguage.Spanish);
+                languagePanel.SetActive(false);
+                GameManager.Instance.eventSystem.SetSelectedGameObject(quitOptionsMenuButton.gameObject);
+            });
+            englishButton.onClick.AddListener(() =>
+            {
+                SetLanguage(LocalisedLanguage.English);
+                languagePanel.SetActive(false);
+                GameManager.Instance.eventSystem.SetSelectedGameObject(quitOptionsMenuButton.gameObject);
+            }); 
             
             loadButton.onClick.AddListener(() => {
                 loadMenu.SetActive(true);
@@ -71,6 +91,7 @@ namespace Game {
         private void ReturnToMenu() {
             loadMenu.SetActive(false);
             optionsMenu.SetActive(false);
+            languagePanel.SetActive(false);
             ToggleButtons(true);
             GameManager.Instance.eventSystem.SetSelectedGameObject(
                 loadButton.gameObject.activeInHierarchy? loadButton.gameObject : newGameButton.gameObject);

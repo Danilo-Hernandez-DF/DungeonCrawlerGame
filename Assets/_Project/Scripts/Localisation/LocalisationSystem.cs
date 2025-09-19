@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using _Project.Scripts.Utils;
+using Game;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,9 +17,9 @@ namespace Localisation
         private static Dictionary<string, string> localised;
 
         public static bool isInit;
-        public static void Init()
+        public static void Init(LocalisedLanguage newLanguage)
         {
-            language = LocalisedLanguage.Spanish;
+            language = newLanguage;
 
             CSVLoader cSVLoader = new CSVLoader();
             cSVLoader.LoadCSV(Resources.Load<TextAsset>("Localisation/" + language.ToString()));
@@ -27,13 +30,16 @@ namespace Localisation
 
         public static string GetLocalisedValue(string key)
         {
-            if (!isInit) Init();
+            if (!isInit) Init(GameManager.Instance.globalSettings.localisedLanguage);
             localised.TryGetValue(key, out string value);
             return value;
         }
 
         public static void SetLanguage(LocalisedLanguage language)
         {
+            Debug.Log("Set language to: " + language.ToString());
+            isInit = false;
+            GameManager.Instance.globalSettings.localisedLanguage = language;
             LocalisationSystem.language = language;
             Localise.Invoke();
         }

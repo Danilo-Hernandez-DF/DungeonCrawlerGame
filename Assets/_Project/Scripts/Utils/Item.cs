@@ -37,11 +37,11 @@ namespace UtilsModule {
         }
 
         public bool HasTag(string tag) {
-            return tags.Exists(x => x.data.name == tag);
+            return tags.Exists(x => x.data.nameKey == tag);
         }
         
         public Tag GetTag(string tag) {
-            return tags.Find(x => x.data.name == tag);
+            return tags.Find(x => x.data.nameKey == tag);
         }
         
         public Tag GetTag(TagData tag) {
@@ -55,8 +55,13 @@ namespace UtilsModule {
             return tags.Count == item.tags.Count && tags.All(tag => item.tags.Exists(x => x.Matches(tag)));
         }
 
-        public void AddTag(Tag tag) {
-            if(!tags.Contains(tag)) tags.Add(tag);
+        public void AddTag(Tag tag)
+        {
+
+            if (!HasTag(tag.data)) tags.Add(tag);
+            else {
+                GetTag(tag.data).SetValue(tag.GetValue());
+            }
         }
 
         public void AddTag<T>(T tag, float value) where T : Tag {

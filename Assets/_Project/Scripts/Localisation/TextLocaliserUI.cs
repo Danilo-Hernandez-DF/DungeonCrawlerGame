@@ -24,6 +24,7 @@ namespace Localisation
 
         void OnEnable()
         {
+            OnLocalise();
             LocalisationSystem.Localise += OnLocalise;
         }
 

@@ -160,19 +160,16 @@ namespace Game {
             base.OnDamage(damage, dmgSource, ignoreKnockback);
             DungeonController.Instance.OnEnemyHit(this);
             
-            LastDamageSource = dmgSource ? dmgSource : LastDamageSource;
+            LastDamageSource = dmgSource ? dmgSource : null;
             if (!ignoreKnockback)
             {
                 Vector2 knockbackDirection;
                 if (LastDamageSource)
                 {
                     knockbackDirection = (transform.position - LastDamageSource.transform.position).normalized;
-                } else
-                {
-                    knockbackDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+                    ApplyForce(knockbackDirection * Stats.Knockback);
+                    wasStunned = true;
                 }
-                wasStunned = true;
-                ApplyForce(knockbackDirection * Stats.Knockback);
             }
         }
         

@@ -1,19 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using Systems.Persistence;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using static Localisation.LocalisationSystem;
 using UtilsModule;
 
-namespace Game {
-    public class GameManager : PersistentSingleton<GameManager> {
+namespace Game
+{
+    public class GameManager : PersistentSingleton<GameManager>
+    {
         //------------------------------------------------
         //Variables
         //------------------------------------------------
+
+        public GlobalSettings globalSettings;
 
         [Header("Dungeon Settings")]
         [SerializeField] public DungeonData dungeonData;
@@ -37,24 +40,28 @@ namespace Game {
         public UnityAction<EntityData, EntityTrack> TrackEntity;
         public UnityAction<EntityData, int> TrackLoot;
         public bool Paused => openUI != null;
+        
 
         //------------------------------------------------
         //Methods
         //------------------------------------------------
 
-        public IEnumerator StartGame() {
+        public IEnumerator StartGame()
+        {
             yield return null;
             DungeonController.Instance.StartFloor();
             //GameSettings.Instance.SetDifficulty(difficulty);
         }
 
-        public IEnumerator FreshGame() {
+        public IEnumerator FreshGame()
+        {
             yield return null;
             currentLevel = 0;
             StartCoroutine(StartGame());
         }
 
-        public void LoadScene(string sceneName, bool resetLevel) {
+        public void LoadScene(string sceneName, bool resetLevel)
+        {
             SceneManager.LoadScene(sceneName);
             if (resetLevel) StartCoroutine(FreshGame());
             else StartCoroutine(StartGame());
@@ -64,28 +71,34 @@ namespace Game {
         {
             return Instance.ItemDatabase.GetData(name);
         }
-        
-        public static Item GetEquipment(Tag.Equipment type) {
+
+        public static Item GetEquipment(Tag.Equipment type)
+        {
             return Instance.ItemDatabase.GetEquipment(type);
         }
-        
-        public static EntityData GetEntity(string name) {
+
+        public static EntityData GetEntity(string name)
+        {
             return Instance.EntityDatabase.GetData(name);
         }
-        
-        public static TagData GetTag(string name) {
+
+        public static TagData GetTag(string name)
+        {
             return Instance.TagDatabase.GetData(name);
         }
-        
-        public static Quest GetQuest(string name) {
+
+        public static Quest GetQuest(string name)
+        {
             return Instance.QuestDatabase.GetData(name);
         }
-        
-        public static StatusEffectData GetStatusEffect(string name) {
+
+        public static StatusEffectData GetStatusEffect(string name)
+        {
             return Instance.StatusEffectDatabase.GetData(name);
         }
-        
-        public static ItemLootTable GetItemLootTable(string name) {
+
+        public static ItemLootTable GetItemLootTable(string name)
+        {
             return Instance.ItemLootTableDatabase.GetData(name);
         }
 
@@ -136,40 +149,60 @@ namespace Game {
             }
         }
 
+        void Start()
+        {
+            SaveLoadSystem.Instance.LoadGlobalSettings();
+            SetLanguage(globalSettings.localisedLanguage);
+        }
+
         //------------------------------------------------
-        
-        void OnApplicationQuit() {
+
+        void OnApplicationQuit()
+        {
             input.Controls.Player.Disable();
             input.Controls.UI.Disable();
             input.Controls.Debug.Disable();
-            
+
+            SaveLoadSystem.Instance.SaveGlobalSettings();
+
             MonoBehaviour[] scripts = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
-            foreach (MonoBehaviour script in scripts) {
-                if(script is PersistentSingleton<GameManager>) continue;
+            foreach (MonoBehaviour script in scripts)
+            {
+                if (script is PersistentSingleton<GameManager>) continue;
                 script.enabled = false;
             }
-            
+
             this.enabled = false;
         }
 
-        public void TrackStats(StatisticsTracker.TrackedStat stat, int value) {
+        public void TrackStats(StatisticsTracker.TrackedStat stat, int value)
+        {
             TrackStat?.Invoke(stat, value);
         }
-        
-        public void TrackEntities(EntityData stat, EntityTrack value) {
+
+        public void TrackEntities(EntityData stat, EntityTrack value)
+        {
             TrackEntity?.Invoke(stat, value);
         }
-        
-        public void TrackItems(ItemData item, int value) {
+
+        public void TrackItems(ItemData item, int value)
+        {
             TrackItem?.Invoke(item, value);
         }
-        
-        public void TrackLoots(EntityData item, int value) {
+
+        public void TrackLoots(EntityData item, int value)
+        {
             TrackLoot?.Invoke(item, value);
         }
     }
 
-    public enum Difficulty {Easy, Normal, Hard, Cataclysm}
+    public enum Difficulty { Easy, Normal, Hard, Cataclysm }
 
-    public enum OperatorType {Add, Multiply}
+    public enum OperatorType { Add, Multiply }
+
+    public struct GlobalSettings
+    {
+        public LocalisedLanguage localisedLanguage;
+    }
 }
+

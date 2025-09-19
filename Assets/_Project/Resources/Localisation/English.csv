@@ -30,7 +30,7 @@
 "tag_equipment","Equipment",
 "tag_fire_infused","Fire Infused",
 "tag_gemstonee","Gemstone",
-"tag_haste","Haste"
+"tag_haste","Haste",
 "tag_lootable","Lootable",
 "tag_metal","Metal",
 "tag_player","Player",
@@ -41,6 +41,7 @@
 "test_lootable","Test Lootable",
 "test_quest","Test Quest",
 "ui_back","Back",
+"ui_language","Language",
 "ui_load_game","Load Game",
 "ui_main_menu","Main Menu",
 "ui_new_game","New Game",

@@ -96,12 +96,48 @@ namespace Game
                     inventoryHolder.Generate(lootTable, rolls);
                     break;
                 case "effect":
-                    //stat modifier effects
+                    if (args.Length < 5) return;
+                    OperatorType operatorType = (OperatorType)Enum.Parse(typeof(OperatorType), args[1]);
+                    StatType type = (StatType)Enum.Parse(typeof(StatType), args[2]);
+                    float value = float.Parse(args[3]);
+                    float duration = float.Parse(args[4]);
+
+                    ModifierEffect modEffect = new ModifierEffect(operatorType, type, value, duration);
+
+                    if (spawnedObject == null)
+                    {
+                        ApplyEffect(PlayerDetector.GetPlayer().GetComponent<Entity>(), modEffect);
+                    }
+                    else
+                    {
+                        Entity entity = spawnedObject.GetComponent<Entity>();
+                        ApplyEffect(entity, modEffect);
+                    }
                     break;
                 case "edit":
-                    //edit item with tags
+                    if (args.Length < 3) return;
+
+                    int.TryParse(args[1], out int editSlot);
+                    TagData tagData = GameManager.GetTag(args[2]);
+                    float val = 0;
+                    if (args.Length > 3)
+                    {
+                        if (args[3] == "remove")
+                        {
+                            inventoryHolder.Inventory.GetItem(editSlot).RemoveTag(tagData);
+                            break;
+                        }
+                        float.TryParse(args[3], out val);
+                    }
+
+                    Tag tag = new Tag(tagData, value: val);
+
+                    inventoryHolder.Inventory.GetItem(editSlot).AddTag(tag);
                     break;
                 case "room":
+                    //generate room
+                    break;
+                case "audio":
                     //generate room
                     break;
             }

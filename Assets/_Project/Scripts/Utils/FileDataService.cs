@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Systems.Persistence {
     public class FileDataService : IDataService {
-        readonly ISerializer serializer;
+        public readonly ISerializer serializer;
         readonly string dataPath;
         readonly string fileExtension;
 

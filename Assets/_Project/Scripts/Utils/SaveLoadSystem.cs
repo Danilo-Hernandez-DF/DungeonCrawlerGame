@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using _Project.Scripts.Utils;
 using Game;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UtilsModule;
+using static Localisation.LocalisationSystem;
 
 namespace Systems.Persistence {
     public class SaveLoadSystem : PersistentSingleton<SaveLoadSystem>
@@ -130,6 +132,32 @@ namespace Systems.Persistence {
             }
 
             return games;
+        }
+
+        public void SaveGlobalSettings()
+        {
+            string datapath = dataService.GetPathToFile(Path.Combine(Application.persistentDataPath, "globalSettings"));
+            File.WriteAllText(datapath, dataService.serializer.Serialize(GameManager.Instance.globalSettings));
+        }
+
+        public void LoadGlobalSettings()
+        {
+            string datapath = dataService.GetPathToFile(Path.Combine(Application.persistentDataPath, "globalSettings"));
+            GlobalSettings settings;
+            if (File.Exists(datapath))
+            {
+                settings = dataService.serializer.Deserialize<GlobalSettings>(File.ReadAllText(datapath));
+                GameManager.Instance.globalSettings = settings;
+            }
+            else
+            {
+                settings = new GlobalSettings()
+                {
+                    localisedLanguage = LocalisedLanguage.English
+                };
+                GameManager.Instance.globalSettings = settings;
+                SaveGlobalSettings();
+            }
         }
 
         void OnApplicationQuit()

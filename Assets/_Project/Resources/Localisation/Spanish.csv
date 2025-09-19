@@ -30,7 +30,7 @@
 "tag_equipment","Armamento",
 "tag_fire_infused","Infusión De Fuego",
 "tag_gemstonee","Gema",
-"tag_haste","Prisa"
+"tag_haste","Prisa",
 "tag_lootable","Saqueable",
 "tag_metal","Metal",
 "tag_player","Jugador",
@@ -41,6 +41,7 @@
 "test_lootable","Saqueable De Prueba",
 "test_quest","Misión De Prueba",
 "ui_back","Regresar",
+"ui_language","Idioma",
 "ui_load_game","Cargar Juego",
 "ui_main_menu","Menú Principal",
 "ui_new_game","Nuevo Juego",
