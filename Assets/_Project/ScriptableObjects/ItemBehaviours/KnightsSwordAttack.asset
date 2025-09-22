@@ -16,5 +16,5 @@ MonoBehaviour:
   consumesItem: 0
   weaponPrefab: {fileID: 7494990390855753678, guid: aaa3d1016ac6dda41841318591bf67fb, type: 3}
   damageAreaPrefab: {fileID: 7264073455762122431, guid: 2199cb67e80ca4f4e930368c33efc809, type: 3}
-  attackArea: {x: 1.5, y: 2.5}
+  attackArea: {x: 1.6, y: 1.3}
   attackOffset: 0.75

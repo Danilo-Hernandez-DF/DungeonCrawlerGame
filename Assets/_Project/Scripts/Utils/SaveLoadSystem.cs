@@ -153,7 +153,11 @@ namespace Systems.Persistence {
             {
                 settings = new GlobalSettings()
                 {
-                    localisedLanguage = LocalisedLanguage.English
+                    localisedLanguage = LocalisedLanguage.English,
+                    masterVolume = 50,
+                    musicVolume = 50,
+                    sfxVolume = 50,
+                    uiVolume = 50
                 };
                 GameManager.Instance.globalSettings = settings;
                 SaveGlobalSettings();

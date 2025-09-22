@@ -1,22 +1,40 @@
 using UnityEditor;
 using System.Reflection;
 using System;
+using UnityEngine;
 
 namespace UtilsModule {
-    public static class MyUtils {
+	public static class MyUtils
+	{
 		static MethodInfo _clearConsoleMethod;
-		static MethodInfo ClearConsoleMethod {
-			get {
-				if(_clearConsoleMethod != null) return _clearConsoleMethod;
-				Assembly assembly = Assembly.GetAssembly (typeof(SceneView));
-				Type logEntries = assembly.GetType ("UnityEditor.LogEntries");
-				_clearConsoleMethod = logEntries.GetMethod ("Clear");
+		static MethodInfo ClearConsoleMethod
+		{
+			get
+			{
+				if (_clearConsoleMethod != null) return _clearConsoleMethod;
+				Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
+				Type logEntries = assembly.GetType("UnityEditor.LogEntries");
+				_clearConsoleMethod = logEntries.GetMethod("Clear");
 				return _clearConsoleMethod;
 			}
 		}
 
-		public static void ClearLogConsole() {
-			ClearConsoleMethod.Invoke (new object (), null);
+		public static void ClearLogConsole()
+		{
+			ClearConsoleMethod.Invoke(new object(), null);
+		}
+
+		public static T GetOrAdd<T>(this GameObject gameObject) where T : Component
+		{
+			T component = gameObject.GetComponent<T>();
+			if (!component) component = gameObject.AddComponent<T>();
+			return component;
+		}
+
+		public static int NormalizeRange(float value, float inputMin, float inputMax, float outputMin = 0, float outputMax = 100)
+		{
+			value = Mathf.Clamp(value, inputMin, inputMax);
+			return Mathf.RoundToInt((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
 		}
 	}
 

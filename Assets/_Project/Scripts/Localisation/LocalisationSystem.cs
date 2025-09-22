@@ -37,7 +37,7 @@ namespace Localisation
 
         public static void SetLanguage(LocalisedLanguage language)
         {
-            Debug.Log("Set language to: " + language.ToString());
+            //Debug.Log("Set language to: " + language.ToString());
             isInit = false;
             GameManager.Instance.globalSettings.localisedLanguage = language;
             LocalisationSystem.language = language;

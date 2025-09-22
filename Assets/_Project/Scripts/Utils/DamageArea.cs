@@ -42,7 +42,7 @@ namespace UtilsModule {
             if(hitEffects?.Count > 0) ApplyEffect(entity, null);
             if(hitStatus?.Count > 0) ApplyStatus(entity, null);
             
-            Debug.Log($"{entity.name} took {damage} damage and {hitEffects?.Count} effects");
+            //Debug.Log($"{entity.name} took {damage} damage and {hitEffects?.Count} effects");
             if(damage <= 0) return;
             entity.TakeDamage(damage, dmgSource: playerDamage ? PlayerDetector.GetPlayer() : gameObject);
         }

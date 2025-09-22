@@ -296,6 +296,30 @@ MonoBehaviour:
   shadow: {fileID: 6853226789279240515}
   defaultZPos: 0
   animationSpeed: 1
+  hitSound:
+    clip: {fileID: 8300000, guid: a9f94bba0ec5b6541a9a95da70dfa3ab, type: 3}
+    mixerGroup: {fileID: -6879367941578619350, guid: 062d3045b6baab349a7a3255ee917b5a, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 1
+  deathSound:
+    clip: {fileID: 0}
+    mixerGroup: {fileID: -6879367941578619350, guid: 062d3045b6baab349a7a3255ee917b5a, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 1
+  attackSound:
+    clip: {fileID: 0}
+    mixerGroup: {fileID: -6879367941578619350, guid: 062d3045b6baab349a7a3255ee917b5a, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 1
+  idleSound:
+    clip: {fileID: 0}
+    mixerGroup: {fileID: -6879367941578619350, guid: 062d3045b6baab349a7a3255ee917b5a, type: 2}
+    loop: 0
+    playOnAwake: 0
+    frequentSound: 1
   stateViewer: {fileID: 8197688364312425080}
   doDebug: 0
   wasStunned: 0

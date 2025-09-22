@@ -25,7 +25,7 @@ namespace Game
 
         public override void Attack()
         {
-
+            base.Attack();
         }
     }
 }

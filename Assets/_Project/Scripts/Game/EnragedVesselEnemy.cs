@@ -68,15 +68,17 @@ namespace Game {
             Instantiate(aoePrefab, transform.position, Quaternion.identity);
         }
 
-        public override void Attack() {
-            if(attackTimer.IsRunning) return;
+        public override void Attack()
+        {
+            if (attackTimer.IsRunning) return;
             charged = false;
 
             attackTimer.Start();
             //Debug.Log("Enraged Vessel Attacking!");
-            
+
             GameObject proj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             proj.GetComponent<Projectile>().SetTarget(target.transform.position);
+            base.Attack();
         }
     }
 }

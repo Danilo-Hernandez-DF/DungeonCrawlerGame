@@ -36,12 +36,14 @@ namespace Game  {
 
             stateMachine.SetState(wanderState);
         }
-        
-        public override void Attack() {
-            if(attackTimer.IsRunning) return;
+
+        public override void Attack()
+        {
+            if (attackTimer.IsRunning) return;
 
             attackTimer.Start();
             target.TakeDamage(AttackDamage, dmgSource: gameObject);
+            base.Attack();
         }
     }
 }

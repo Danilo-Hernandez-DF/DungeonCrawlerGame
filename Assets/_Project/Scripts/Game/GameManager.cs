@@ -203,6 +203,10 @@ namespace Game
     public struct GlobalSettings
     {
         public LocalisedLanguage localisedLanguage;
+        public int masterVolume;
+        public int musicVolume;
+        public int sfxVolume;
+        public int uiVolume;
     }
 }
 

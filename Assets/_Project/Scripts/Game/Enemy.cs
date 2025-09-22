@@ -1,3 +1,4 @@
+using AudioSystem;
 using StateMachines;
 using TMPro;
 using UnityEngine;
@@ -5,15 +6,18 @@ using UnityEngine.AI;
 using UtilsModule;
 
 namespace Game {
-    public class Enemy : Entity {
-        [Header("Behaviour Settings")]
-        //[SerializeField] protected NavMeshAgent agent;
-        //[SerializeField] protected PlayerDetector playerDetector;
-        
+    public class Enemy : Entity
+    {
+        [Header("Audio Settings")]
+        [SerializeField] protected SoundData hitSound;
+        [SerializeField] protected SoundData deathSound;
+        [SerializeField] protected SoundData attackSound;
+        [SerializeField] protected SoundData idleSound;
+
         [Header("Debug")]
         [SerializeField] private TMP_Text stateViewer;
         [SerializeField] private bool doDebug = false;
-        protected GameObject LastDamageSource { get;  set; }
+        protected GameObject LastDamageSource { get; set; }
 
         protected float TimeBetweenAttacks => Stats.AttackCooldown;
         protected int AttackDamage => Stats.Attack;
@@ -27,18 +31,19 @@ namespace Game {
 
         protected StateMachine stateMachine;
         protected CountdownTimer attackTimer;
-        
-        void Start() {
+
+        void Start()
+        {
             attackTimer = new CountdownTimer(TimeBetweenAttacks);
             attackTimer.OnTimerStop += () => attackTimer.Reset(TimeBetweenAttacks);
             stateMachine = new StateMachine();
 
-            if(Collider is CircleCollider2D circle) coliderRadius = circle.radius;
+            if (Collider is CircleCollider2D circle) coliderRadius = circle.radius;
 
             InitStates();
             DungeonController.Instance.OnEnemySpawn(this);
         }
-        
+
         virtual protected void InitStates() { }
 
         protected void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
@@ -64,7 +69,7 @@ namespace Game {
             if (target == default) target = this.target.transform.position;
 
             MovementDirection = DirectionToTarget(target);
-            
+
             RaycastHit2D hit = Physics2D.Raycast(transform.position + (MovementDirection * coliderRadius * 1.25f), MovementDirection, coliderRadius, LayerMask.GetMask("Entity"));
 
             if (hit.collider)
@@ -108,7 +113,8 @@ namespace Game {
             return Vector2.Distance(transform.position, target);
         }
 
-        public bool IsSpaceAvailable(Vector2 target = default) {
+        public bool IsSpaceAvailable(Vector2 target = default)
+        {
             if (target == default) target = this.target.transform.position;
             return !Physics2D.OverlapCircle(target, coliderRadius, LayerMask.GetMask("Wall"));
         }
@@ -143,14 +149,19 @@ namespace Game {
 #endif
         }
 
-        void FixedUpdate() {
+        void FixedUpdate()
+        {
             stateMachine.FixedUpdate();
             FacingDirection = MovementDirection;
         }
-        
-        protected override void OnDeath() {
-            GameManager.Instance.TrackEntity(entityData, new() {timesKilled = 1});
+
+        protected override void OnDeath()
+        {
+            GameManager.Instance.TrackEntity(entityData, new() { timesKilled = 1 });
             DungeonController.Instance.OnEnemyDeath(this);
+
+            if(deathSound.clip) SoundManager.Instance.CreateSound().WithSoundData(deathSound).Play();
+
             hasDied = true;
             base.OnDeath();
         }
@@ -159,7 +170,9 @@ namespace Game {
         {
             base.OnDamage(damage, dmgSource, ignoreKnockback);
             DungeonController.Instance.OnEnemyHit(this);
-            
+
+            if(hitSound.clip) SoundManager.Instance.CreateSound().WithSoundData(hitSound).Play();
+
             LastDamageSource = dmgSource ? dmgSource : null;
             if (!ignoreKnockback)
             {
@@ -172,7 +185,10 @@ namespace Game {
                 }
             }
         }
-        
-        public virtual void Attack() { }
+
+        public virtual void Attack()
+        {
+            if(attackSound.clip) SoundManager.Instance.CreateSound().WithSoundData(attackSound).WithRandomPitch().Play();
+        }
     }
 }
