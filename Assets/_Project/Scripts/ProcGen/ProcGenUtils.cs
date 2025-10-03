@@ -23,6 +23,5 @@ namespace ProcGen {
     }
 
     public enum RoomType {NoRoom, StartRoom, PlaceholderRoom, EmptyRoom, HostileRoom, TreasureRoom, ShopRoom, BossRoom, HiddenRoom}
-    public enum RoomTrigger {Enter}
     public enum Orientation {Horizontal, Vertical}
 }

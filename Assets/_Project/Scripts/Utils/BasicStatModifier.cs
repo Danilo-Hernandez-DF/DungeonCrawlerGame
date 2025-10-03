@@ -18,8 +18,6 @@ namespace UtilsModule {
             if(query.StatType != type) return;
             query.Value = operation.Invoke(query.Value);
             query.FinalMultiplier += finalMultiplier;
-
-            //Debug.Log($"StatModifier {id} applied to {query.statType} with value {query.value}");
         }
     }
 }

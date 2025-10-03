@@ -31,11 +31,20 @@ namespace UtilsModule {
 			return component;
 		}
 
-		public static int NormalizeRange(float value, float inputMin, float inputMax, float outputMin = 0, float outputMax = 100)
+		public static int LinearMapping(int currentValue, int currentMin, int currentMax, int newMin, int newMax)
 		{
-			value = Mathf.Clamp(value, inputMin, inputMax);
-			return Mathf.RoundToInt((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+			int newSize = newMax - newMin;
+            int oldSize = currentMax - currentMin;
+            int oldScale = currentValue - currentMin;
+            return (newSize * oldScale / oldSize) + newMin;
 		}
+
+		public static float LinearMapping(float currentValue, float currentMin, float currentMax, float newMin, float newMax) {
+            float newSize = newMax - newMin;
+            float oldSize = currentMax - currentMin;
+            float oldScale = currentValue - currentMin;
+            return (newSize * oldScale / oldSize) + newMin;
+        }
 	}
 
 	public enum Dir {Up, Down, Left, Right}

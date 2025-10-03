@@ -76,7 +76,7 @@ namespace UtilsModule {
                 }
 
                 if(tileData.tileType == TileType.Placeholder) {
-                    replaceArea.Add(tileData.GetTile(true));
+                    replaceArea.Add(tileData.GetTile());
                 }
             }
 
@@ -95,9 +95,9 @@ namespace UtilsModule {
                     if(tile.tileType != TileType.SpawnPoint) continue;
 
                     tilemap.SetTile(new Vector3Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
-                        -Mathf.FloorToInt(areaSize.y/2) + y), tile.GetTile(true));
+                        -Mathf.FloorToInt(areaSize.y/2) + y), tile.GetTile());
 
-                    var prefab = tile.prefabs.GetWeightedItem(seeded: true);
+                    var prefab = tile.prefabs.GetWeightedItem();
                     Vector2 position = new Vector2Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
                         -Mathf.FloorToInt(areaSize.y/2) + y) + new Vector2(0.5f, 0.5f) + centerPos;
                     //Vector2 position = new Vector2(x + 0.5f, y + 0.5f) + centerPos;
@@ -128,7 +128,7 @@ namespace UtilsModule {
                     if(tile == null) continue;
                     if(tile.tileType != TileType.Poi) continue;
 
-                    var poi = tile.GetPoi(true);
+                    var poi = tile.GetPoi();
                     if(poi != null) CopyFrom(poi, Vector2Int.zero, new Vector2Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
                         -Mathf.FloorToInt(areaSize.y/2) + y) - tile.PoiOffset, tile.poiSize);
                 }

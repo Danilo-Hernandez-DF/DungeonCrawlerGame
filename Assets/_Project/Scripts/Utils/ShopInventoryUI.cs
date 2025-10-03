@@ -12,7 +12,6 @@ namespace _Project.Scripts.Utils {
             if(!open) return;
             int cost = (int)TargetInventory.items[index].GetTag(costTag).GetValue();
             if (cost > PlayerDetector.GetPlayerComponent().playerInv.GetCount(currency, false)) return;
-            Debug.Log("currency is enough");
             
             switch(action) {
                 case -1:

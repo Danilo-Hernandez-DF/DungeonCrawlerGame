@@ -37,8 +37,8 @@ namespace AudioSystem
             InitializePool();
         }
 
-        public int ToSoundRange(int value) => MyUtils.NormalizeRange(value, 0, 100, -20, -5);
-        public int FromSoundRange(int value) => MyUtils.NormalizeRange(value, -20, -5, 0, 100);
+        public int ToSoundRange(int value) => MyUtils.LinearMapping(value, 0, 100, -20, -5);
+        public int FromSoundRange(int value) => MyUtils.LinearMapping(value, -20, -5, 0, 100);
 
         public SoundBuilder CreateSound() => new SoundBuilder(this);
 

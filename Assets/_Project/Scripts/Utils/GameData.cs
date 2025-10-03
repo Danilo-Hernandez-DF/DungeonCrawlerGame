@@ -9,14 +9,12 @@ namespace Systems.Persistence {
     [Serializable] public class GameData {
         [FormerlySerializedAs("Name")] public string name;
         [FormerlySerializedAs("CurrentLevelName")] public string currentLevelName;
-        public Vector3 playerPosition;
         public List<InventoryData> inventoryData;
         public List<InventoryData> filteredInventoryData;
         public List<NPCData> NpcDatas;
         public GameSettingsData gameSettingsData;
 
         public ISaveable MatchID(SerializableGuid id) {
-            //if(playerData.Id.Equals(id)) return playerData;
             if(gameSettingsData.Id.Equals(id)) return gameSettingsData;
 
             for(int i = 0; i < inventoryData.Count; i++) {
@@ -54,7 +52,7 @@ namespace Systems.Persistence {
                 if(newData is NPCData data) NpcDatas[i] = data;
             }
             
-            Debug.Log("No data found to update!");
+            Debug.LogError("No data found to update!");
         }
     }
 }

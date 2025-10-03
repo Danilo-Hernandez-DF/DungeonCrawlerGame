@@ -46,6 +46,7 @@ namespace Game {
         CountdownTimer dashTimer;
         CountdownTimer dashCooldownTimer;
         CountdownTimer attackTimer;
+        
 
         public FilteredInventory equipmentInv { get; private set; }
         public Inventory playerInv { get; private set; }
@@ -144,14 +145,14 @@ namespace Game {
             base.Update();
 
             if(!GameManager.Instance.Paused) {
-                if(animationSpeed == 0f) {
-                    animationSpeed = 1f;
+                if(anim.speed == 0f) {
+                    anim.speed = 1f;
                 }
                 movement = new Vector2(Input.Direction.x, Input.Direction.y);
                 stateMachine.Update();
                 HandleTimers();
             } else {
-                animationSpeed = 0f;
+                anim.speed = 0f;
             }
         }
 
@@ -230,13 +231,28 @@ namespace Game {
 
         protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
+
+            if (RendererComponent) {
+                Vector2 hitDirection = Vector2.zero;
+                if (dmgSource)
+                {
+                    hitDirection = (transform.position - dmgSource.transform.position).normalized * 2f;
+                }
+
+                RendererComponent.sharedMaterial = GameManager.Instance.entityHitmaterial;
+                RendererComponent.sharedMaterial.SetVector("_HitDirection", hitDirection);
+                RendererComponent.sharedMaterial.SetTexture("_Texture2D", RendererComponent.sprite.texture);
+                RendererComponent.sharedMaterial.SetColor("_Color", Color.white);
+
+                Invoke(nameof(ResetMaterial), 0.1f);
+            }
+
             DungeonController.Instance.OnPlayerHit();
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
             Entity sourceEntity = dmgSource?.GetComponent<Entity>();
             if(sourceEntity) {
                 GameManager.Instance.TrackEntity(sourceEntity.entityData, new EntityTrack() {damageDealt = damage});
             }
-            //Debug.Log($"{name} took {damage} damage");
         }
     }
 }

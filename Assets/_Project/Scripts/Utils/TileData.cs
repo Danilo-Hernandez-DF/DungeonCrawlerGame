@@ -17,11 +17,11 @@ namespace UtilsModule {
         [Header("Prefabs")]
         public GOLootTable prefabs;
         public Vector2Int PoiOffset => new Vector2Int(Mathf.FloorToInt(poiSize.x/2), Mathf.FloorToInt(poiSize.y/2));
-        public Tilemap GetPoi(bool seeded = false) {
-            return poiTilemaps == null ? null : poiTilemaps.GetWeightedItem(seeded: seeded).GetComponentInChildren<Tilemap>();
+        public Tilemap GetPoi() {
+            return poiTilemaps == null ? null : poiTilemaps.GetWeightedItem().GetComponentInChildren<Tilemap>();
         }
 
-        public TileBase GetTile(bool seeded = false) => replaceTiles.GetWeightedItem(seeded: seeded);  
+        public TileBase GetTile() => replaceTiles.GetWeightedItem();  
     }
 
     public enum TileType {Normal, Poi, Placeholder, SpawnPoint}

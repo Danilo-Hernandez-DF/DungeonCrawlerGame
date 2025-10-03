@@ -11,7 +11,6 @@ namespace UtilsModule {
         private void Init() {
             predicate = new FuncPredicate<Item>(i => Evaluate(toEval));
             isInitialized = true;
-            //Debug.Log("Initialized");
         }
 
         public bool MatchesFilter(Item item) {

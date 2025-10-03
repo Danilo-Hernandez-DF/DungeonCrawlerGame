@@ -7,8 +7,7 @@ namespace ProcGen {
         Collider2D col;
         SpriteRenderer sprite;
         [SerializeField] bool isLocked = false;
-        [SerializeField] Item key;
-        [SerializeField] PlayerDetector playerDetector;
+        [SerializeField] ItemData key;
         void Awake() {
             col = GetComponent<Collider2D>();
             sprite = GetComponent<SpriteRenderer>();
@@ -28,16 +27,13 @@ namespace ProcGen {
         bool InRange() => IInteractable.InRange(transform.position);
         
         public void OnInteract() {
-            Debug.Log("Interacting with door");
             if(GameManager.Instance.Paused) return;
-            if(!InRange()) return;
-            Debug.Log("Is in range");
             if(!isLocked) return;
-            if (!playerDetector.PlayerComponent.playerInv.TryRemove(key, fullMatch: false)) {
-                Debug.Log("You need a key to open this door");
+            if (!InRange()) return;
+            if (!PlayerDetector.GetPlayerComponent().playerInv.TryRemove(key.GetItem(), 1, fullMatch: false)) {
+                //Sound/anim feedback
                 return;
             }
-            Debug.Log("Door unlocked");
             isLocked = false;
             Open();
         }

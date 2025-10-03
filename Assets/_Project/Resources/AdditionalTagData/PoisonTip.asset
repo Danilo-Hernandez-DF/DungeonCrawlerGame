@@ -16,5 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 73502a77c31009b4faa0ccebb894444e, type: 2}
   effects: []
   additionalEffects: []
-  statusEffects:
+  statusEffects: []
+  additionalStatusEffects:
   - {fileID: 11400000, guid: b03e25189cbcabd4b9479675b32e1990, type: 2}

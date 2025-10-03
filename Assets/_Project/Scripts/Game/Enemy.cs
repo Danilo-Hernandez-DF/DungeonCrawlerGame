@@ -123,16 +123,15 @@ namespace Game {
         {
             base.Update();
 
-            //playerDetector.Init(Stats.AttackRange);
-
             if (!GameManager.Instance.Paused)
             {
+                if(anim.speed == 0f) anim.speed = 1f;
                 stateMachine.Update();
                 attackTimer.Tick(Time.deltaTime);
             }
             else
             {
-                animationSpeed = 0f;
+                anim.speed = 0f;
             }
 
 #if UNITY_EDITOR
@@ -151,6 +150,7 @@ namespace Game {
 
         void FixedUpdate()
         {
+            if(GameManager.Instance.Paused) return;
             stateMachine.FixedUpdate();
             FacingDirection = MovementDirection;
         }
@@ -179,7 +179,7 @@ namespace Game {
                 Vector2 knockbackDirection;
                 if (LastDamageSource)
                 {
-                    knockbackDirection = (transform.position - LastDamageSource.transform.position).normalized;
+                    knockbackDirection = (transform.position - LastDamageSource.transform.position).normalized * 2f;
                     ApplyForce(knockbackDirection * Stats.Knockback);
                     wasStunned = true;
                 }

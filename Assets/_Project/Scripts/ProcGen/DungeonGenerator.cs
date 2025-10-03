@@ -11,7 +11,6 @@ namespace ProcGen {
         [SerializeField] GOLootTable startRoomPrefab;
         [SerializeField] GOLootTable roomPrefabs;
         [SerializeField] LayerMask roomMask;
-        //Dictionary<Vector2, RoomController> roomPositions;
         public List<RoomController> rooms { get; private set; }
         List<RoomEntrance> entrances;
         [SerializeField] int seed;
@@ -22,25 +21,20 @@ namespace ProcGen {
         }
 
         public void Generate(out RoomController initialRoom) {
-            SeededRandom.SetSeed(seed > 0 ? seed : Random.Range(0, int.MaxValue));
-            seed = SeededRandom.GetSeed();
-
             rooms = new List<RoomController>();
-            //roomPositions = new Dictionary<Vector2, RoomController>();
             entrances = new List<RoomEntrance>();
 
             int requiredRooms = specialRoomRequirements.Sum(req => req.count);
 
             Vector2 roomPos = Vector2.zero;
 
-            var startRoom = Instantiate(startRoomPrefab.GetWeightedItem(seeded: true), roomPos, Quaternion.identity);
+            var startRoom = Instantiate(startRoomPrefab.GetWeightedItem(), roomPos, Quaternion.identity);
             initialRoom = startRoom.GetComponent<RoomController>();
             AddRoom(initialRoom);
 
             if (targetRooms == 0)
             {
                 initialRoom.Init();
-
                 return;
             }
 
@@ -71,22 +65,22 @@ namespace ProcGen {
             RoomEntrance targetEntrance;
 
             var invalidEntrances = new List<RoomEntrance>();
-            RoomEntrance entrance;
+            RoomEntrance entrance = null;
             bool noEntrances = false;
 
-            do {
-                entrance = roomEntrances[SeededRandom.GetRange(0, roomEntrances.Count)];
+            while(!validEntrance && !noEntrances) {
+                entrance = roomEntrances[Random.Range(0, roomEntrances.Count)];
                 var invalidRooms = new List<RoomController>();
                 bool roomsRemaining = true;
                 targetEntrance = null;
 
                 if(invalidEntrances.Contains(entrance)) continue;
 
-                do {
-                    room = prefabs.GetWeightedItem(seeded: true).GetComponent<RoomController>();
+                while(roomsRemaining && !validEntrance) {
+                    room = prefabs.GetWeightedItem().GetComponent<RoomController>();
                     if(invalidRooms.Contains(room)) continue;
                         
-                    do {
+                    while(!validEntrance) {
                         targetEntrance = room.GetNextEntrance(entrance.dir.GetOpposite(), targetEntrance);
                         if(targetEntrance == null) {
                             Debug.LogError("No next entrance");
@@ -95,17 +89,17 @@ namespace ProcGen {
                         roomPos = new Vector2(entrance.Pos.x - targetEntrance.Pos.x, entrance.Pos.y - targetEntrance.Pos.y);
                         if(Physics2D.OverlapBox(roomPos, room.roomSize - (Vector2.one/10), 0, roomMask) == null) validEntrance = true;
                         else break;
-                    } while(!validEntrance);
+                    }
 
                     if(validEntrance) continue;
                     if(!invalidRooms.Contains(room)) invalidRooms.Add(room);
                     if(invalidRooms.Count == prefabs.GetList().Count) roomsRemaining = false;
-                } while(roomsRemaining && !validEntrance);
+                }
 
                 if(validEntrance) continue;
                 if(!invalidEntrances.Contains(entrance)) invalidEntrances.Add(entrance);
                 if(invalidEntrances.Count == roomEntrances.Count) noEntrances = true;
-            } while(!validEntrance && !noEntrances);
+            } 
 
             if(noEntrances) {
                 Debug.LogError("No more entrances to connect to");
@@ -135,7 +129,6 @@ namespace ProcGen {
         }
 
         void AddRoom(RoomController room, bool addEntrances = true) {
-            //roomPositions.Add(room.transform.position, room);
             rooms.Add(room);
 
             if(!addEntrances) return;

@@ -34,6 +34,11 @@ namespace Game
         private ItemLootTableDatabase ItemLootTableDatabase;
         public GameObject openUI;
         public InputReader input;
+        [Header("Material Settings")]
+        public Material entityHitmaterial;
+
+        [Header("Effect Settings")]
+        public GameObject hitEffectPrefab;
 
         public UnityAction<StatisticsTracker.TrackedStat, int> TrackStat;
         public UnityAction<ItemData, int> TrackItem;
@@ -50,7 +55,6 @@ namespace Game
         {
             yield return null;
             DungeonController.Instance.StartFloor();
-            //GameSettings.Instance.SetDifficulty(difficulty);
         }
 
         public IEnumerator FreshGame()

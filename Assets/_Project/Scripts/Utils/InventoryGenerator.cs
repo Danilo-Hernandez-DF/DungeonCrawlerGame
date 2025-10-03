@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 
 namespace UtilsModule {
-    //[RequireComponent(typeof(IInventoryHolder))]
     public class InventoryGenerator : MonoBehaviour {
         [SerializeField] InventoryHolder inventoryHolder;
         [SerializeField] LootTable<Item> lootTable;
@@ -17,7 +16,7 @@ namespace UtilsModule {
         public void Generate() {
             if(prioritizeEmpty) {
                 for(int i = 0; i < rolls; i++) {
-                    var toAdd = lootTable.GetWeightedItem(seeded: isSeeded);
+                    var toAdd = lootTable.GetWeightedItem();
                     if(Inventory.EmptySlots() == 0) {
                         inventoryHolder.OnGenerate();
                         return;
@@ -27,7 +26,7 @@ namespace UtilsModule {
 
                 foreach(FixedDrop drop in fixedDrops) {
                     for (int i = 0; i < drop.count; i++) {
-                        var toAdd = drop.table.GetWeightedItem(seeded: isSeeded);
+                        var toAdd = drop.table.GetWeightedItem();
                         if(Inventory.EmptySlots() == 0) {
                             inventoryHolder.OnGenerate();
                             return;
@@ -41,14 +40,14 @@ namespace UtilsModule {
             }
 
             for(int i = 0; i < rolls; i++) {
-                var toAdd = lootTable.GetWeightedItem(seeded: isSeeded);
-                Inventory.SetAtRandom(toAdd, toAdd.count, true);
+                var toAdd = lootTable.GetWeightedItem();
+                Inventory.SetAtRandom(toAdd, toAdd.count);
             }
 
             foreach(FixedDrop drop in fixedDrops) {
                 for (int i = 0; i < drop.count; i++) {
-                    var toAdd = drop.table.GetWeightedItem(seeded: isSeeded);
-                    Inventory.SetAtRandom(toAdd, toAdd.count, true);
+                    var toAdd = drop.table.GetWeightedItem();
+                    Inventory.SetAtRandom(toAdd, toAdd.count);
                 }
             }
 

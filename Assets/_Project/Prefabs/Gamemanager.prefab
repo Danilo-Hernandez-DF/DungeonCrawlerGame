@@ -49,9 +49,12 @@ MonoBehaviour:
   autoUnparentOnAwake: 1
   dungeonData: {fileID: 11400000, guid: 92d866f0e66cbbf45902bb2359439c29, type: 2}
   difficulty: 0
+  currentLevel: 0
   eventSystem: {fileID: 1405269892349924137}
   openUI: {fileID: 0}
   input: {fileID: 11400000, guid: ec71ab41467a3ca42b47dce5fd3c8523, type: 2}
+  entityHitmaterial: {fileID: 2100000, guid: c5a5b3dd56bff24468ca0249ff576330, type: 2}
+  hitEffectPrefab: {fileID: 4834514664517795436, guid: 4556e54e35604e547b5eafcccb9d2af0, type: 3}
 --- !u!114 &2672469988216653426
 MonoBehaviour:
   m_ObjectHideFlags: 0

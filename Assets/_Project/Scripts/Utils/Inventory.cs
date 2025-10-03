@@ -32,30 +32,32 @@ namespace UtilsModule {
             if(items == null) PopulateInventory();
             if (item.IsEmpty) return 0;
 
-            var foundMatch = items.Find(x => x.Matches(item) && x.count < item.data.maxCount);
-            if(foundMatch != null) {
-                int remainder = foundMatch.count + count - item.data.maxCount;
-                if(remainder < 0) remainder = 0;
-                count -= remainder; 
-                foundMatch.count += count;
+            while (count > 0)
+            {
+                var foundMatch = items.Find(x => x.Matches(item) && x.count < item.data.maxCount);
+                if (foundMatch != null)
+                {
+                    int remainder = foundMatch.count + count - item.data.maxCount;
+                    if (remainder < 0) remainder = 0;
+                    foundMatch.count += count - remainder;
 
-                if(remainder > 0) return Add(item, remainder);
-                InventoryChannel?.Invoke(this);
-                return 0;
-            } 
-            
-            if(EmptySlots() > 0) {
-                int remainder = count - item.data.maxCount;
-                if(remainder < 0) remainder = 0;
-                count -= remainder;
-                SetSlot(NextEmpty(), item, count);
+                    count = remainder;
+                    continue;
+                }
 
-                if(remainder > 0) return Add(item, remainder);
-                InventoryChannel?.Invoke(this);
-                return 0;
+                if (EmptySlots() > 0)
+                {
+                    int remainder = count - item.data.maxCount;
+                    if (remainder < 0) remainder = 0;
+                    SetSlot(NextEmpty(), item, count - remainder);
+
+                    count = remainder;
+                    continue;
+                }
+
+                break;
             }
 
-            //Debug.Log("Inventory is full");
             InventoryChannel?.Invoke(this);
             return count;
         }
@@ -77,8 +79,6 @@ namespace UtilsModule {
             items[slot].count += count;
             InventoryChannel?.Invoke(this);
             return remainder;
-
-            //Debug.Log("Slot is occupied");
         }
 
         public Item GetItem(int slot) {
@@ -131,7 +131,7 @@ namespace UtilsModule {
             return true;
         }
 
-        public virtual void SetAtRandom(Item item, int count = 1, bool isSeeded = false) {
+        public virtual void SetAtRandom(Item item, int count = 1) {
             if(items == null) PopulateInventory();
             if(AvailableCount(item) == 0) return;
 
@@ -140,7 +140,7 @@ namespace UtilsModule {
             bool found = false;
             int iterations = 0;
             do {
-                rand = isSeeded? SeededRandom.GetRange(0, Size): Random.Range(0, Size);
+                rand = Random.Range(0, Size);
 
                 if(items[rand].IsEmpty || items[rand].Matches(item)) found = true;
                 iterations++;
@@ -152,9 +152,7 @@ namespace UtilsModule {
         public bool TryRemove(Item item, int count = 1, bool fullMatch = true) {
             if(items == null) return false;
             if(!items.Exists(x => x.Matches(item, fullMatch))) return false;
-            //Debug.Log("Item exists");
             if(GetCount(item, fullMatch) < count) return false;
-            //Debug.Log("Count is enough");
 
             for(int j = items.Count - 1; j >= 0; j--) {
                 if(items[j].IsEmpty) continue;

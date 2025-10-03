@@ -18,7 +18,6 @@ namespace UtilsModule {
             
             tags ??= new List<Tag>();
             if (!data) {
-                //Debug.Log("ItemData is null");
                 return;
             }
             foreach(var tag in data.inherentTags) {
@@ -64,21 +63,10 @@ namespace UtilsModule {
             }
         }
 
-        public void AddTag<T>(T tag, float value) where T : Tag {
-            if(!tags.Contains(tag)) tags.Add(tag.SetValue(value));
-        }
-
         public void RemoveTag(TagData tag) {
             if(!HasTag(tag)) return;
             Tag foundTag = tags.Find(x => x.data == tag);
             if(!foundTag.inherent) tags.Remove(foundTag);
-        }
-
-        public float GetTagValue<T>(TagData tag) where T : Tag {
-            if(!HasTag(tag)) return 0;
-            Tag foundTag = tags.Find(x => x.data == tag);
-            if(foundTag.GetType() != typeof(T)) return 0;
-            return ((T)foundTag).GetValue();
         }
 
         public Item Copy() {

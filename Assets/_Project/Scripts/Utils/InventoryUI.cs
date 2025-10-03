@@ -55,8 +55,6 @@ namespace UtilsModule {
                 slotComp.Init(i);
                 slots.Add(slotComp);
             }
-
-            //Debug.Log("Populated");
         }
 
         public void OnUpdate(Inventory inventory) {
@@ -83,9 +81,7 @@ namespace UtilsModule {
 
         void SwitchSelection(int index) {
             if(index < 0 || index >= TargetInventory.Size) return;
-            //Debug.Log("Pressed: " + index);
             if(InventorySlotUI.HeldItemEmpty) {
-                //Debug.Log("Empty held item");
                 if(TargetInventory.items[index].IsEmpty) return;
                 InventorySlotUI.heldItem = TargetInventory.items[index].Copy();
                 TargetInventory.ResetSlot(index);
@@ -94,12 +90,10 @@ namespace UtilsModule {
                     AdditionalDataManager.Instance.OnUnequip(InventorySlotUI.heldItem, TargetInventory.targetEntity);
                 }
             } else if(InventorySlotUI.heldItem.Matches(TargetInventory.items[index])) {
-                //Debug.Log("Matching held item");
                 int remainder = TargetInventory.AddAt(index, InventorySlotUI.heldItem, InventorySlotUI.heldItem.count);
                 if(remainder > 0) InventorySlotUI.heldItem.count = remainder;
                 else InventorySlotUI.heldItem = new Item(GameManager.emptyItem);
             } else {
-                //Debug.Log("Different held item");
                 var tempItem = InventorySlotUI.heldItem.Copy();
                 InventorySlotUI.heldItem = TargetInventory.items[index].Copy();
                 if(!TargetInventory.SetSlot(index, tempItem, tempItem.count)) {

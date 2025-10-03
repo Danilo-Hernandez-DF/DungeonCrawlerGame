@@ -11,7 +11,6 @@ namespace UtilsModule {
         Dictionary<TileBase, TileData> dataFromTiles;
 
         protected override void Awake() {
-            //tileData = Resources.FindObjectsOfTypeAll<TileData>().ToList();
             tileData = Resources.LoadAll<TileData>("TileData").ToList();
 
             dataFromTiles = new Dictionary<TileBase, TileData>();

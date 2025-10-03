@@ -38,7 +38,6 @@ namespace Systems.Persistence {
 
         void BindAll()
         {
-            //Bind<PlayerController, PlayerData>(gameData.playerData);
             Bind<SaveableInventoryHolder, InventoryData>(gameData.inventoryData);
             Bind<SaveableFilteredHolder, InventoryData>(gameData.filteredInventoryData);
             Bind<GameSettings, GameSettingsData>(gameData.gameSettingsData);

@@ -21,23 +21,44 @@ namespace UtilsModule {
 
         public void Update(float deltaTime) => timer.Tick(deltaTime);
 
-        public void Add(StatusEffect effect) { 
+        public void Add(StatusEffect effect, string id = "") { 
+            effect.id = id;
             Effects.Add(effect);
             effect.Data.OnApply(Entity);
         }
 
-        public void Tick() { 
+        public void RemoveStatus(string id)
+        {
             List<StatusEffect> toRemove = new List<StatusEffect>();
 
-            foreach(var effect in Effects) {
-                if(effect.ToRemove) {
+            foreach (var effect in Effects)
+            {
+                if (effect.id == id) toRemove.Add(effect);
+            }
+
+            foreach (var effect in toRemove)
+            {
+                Effects.Remove(effect);
+                effect.Data.OnExpire(Entity);Effects.Remove(effect);
+            }
+        }
+
+        public void Tick()
+        {
+            List<StatusEffect> toRemove = new List<StatusEffect>();
+
+            foreach (var effect in Effects)
+            {
+                if (effect.ToRemove)
+                {
                     toRemove.Add(effect);
                     continue;
                 }
-                effect.OnTick(Entity); 
+                effect.OnTick(Entity);
             }
 
-            foreach(var effect in toRemove) {
+            foreach (var effect in toRemove)
+            {
                 Effects.Remove(effect);
             }
         }

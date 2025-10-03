@@ -13,8 +13,7 @@ namespace UtilsModule {
 
         protected override void Awake() {
             base.Awake();
-            //equipmentUI.targetEntity = PlayerDetector.GetPlayer().GetComponent<PlayerController>();
-
+            
             children = new List<UIBase> {
                 inventory,
                 equipmentUI

@@ -71,12 +71,16 @@ namespace Game
             ApplyEffect(entity, null);
             ApplyStatus(entity, null);
         }
-        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect) {
-            foreach(var modifier in hitEffects.Select(hitEffect => hitEffect.operatorType switch {
-                        OperatorType.Add => new BasicStatModifier(hitEffect.type, v => v + hitEffect.value, hitEffect.duration),
-                        OperatorType.Multiply => new BasicStatModifier(hitEffect.type, v => v, hitEffect.duration, hitEffect.value),
-                        _ => throw new ArgumentOutOfRangeException()
-                    })) {
+        
+        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect)
+        {
+            foreach (var modifier in hitEffects.Select(hitEffect => hitEffect.operatorType switch
+            {
+                OperatorType.Add => new BasicStatModifier(hitEffect.type, v => v + hitEffect.value, hitEffect.duration),
+                OperatorType.Multiply => new BasicStatModifier(hitEffect.type, v => v, hitEffect.duration, hitEffect.value),
+                _ => throw new ArgumentOutOfRangeException()
+            }))
+            {
                 entity.Stats.Mediator.AddModifier(modifier);
             }
         }

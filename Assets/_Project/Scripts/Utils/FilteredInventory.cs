@@ -19,7 +19,7 @@ namespace UtilsModule {
             PopulateInventory();
         }
 
-        public override int Add(Item item, int count = 1)
+        public override int Add(Item item, int count = 1) 
         {
             if (items == null) PopulateInventory();
             if (item.IsEmpty) return 0;
@@ -59,7 +59,6 @@ namespace UtilsModule {
             if (items == null) PopulateInventory();
             if (!slotFilters[slot].Evaluate(item))
             {
-                //Debug.Log("Item not allowed");
                 return count;
             }
             if (slot < 0 || slot >= items.Count) return count;
@@ -78,15 +77,12 @@ namespace UtilsModule {
             items[slot].count += count;
             inventoryChannel?.Invoke(this);
             return remainder;
-
-            //Debug.Log("Slot is occupied");
         }
 
         public override bool SetSlot(int slot, Item item, int count = 1, bool force = false)
         {
             if (!force) if (!slotFilters[slot].Evaluate(item))
                 {
-                    //Debug.Log("Item not allowed");
                     return false;
                 }
             items[slot] = item.Copy();
@@ -101,19 +97,17 @@ namespace UtilsModule {
             if (AvailableCount(item) < count) return false;
             if (!Allowed(item))
             {
-                //Debug.Log("Item not allowed");
                 return false;
             }
 
             return Add(item, count) < 0;
         }
 
-        public override void SetAtRandom(Item item, int count = 1, bool isSeeded = false)
+        public override void SetAtRandom(Item item, int count = 1)
         {
             if (items == null) PopulateInventory();
             if (!Allowed(item))
             {
-                //Debug.Log("Item not allowed");
                 return;
             }
             if (AvailableCount(item) == 0) return;
@@ -124,7 +118,7 @@ namespace UtilsModule {
             int iterations = 0;
             do
             {
-                rand = isSeeded ? SeededRandom.GetRange(0, Size) : Random.Range(0, Size);
+                rand = Random.Range(0, Size);
 
                 if ((items[rand].IsEmpty || items[rand].Matches(item)) && slotFilters[rand].Evaluate(item)) found = true;
                 iterations++;

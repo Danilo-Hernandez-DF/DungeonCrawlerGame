@@ -96,10 +96,6 @@ namespace Game {
         public int GetTracked(TrackedStat stat) {
             return trackedStats.GetValueOrDefault(stat, 0);
         }
-        
-        public int GetTracked(string stat) {
-            return trackedLoot.GetValueOrDefault(stat, 0);
-        }
 
         public EntityTrack GetTracked(EntityData stat) {
             return trackedEntities.GetValueOrDefault(stat, new());

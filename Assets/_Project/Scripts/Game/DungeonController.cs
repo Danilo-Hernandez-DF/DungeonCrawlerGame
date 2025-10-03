@@ -17,6 +17,11 @@ namespace Game {
         private int currentLevel => GameManager.Instance.currentLevel;
         LootSetting[] lootSettings;
 
+        private new void Awake() {
+            base.Awake();
+            modifiers = new List<DungeonModifier>();
+        }
+
         public void StartFloor()
         {
             modifiers = dungeonData.modifiers?.ToList() ?? new List<DungeonModifier>();
@@ -24,7 +29,6 @@ namespace Game {
             completionQuest = dungeonData.completionQuest;
             dungeonGenerator.Configure(dungeonData);
             dungeonGenerator.Generate(out startRoom);
-            //GameManager.Instance.currentLevel++;
 
             if (completionQuest == null)
             {

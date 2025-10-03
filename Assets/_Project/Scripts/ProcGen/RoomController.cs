@@ -8,7 +8,6 @@ using UtilsModule;
 namespace ProcGen {
     public class RoomController :  MonoBehaviour { 
         [Header("Room Settings")]
-        [SerializeField] RoomType type;
         public Vector2Int roomSize;
         [SerializeField] List<RoomBehaviour> roomBehaviours;
         [SerializeField] List<EnemySpawnManager> enemySpawners;

@@ -7,8 +7,7 @@ namespace UtilsModule {
         void OnInteract();
         
         static bool InRange(Vector3 position) {
-            var colliders = Physics2D.OverlapCircleAll(position, 1f);
-            return colliders.Any(collider => collider.CompareTag("Player"));
+            return Vector3.Distance(PlayerDetector.GetPlayer().transform.position, position) < 1f;
         }
     }
 }

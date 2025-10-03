@@ -5,10 +5,6 @@ using UnityEngine;
 namespace UtilsModule {
     [CreateAssetMenu(menuName = "ItemBehaviour/SwingAttackBehaviour")]
     public class SwingAttackBehaviour : OnUseBehaviour {
-        public static int swingHash = Animator.StringToHash("SwingWeapon");
-        public static int reverseHash = Animator.StringToHash("SwingWeaponReverse");
-        public static int pierceHash = Animator.StringToHash("SwingWeaponPierce"); 
-
         [SerializeField] GameObject weaponPrefab;
         [SerializeField] GameObject damageAreaPrefab;
         [SerializeField] Vector2 attackArea;
@@ -25,7 +21,7 @@ namespace UtilsModule {
             var sourceItem = source.items[indexSource];
 
             var effectModifiers = AdditionalDataManager.Instance.GetAdditionalsFromItem(sourceItem);
-            var statusEffectData = AdditionalDataManager.Instance.GetStatusFromItem(sourceItem);
+            var statusEffectData = AdditionalDataManager.Instance.GetAdditionalStatusFromItem(sourceItem);
 
             //Debug.Log($"Swing Attack {addData}");
             GameObject weapon = Instantiate(weaponPrefab, atkOrigin.position, Quaternion.Euler(0f, 0f, actionAngle));

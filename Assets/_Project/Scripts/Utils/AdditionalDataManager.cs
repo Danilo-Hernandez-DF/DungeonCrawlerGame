@@ -5,7 +5,8 @@ using Game;
 using UnityEngine;
 
 namespace UtilsModule {
-    public class AdditionalDataManager : Singleton<AdditionalDataManager>, IEffector {
+    public class AdditionalDataManager : Singleton<AdditionalDataManager>, IEffector
+    {
         List<AdditionalTagData> tagData;
         List<AdditionalItemData> itemData;
         Dictionary<TagData, AdditionalTagData> dataFromTag;
@@ -14,13 +15,16 @@ namespace UtilsModule {
         private List<ModifierEffect> queuedEffects;
         private string id;
 
-        protected override void Awake() {
+        protected override void Awake()
+        {
             tagData = Resources.LoadAll<AdditionalTagData>("AdditionalTagData").ToList();
 
             dataFromTag = new Dictionary<TagData, AdditionalTagData>();
 
-            foreach(var data in tagData) {
-                foreach(var tag in data.tags) {
+            foreach (var data in tagData)
+            {
+                foreach (var tag in data.tags)
+                {
                     dataFromTag.Add(tag, data);
                 }
             }
@@ -29,15 +33,18 @@ namespace UtilsModule {
 
             dataFromItem = new Dictionary<ItemData, AdditionalItemData>();
 
-            foreach(var data in itemData) {
+            foreach (var data in itemData)
+            {
                 dataFromItem.Add(data.item, data);
             }
 
             base.Awake();
         }
 
-        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect) {
-            BasicStatModifier modifier = modifierEffect.operatorType switch {
+        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect)
+        {
+            BasicStatModifier modifier = modifierEffect.operatorType switch
+            {
                 OperatorType.Add => new BasicStatModifier(modifierEffect.type, v => v + modifierEffect.value, 0),
                 OperatorType.Multiply => new BasicStatModifier(modifierEffect.type, v => v, 0, modifierEffect.value),
                 _ => throw new ArgumentOutOfRangeException()
@@ -46,28 +53,34 @@ namespace UtilsModule {
             entity.Stats.Mediator.AddModifier(modifier, id);
         }
 
-        public void ApplyStatus(Entity entity, StatusEffect statusEffect) {
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect)
+        {
             return;
         }
 
-        private void RemoveEffects(Entity entity) {
+        private void RemoveEffects(Entity entity)
+        {
             entity.Stats.Mediator.RemoveModifiers(id);
         }
 
         void ApplyQueuedEffects(Entity entity)
         {
-            foreach (var modifierEffect in queuedEffects.Select(effect => new ModifierEffect(effect))) {
+            foreach (var modifierEffect in queuedEffects.Select(effect => new ModifierEffect(effect)))
+            {
                 ApplyEffect(entity, modifierEffect);
             }
         }
 
-        public void Visit<T> (T visitable) where T : Component, IVisitable {
-            if(visitable is Entity entity) {
+        public void Visit<T>(T visitable) where T : Component, IVisitable
+        {
+            if (visitable is Entity entity)
+            {
                 ApplyQueuedEffects(entity);
             }
         }
 
-        public void OnEquip(Item item, Entity entity) {
+        public void OnEquip(Item item, Entity entity)
+        {
             id = item.data.name;
             queuedEffects = GetEffectsFromItem(item);
             ApplyQueuedEffects(entity);
@@ -75,29 +88,36 @@ namespace UtilsModule {
             //foreach(ModifierEffect effect in queuedEffects) Debug.Log(effect.ToString());
         }
 
-        public void OnUnequip(Item item, Entity entity) {
+        public void OnUnequip(Item item, Entity entity)
+        {
             id = item.data.name;
             RemoveEffects(entity);
         }
 
-        public void TriggerItemBehaviour(Inventory source, int indexSource, BehaviourType behaviourType, Entity entitySource = null, int addData = 0) {
+        public void TriggerItemBehaviour(Inventory source, int indexSource, BehaviourType behaviourType, Entity entitySource = null, int addData = 0)
+        {
             ItemBehaviour[] behaviours = dataFromItem[source.items[indexSource].data].behaviours;
-            foreach(var behaviour in behaviours) {
-                if(behaviour.behaviourType == behaviourType) behaviour.ExecuteBehaviour(source, indexSource, entitySource, addData);
+            foreach (var behaviour in behaviours)
+            {
+                if (behaviour.behaviourType == behaviourType) behaviour.ExecuteBehaviour(source, indexSource, entitySource, addData);
             }
         }
 
-        private List<ModifierEffect> GetEffectsFromItem(Item item) {
+        private List<ModifierEffect> GetEffectsFromItem(Item item)
+        {
             var effects = new List<ModifierEffect>();
-            
-            if(item.data == null || item.tags == null) return effects;
-            foreach(var tag in item.tags)
+
+            if (item.data == null || item.tags == null) return effects;
+            foreach (var tag in item.tags)
             {
-                if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
-                foreach(var effect in data.effects) {
+                if (!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                if (data.effects == null) continue;
+                foreach (var effect in data.effects)
+                {
                     var tempEffect = new ModifierEffect(effect);
 
-                    tempEffect.value = tag.Type switch {
+                    tempEffect.value = tag.Type switch
+                    {
                         TagData.TagType.Float => tag.GetValue(),
                         TagData.TagType.Int => Mathf.FloorToInt(tag.GetValue()),
                         _ => tempEffect.value
@@ -110,16 +130,20 @@ namespace UtilsModule {
             return effects;
         }
 
-        public List<ModifierEffect> GetAdditionalsFromItem(Item item) {
+        public List<ModifierEffect> GetAdditionalsFromItem(Item item)
+        {
             var effects = new List<ModifierEffect>();
 
-            foreach(var tag in item.tags)
+            foreach (var tag in item.tags)
             {
-                if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
-                foreach(var effect in data.additionalEffects) {
+                if (!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                if (data.additionalEffects == null) continue;
+                foreach (var effect in data.additionalEffects)
+                {
                     var tempEffect = new ModifierEffect(effect);
 
-                    tempEffect.value = tag.Type switch {
+                    tempEffect.value = tag.Type switch
+                    {
                         TagData.TagType.Float => tag.GetValue(),
                         TagData.TagType.Int => Mathf.FloorToInt(tag.GetValue()),
                         _ => tempEffect.value
@@ -132,12 +156,27 @@ namespace UtilsModule {
             return effects;
         }
 
+        public List<StatusEffectData> GetAdditionalStatusFromItem(Item item)
+        {
+            var effects = new List<StatusEffectData>();
+
+            foreach (var tag in item.tags)
+            {
+                if (!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                if (data.additionalStatusEffects == null) continue;
+                effects.AddRange(data.additionalStatusEffects);
+            }
+
+            return effects;
+        }
+        
         public List<StatusEffectData> GetStatusFromItem(Item item) {
             var effects = new List<StatusEffectData>();
 
             foreach(var tag in item.tags)
             {
                 if(!dataFromTag.TryGetValue(tag.data, out AdditionalTagData data)) continue;
+                if (data.statusEffects == null) continue;
                 effects.AddRange(data.statusEffects);
             }
 

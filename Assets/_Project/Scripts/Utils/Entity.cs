@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using _Project.Scripts.Utils;
 using Game;
 using Unity.VisualScripting;
@@ -19,19 +18,26 @@ namespace UtilsModule {
         public Vector2 FacingDirection {get; protected set;}
         public GameObject Renderer;
         public GameObject shadow;
-        public SpriteRenderer RendererComponent {get; private set;}
+        protected Animator anim;
+        public SpriteRenderer RendererComponent { get; private set; }
         [SerializeField] private float defaultZPos = 0;
-        [SerializeField] public float animationSpeed = 1f;
         public float zPos {get; protected set;}
         public bool Grounded => zPos == 0;
+        Material defaultMaterial;
 
-        protected void Init() {
-            if(entityData) Stats = new Stats(new StatsMediator(), baseStats);
+        protected void Init()
+        {
+            if (entityData) Stats = new Stats(new StatsMediator(), baseStats);
             Status = new Status(this);
             Rb = GetComponent<Rigidbody2D>();
             Collider = GetComponent<Collider2D>();
             health = GetComponent<Health>();
-            if(Renderer) RendererComponent = Renderer.GetComponent<SpriteRenderer>();
+            if (Renderer)
+            {
+                RendererComponent = Renderer.GetComponent<SpriteRenderer>();
+                defaultMaterial = RendererComponent.sharedMaterial;
+            }
+            anim = GetComponent<Animator>();
             health?.Init(Stats.Health);
             FacingDirection = Vector2.right;
         }
@@ -56,7 +62,7 @@ namespace UtilsModule {
             }
 
             if(shadow) {
-                shadow.transform.localScale = Vector2.one * MiscUtils.LinearMapping(zPos,
+                shadow.transform.localScale = Vector2.one * MyUtils.LinearMapping(zPos,
                     0, 10, 1, 0.1f);
             }
         }
@@ -68,22 +74,44 @@ namespace UtilsModule {
 
         protected virtual void OnDeath() {
             Status.OnDeath();
-            //Debug.Log($"{name} has reached 0 Hp");
         }
 
         protected virtual void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
+            Vector2 hitDirection = Vector2.zero;
+            if (dmgSource)
+            {
+                hitDirection = (transform.position - dmgSource.transform.position).normalized;
+            }
+
+            var hitEffect = Instantiate(GameManager.Instance.hitEffectPrefab, transform.position, Quaternion.Euler(0, 0, Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg - 90));
+            hitEffect.transform.SetParent(transform);
+
+            if (RendererComponent)
+            {
+                RendererComponent.sharedMaterial = GameManager.Instance.entityHitmaterial;
+                RendererComponent.sharedMaterial.SetVector("_HitDirection", hitDirection);
+                RendererComponent.sharedMaterial.SetTexture("_Texture2D", RendererComponent.sprite.texture);
+                RendererComponent.sharedMaterial.SetColor("_Color", Color.white);
+
+                Invoke(nameof(ResetMaterial), 0.1f);
+            }
+
             Status.OnDamage(damage);
             GameManager.Instance.TrackEntity(entityData, new() {damageTaken = damage});
-            //Debug.Log($"{name} took {damage} damage");
         } 
+        
+        protected void ResetMaterial() {
+            RendererComponent.sharedMaterial = defaultMaterial;
+        }
 
-        public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null, bool ignoreKnockback = false) {
-            if(!health) return;
+        public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null, bool ignoreKnockback = false)
+        {
+            if (!health) return;
 
             var isDead = !ignoreDefense ? health.TakeDamage(damage - Stats.Defense) : health.TakeDamage(damage);
-            
+
             OnDamage(damage, dmgSource);
-            if(isDead) OnDeath();
+            if (isDead) OnDeath();
         }
 
         public void Heal(int amount) {
