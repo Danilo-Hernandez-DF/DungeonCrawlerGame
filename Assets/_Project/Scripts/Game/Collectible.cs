@@ -12,7 +12,7 @@ namespace Game {
             if (visitable is not Entity entity) return;
             if (entity.gameObject.CompareTag("Player"))
             {
-                if (statusEffect != null) ApplyStatus(entity, statusEffect.GetStatusEffect());
+                if (statusEffect != null) ApplyStatus(entity, statusEffect.GetStatusEffect(new DamageSource(gameObject)));
                 if (modifierEffect.value > 0) ApplyEffect(entity, modifierEffect);
 
                 GameManager.Instance.TrackEntity(entityData, new() { timesKilled = 1 });
@@ -36,7 +36,7 @@ namespace Game {
 
         public void ApplyStatus(Entity entity, StatusEffect statusEffect)
         {
-            entity.Status.Add(statusEffect);
+            entity.Status.Add(statusEffect, statusEffect.source);
         }
     }
 }

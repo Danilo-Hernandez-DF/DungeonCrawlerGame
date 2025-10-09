@@ -17,6 +17,10 @@ namespace Game {
 
         protected override void InitStates()
         {
+            if (stateMachine == null) {
+                return;
+            }
+            
             patrolPoint = transform.position;
             SetTarget(PlayerDetector.GetPlayerComponent());
 

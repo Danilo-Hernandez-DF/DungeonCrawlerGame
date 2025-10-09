@@ -31,6 +31,7 @@ namespace Game {
 
         protected StateMachine stateMachine;
         protected CountdownTimer attackTimer;
+        protected bool noAI = false;
 
         void Start()
         {
@@ -43,6 +44,8 @@ namespace Game {
             InitStates();
             DungeonController.Instance.OnEnemySpawn(this);
         }
+        
+        public void NoAI() { noAI = true; }
 
         virtual protected void InitStates() { }
 
@@ -126,7 +129,7 @@ namespace Game {
             if (!GameManager.Instance.Paused)
             {
                 if(anim.speed == 0f) anim.speed = 1f;
-                stateMachine.Update();
+                if(!noAI) stateMachine.Update();
                 attackTimer.Tick(Time.deltaTime);
             }
             else
@@ -151,7 +154,7 @@ namespace Game {
         void FixedUpdate()
         {
             if(GameManager.Instance.Paused) return;
-            stateMachine.FixedUpdate();
+            if(!noAI) stateMachine.FixedUpdate();
             FacingDirection = MovementDirection;
         }
 
@@ -161,19 +164,24 @@ namespace Game {
             DungeonController.Instance.OnEnemyDeath(this);
 
             if(deathSound.clip) SoundManager.Instance.CreateSound().WithSoundData(deathSound).Play();
+            
+            if (noAI) {
+                Destroy(gameObject);
+                return;
+            }
 
             hasDied = true;
             base.OnDeath();
         }
 
-        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false)
+        protected override void OnDamage(int damage, DamageSource dmgSource, bool ignoreKnockback = false)
         {
             base.OnDamage(damage, dmgSource, ignoreKnockback);
             DungeonController.Instance.OnEnemyHit(this);
 
             if(hitSound.clip) SoundManager.Instance.CreateSound().WithSoundData(hitSound).Play();
 
-            LastDamageSource = dmgSource ? dmgSource : null;
+            LastDamageSource = dmgSource.source ? dmgSource.source : null;
             if (!ignoreKnockback)
             {
                 Vector2 knockbackDirection;

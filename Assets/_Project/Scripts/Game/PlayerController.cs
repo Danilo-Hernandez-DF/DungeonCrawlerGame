@@ -137,8 +137,6 @@ namespace Game {
             
             dashTimer.Reset(DashDuration);
             dashTimer.Start();
-            
-            Debug.Log(Stats.ToString());
         }
 
         new void Update() {
@@ -229,14 +227,14 @@ namespace Game {
             currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
         }
 
-        protected override void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
+        protected override void OnDamage(int damage, DamageSource dmgSource, bool ignoreKnockback = false) {
             Status.OnDamage(damage);
 
             if (RendererComponent) {
                 Vector2 hitDirection = Vector2.zero;
-                if (dmgSource)
+                if (dmgSource.source)
                 {
-                    hitDirection = (transform.position - dmgSource.transform.position).normalized * 2f;
+                    hitDirection = (transform.position - dmgSource.source.transform.position).normalized * 2f;
                 }
 
                 RendererComponent.sharedMaterial = GameManager.Instance.entityHitmaterial;
@@ -249,7 +247,7 @@ namespace Game {
 
             DungeonController.Instance.OnPlayerHit();
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
-            Entity sourceEntity = dmgSource?.GetComponent<Entity>();
+            Entity sourceEntity = dmgSource.entity;
             if(sourceEntity) {
                 GameManager.Instance.TrackEntity(sourceEntity.entityData, new EntityTrack() {damageDealt = damage});
             }

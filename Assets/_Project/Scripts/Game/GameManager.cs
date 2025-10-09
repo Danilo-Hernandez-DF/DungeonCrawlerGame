@@ -40,6 +40,8 @@ namespace Game
         [Header("Effect Settings")]
         public GameObject hitEffectPrefab;
 
+        public Sprite partcleHitTexture;
+
         public UnityAction<StatisticsTracker.TrackedStat, int> TrackStat;
         public UnityAction<ItemData, int> TrackItem;
         public UnityAction<EntityData, EntityTrack> TrackEntity;

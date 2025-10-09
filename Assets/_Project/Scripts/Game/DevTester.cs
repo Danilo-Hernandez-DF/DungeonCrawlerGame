@@ -35,6 +35,7 @@ namespace Game
                     GameObject prefab = GameManager.GetEntity(entityName)?.prefab;
 
                     if (prefab != null) SpawnObject(prefab);
+                    if(args.Length > 2) spawnedObject.GetComponent<Enemy>()?.NoAI();
                     break;
                 case "status":
                     string effectName = args[1];
@@ -44,12 +45,12 @@ namespace Game
                     {
                         if (spawnedObject == null)
                         {
-                            ApplyStatus(PlayerDetector.GetPlayer().GetComponent<Entity>(), effect.GetStatusEffect());
+                            ApplyStatus(PlayerDetector.GetPlayer().GetComponent<Entity>(), effect.GetStatusEffect(new DamageSource(gameObject)));
                         }
                         else
                         {
                             Entity entity = spawnedObject.GetComponent<Entity>();
-                            ApplyStatus(entity, effect.GetStatusEffect());
+                            ApplyStatus(entity, effect.GetStatusEffect(new DamageSource(gameObject)));
                         }
                     }
                     break;
@@ -150,7 +151,7 @@ namespace Game
         {
             if (spawnedObject != null)
             {
-                if (spawnedObject.GetComponent<Entity>()) spawnedObject.GetComponent<Entity>().TakeDamage(int.MaxValue);
+                if (spawnedObject.GetComponent<Entity>()) spawnedObject.GetComponent<Entity>().TakeDamage(int.MaxValue, new DamageSource(gameObject));
                 else
                 {
                     Destroy(spawnedObject);
@@ -183,7 +184,7 @@ namespace Game
 
         public void ApplyStatus(Entity entity, StatusEffect statusEffect)
         {
-            entity.Status.Add(statusEffect);
+            entity.Status.Add(statusEffect, statusEffect.source);
         }
 
         public void Visit<T>(T visitable) where T : Component, IVisitable

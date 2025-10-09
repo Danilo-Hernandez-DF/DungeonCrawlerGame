@@ -13,6 +13,10 @@ namespace Game
 
         protected override void InitStates()
         {
+            if (stateMachine == null) {
+                return;
+            }
+            
             var chaseState = new EnemyChaseState(this, target.transform);
             var chargeState = new EnemyChargingState(this);
             var attackState = new EnemyAttackState(this, target.transform);

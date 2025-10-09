@@ -67,7 +67,7 @@ namespace Game
         public void Visit<T>(T visitable) where T : Component, IVisitable {
             if(visitable is not Entity entity) return;
             affectedEntities.Add(entity);
-            entity.TakeDamage(damage);
+            entity.TakeDamage(damage, new DamageSource(gameObject));
             ApplyEffect(entity, null);
             ApplyStatus(entity, null);
         }
@@ -87,7 +87,8 @@ namespace Game
 
         public void ApplyStatus(Entity entity, StatusEffect statusEffect) {
             foreach(StatusEffectData hitEffect in hitStatus) {
-                entity.Status.Add(new StatusEffect(hitEffect));
+                DamageSource source = new DamageSource(gameObject);
+                entity.Status.Add(new StatusEffect(hitEffect, source), source);
             }
         }
     }

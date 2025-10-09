@@ -31,7 +31,10 @@ namespace UtilsModule {
 
         public void ApplyStatus(Entity entity, StatusEffect statusEffect) {
             foreach(StatusEffectData hitEffect in hitStatus) {
-                entity.Status.Add(new StatusEffect(hitEffect));
+                DamageSource source = playerDamage
+                    ? new DamageSource(PlayerDetector.GetPlayer().gameObject)
+                    : new DamageSource(gameObject);
+                entity.Status.Add(new StatusEffect(hitEffect, source), source);
             }
         }
 
@@ -43,7 +46,10 @@ namespace UtilsModule {
             if(hitStatus?.Count > 0) ApplyStatus(entity, null);
             
             if(damage <= 0) return;
-            entity.TakeDamage(damage, dmgSource: playerDamage ? PlayerDetector.GetPlayer() : gameObject);
+            DamageSource source = playerDamage
+                ? new DamageSource(PlayerDetector.GetPlayer().gameObject)
+                : new DamageSource(gameObject);
+            entity.TakeDamage(damage, source);
         }
 
         void OnTriggerEnter2D(Collider2D other) {

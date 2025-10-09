@@ -16,6 +16,10 @@ namespace Game  {
 
         protected override void InitStates()
         {
+            if (stateMachine == null) {
+                return;
+            }
+            
             patrolPoint = transform.position;
             SetTarget(PlayerDetector.GetPlayerComponent());
 
@@ -42,7 +46,7 @@ namespace Game  {
             if (attackTimer.IsRunning) return;
 
             attackTimer.Start();
-            target.TakeDamage(AttackDamage, dmgSource: gameObject);
+            target.TakeDamage(AttackDamage, new DamageSource(gameObject));
             base.Attack();
         }
     }

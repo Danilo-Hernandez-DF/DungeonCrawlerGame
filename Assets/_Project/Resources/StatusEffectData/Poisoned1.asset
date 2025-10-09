@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 25
   nameKey: poison
+  dmgColor: {r: 0.7169812, g: 0.15895337, b: 0.6170357, a: 1}
   damage: 1

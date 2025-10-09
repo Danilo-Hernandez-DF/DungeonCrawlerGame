@@ -76,23 +76,30 @@ namespace UtilsModule {
             Status.OnDeath();
         }
 
-        protected virtual void OnDamage(int damage, GameObject dmgSource = null, bool ignoreKnockback = false) {
+        protected virtual void OnDamage(int damage, DamageSource dmgSource, bool ignoreKnockback = false) {
             Vector2 hitDirection = Vector2.zero;
-            if (dmgSource)
+            if (dmgSource.source)
             {
-                hitDirection = (transform.position - dmgSource.transform.position).normalized;
+                hitDirection = (transform.position - dmgSource.source.transform.position).normalized;
             }
 
-            var hitEffect = Instantiate(GameManager.Instance.hitEffectPrefab, transform.position, Quaternion.Euler(0, 0, Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg - 90));
+            var eulerAngles = dmgSource.statusEffect ? Quaternion.Euler(90, 0, 0) :
+                Quaternion.Euler(0, 0, Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg - 90);
+            var hitEffect = Instantiate(GameManager.Instance.hitEffectPrefab, transform.position, eulerAngles);
             hitEffect.transform.SetParent(transform);
+            var particleSystem = hitEffect.GetComponentInChildren<ParticleSystemRenderer>();
+            particleSystem.material = GameManager.Instance.entityHitmaterial;
+            
 
             if (RendererComponent)
             {
                 RendererComponent.sharedMaterial = GameManager.Instance.entityHitmaterial;
-                RendererComponent.sharedMaterial.SetVector("_HitDirection", hitDirection);
                 RendererComponent.sharedMaterial.SetTexture("_Texture2D", RendererComponent.sprite.texture);
-                RendererComponent.sharedMaterial.SetColor("_Color", Color.white);
-
+                particleSystem.material.SetTexture("_Texture2D", GameManager.Instance.partcleHitTexture.texture);
+                
+                RendererComponent.sharedMaterial.SetColor("_Color", dmgSource.color);
+                particleSystem.material.SetColor("_Color", dmgSource.color);
+                
                 Invoke(nameof(ResetMaterial), 0.1f);
             }
 
@@ -104,7 +111,7 @@ namespace UtilsModule {
             RendererComponent.sharedMaterial = defaultMaterial;
         }
 
-        public void TakeDamage(int damage, bool ignoreDefense = false, GameObject dmgSource = null, bool ignoreKnockback = false)
+        public void TakeDamage(int damage, DamageSource dmgSource, bool ignoreDefense = false, bool ignoreKnockback = false)
         {
             if (!health) return;
 
@@ -123,6 +130,24 @@ namespace UtilsModule {
 
         public void Accept(IVisitor visitor) {
             if(!isTileEntity) visitor.Visit(this);
+        }
+    }
+    
+    public struct DamageSource {
+        public GameObject source;
+        public Entity entity => source.GetComponent<Entity>();
+        public StatusEffectData statusEffect;
+        public Color color => statusEffect?.dmgColor ?? _color;
+        private Color _color;
+        
+        public DamageSource(GameObject source) {
+            this.source = source;
+            this.statusEffect = null;
+            _color = Color.white;
+        }
+        
+        public void SetColor(Color _color) {
+            this._color = color;
         }
     }
 }

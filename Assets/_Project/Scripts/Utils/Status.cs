@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace UtilsModule {
     public class Status {
@@ -21,10 +22,11 @@ namespace UtilsModule {
 
         public void Update(float deltaTime) => timer.Tick(deltaTime);
 
-        public void Add(StatusEffect effect, string id = "") { 
+        public void Add(StatusEffect effect, DamageSource source, string id = "") { 
+            if(Effects.Exists(x => x.Data == effect.Data)) return;
             effect.id = id;
             Effects.Add(effect);
-            effect.Data.OnApply(Entity);
+            effect.Data.OnApply(Entity, source);
         }
 
         public void RemoveStatus(string id)
@@ -39,7 +41,7 @@ namespace UtilsModule {
             foreach (var effect in toRemove)
             {
                 Effects.Remove(effect);
-                effect.Data.OnExpire(Entity);Effects.Remove(effect);
+                effect.Data.OnExpire(Entity, effect.source);Effects.Remove(effect);
             }
         }
 
@@ -65,19 +67,19 @@ namespace UtilsModule {
     
         public void OnDamage(int damage) { 
             foreach(var effect in Effects) {
-                effect.Data.OnDamage(Entity, damage); 
+                effect.Data.OnDamage(Entity, damage, effect.source); 
             }
         }
 
         public void OnHeal(int amount) { 
             foreach(var effect in Effects) {
-                effect.Data.OnHeal(Entity, amount); 
+                effect.Data.OnHeal(Entity, amount, effect.source); 
             }
         }
 
         public void OnDeath() { 
             foreach(var effect in Effects) {
-                effect.Data.OnDeath(Entity); 
+                effect.Data.OnDeath(Entity, effect.source); 
             }
         }
     }
