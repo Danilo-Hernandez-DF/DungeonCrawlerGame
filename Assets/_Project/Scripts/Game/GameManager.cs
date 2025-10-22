@@ -25,6 +25,10 @@ namespace Game
 
         [Header("Game Settings")]
         public static ItemData emptyItem => Instance.ItemDatabase.GetData("empty");
+        public static TagData enemyTag => Instance.TagDatabase.GetData("tag_enemy");
+        public static TagData collectibleTag => Instance.TagDatabase.GetData("tag_collectible");
+        public static TagData lootableTag => Instance.TagDatabase.GetData("tag_lootable");
+        public static TagData spawnerTag => Instance.TagDatabase.GetData("tag_spawner");
         public EventSystem eventSystem;
         private ItemDatabase ItemDatabase;
         private EntityDatabase EntityDatabase;
@@ -53,24 +57,24 @@ namespace Game
         //Methods
         //------------------------------------------------
 
-        public IEnumerator StartGame()
+        public IEnumerator StartGame(DungeonType dungeonType)
         {
             yield return null;
-            DungeonController.Instance.StartFloor();
+            DungeonController.Instance.StartFloor(dungeonType.variants.GetWeightedItem());
         }
 
-        public IEnumerator FreshGame()
+        public IEnumerator FreshGame(DungeonType dungeonType)
         {
             yield return null;
             currentLevel = 0;
-            StartCoroutine(StartGame());
+            StartCoroutine(StartGame(dungeonType));
         }
 
-        public void LoadScene(string sceneName, bool resetLevel)
+        public void LoadScene(string sceneName,DungeonType dungeonType, bool resetLevel)
         {
             SceneManager.LoadScene(sceneName);
-            if (resetLevel) StartCoroutine(FreshGame());
-            else StartCoroutine(StartGame());
+            if (resetLevel) StartCoroutine(FreshGame(dungeonType));
+            else StartCoroutine(StartGame(dungeonType));
         }
 
         public static ItemData GetItem(string name)

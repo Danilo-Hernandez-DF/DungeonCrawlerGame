@@ -22,12 +22,14 @@ namespace Game {
             modifiers = new List<DungeonModifier>();
         }
 
-        public void StartFloor()
+        public void StartFloor(DungeonData dungeonData)
         {
+            this.dungeonData = dungeonData;
             modifiers = dungeonData.modifiers?.ToList() ?? new List<DungeonModifier>();
             lootSettings = dungeonData.lootSettings;
             completionQuest = dungeonData.completionQuest;
             dungeonGenerator.Configure(dungeonData);
+            
             dungeonGenerator.Generate(out startRoom);
 
             if (completionQuest == null)
@@ -47,18 +49,13 @@ namespace Game {
             }
 
             foreach(LootSetting lootSetting in lootSettings) {
-                if(lootSetting.startLevel <= currentLevel && lootSetting.lootType == lootType) {
-                    if(currentSetting == null || lootSetting.startLevel > currentSetting.startLevel) {
-                        currentSetting = lootSetting;
-                    }
+                if(lootSetting.lootType == lootType) {
+                    currentSetting = lootSetting;
+                    break;
                 }
             }
 
-            if(currentSetting != null) {
-                return currentSetting;
-            }
-           
-            return null;
+            return currentSetting;
         }
         
         void ResetRooms() {

@@ -7,5 +7,9 @@ namespace UtilsModule {
         public virtual T GetWeightedItem(int lowerLimit = 0, uint upperLimit = int.MaxValue) {
             return default;
         }
+        
+        public virtual List<T> GetAllItems() {
+            return new List<T>();
+        }
     }
 }

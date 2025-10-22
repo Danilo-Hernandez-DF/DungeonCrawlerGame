@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameKey: enraged_vessel
   stats: {fileID: 11400000, guid: a546f3353e59f754b8e1acf1caeec68b, type: 2}
+  sprite: {fileID: 21300000, guid: 4a9fac7e2365cc645b75ae7fb5574e5b, type: 3}
   prefab: {fileID: 6356083494339734611, guid: 948e175c173f5b049b92e613479de37f, type: 3}
   tags:
   - value: 0

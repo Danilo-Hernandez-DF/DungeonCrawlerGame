@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2468404743654827894}
   - component: {fileID: 7461059220379428196}
   - component: {fileID: 3493032404448525273}
-  - component: {fileID: 3976430732334053482}
   m_Layer: 9
   m_Name: GroundMap
   m_TagString: Untagged
@@ -1654,6 +1653,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1675,6 +1676,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1231631307
   m_SortingLayer: -1
   m_SortingOrder: 1
@@ -1882,22 +1884,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 1
---- !u!114 &3976430732334053482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31903053953783895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &103800149852153986
 GameObject:
   m_ObjectHideFlags: 0
@@ -1996,7 +1982,6 @@ GameObject:
   - component: {fileID: 7898985233937692883}
   - component: {fileID: 3361070043954076907}
   - component: {fileID: 2934913899765703296}
-  - component: {fileID: 5769697275469523575}
   m_Layer: 0
   m_Name: ObjectMap
   m_TagString: Untagged
@@ -2215,6 +2200,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2236,11 +2223,12 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1231631307
   m_SortingLayer: -1
   m_SortingOrder: 2
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0.125, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -2419,22 +2407,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 1
---- !u!114 &5769697275469523575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 462238814062355378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &1906559154617042815
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,8 +2653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0005362a561cd44592025b875986d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
   roomSize: {x: 16, y: 9}
+  dungeonType: {fileID: 11400000, guid: 7bae821f2f8c0994db3408320e63e706, type: 2}
   roomBehaviours: []
   enemySpawners: []
   lootables: []

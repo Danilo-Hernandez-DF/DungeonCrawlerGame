@@ -12,6 +12,10 @@ namespace UtilsModule {
         public List<Tag> tags;
         public Sprite DisplaySprite => data.DisplaySprite;
 
+        public int GetRarity() {
+            return data.rarity;
+        }
+
         public Item(ItemData data, int count = 1, List<Tag> tags = null) {
             this.data = data;
             this.count = count;
@@ -22,6 +26,10 @@ namespace UtilsModule {
             }
             foreach(var tag in data.inherentTags) {
                 if(tag.data.type != TagData.TagType.None) {
+                    if (tags.Exists(x => x.data == tag.data)) {
+                        tags.Find(x => x.data == tag.data).inherent = true;
+                        continue;
+                    }
                     tags.Add(tag.data.GetTag(tag.value, true));
                     continue;
                 }

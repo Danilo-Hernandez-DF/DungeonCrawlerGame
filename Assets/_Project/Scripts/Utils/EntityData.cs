@@ -8,6 +8,7 @@ namespace UtilsModule {
         public string entityName => LocalisationSystem.GetLocalisedValue(nameKey);
         public string nameKey;
         public EntityStats stats;
+        public Sprite sprite;
         public GameObject prefab;
         public List<Tag> tags;
 

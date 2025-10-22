@@ -43,5 +43,13 @@ namespace UtilsModule {
 
             return GameManager.emptyItem.GetItem();
         }
+        
+        public override List<Item> GetAllItems() {
+            List<Item> allItems = new List<Item>();
+            foreach(var item in items) {
+                allItems.Add(item.GetItem(1));
+            }
+            return allItems;
+        }
     }
 }

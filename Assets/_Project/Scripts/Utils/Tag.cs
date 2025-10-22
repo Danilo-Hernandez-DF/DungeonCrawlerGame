@@ -16,8 +16,7 @@ namespace UtilsModule {
         }
 
         public virtual bool Matches(Tag tag) {
-            if(tag.data != data) return false;
-            return inherent == tag.inherent;
+            return tag.data == data;
         }
 
         public Tag SetValue(float value) {

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bcf657095d75f744a06f3c3fb1ac2ac, type: 3}
+  m_Name: ClayStartRooms
+  m_EditorClassIdentifier: 
+  weight: 0
+  items:
+  - Item: {fileID: 3974854122743024291, guid: e9ffc5eea0de65b43ad09c702b8b740e, type: 3}
+    Weight: 10
+  secondaryTables: []

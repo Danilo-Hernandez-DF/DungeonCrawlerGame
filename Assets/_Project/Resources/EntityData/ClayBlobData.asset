@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameKey: clay_blob
   stats: {fileID: 11400000, guid: 82097f39efd5d6e468956a94d5da6601, type: 2}
+  sprite: {fileID: -211520193, guid: dc5a01173063fb94081c08293f75c091, type: 3}
   prefab: {fileID: 6356083494339734611, guid: 6bfb53aad2cdaab469b866a8e95832dc, type: 3}
   tags:
   - value: 0

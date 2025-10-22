@@ -17,7 +17,7 @@ namespace UtilsModule
             savedTags = new List<SavedTag>();
 
             foreach(Tag tag in toCopy.tags) {
-                if(!tag.inherent) savedTags.Add(new SavedTag(tag));
+                savedTags.Add(new SavedTag(tag));
             }
         }
 

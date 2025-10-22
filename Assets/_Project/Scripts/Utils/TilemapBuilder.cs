@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using ProcGen;
 using UnityEngine;
@@ -94,10 +95,41 @@ namespace UtilsModule {
                     if(tile == null) continue;
                     if(tile.tileType != TileType.SpawnPoint) continue;
 
-                    tilemap.SetTile(new Vector3Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
+                    if(!tile.dynamicTile) {
+                        tilemap.SetTile(new Vector3Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
                         -Mathf.FloorToInt(areaSize.y/2) + y), tile.GetTile());
+                    }
+                    else {
+                        tilemap.SetTile(new Vector3Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
+                        -Mathf.FloorToInt(areaSize.y/2) + y), roomController.dungeonType.GetTile());
+                    }
 
-                    var prefab = tile.prefabs.GetWeightedItem();
+                    GameObject prefab;
+
+                    if (!tile.dynamicTile) {
+                        prefab = tile.prefabs.GetWeightedItem();
+                    }
+                    else {
+                        if (tile.dynamicIndex == -1) {
+                            var enemies = roomController.dungeonType.spawnableEntities
+                                .Where(entity => entity.HasTag(GameManager.enemyTag.nameKey)).ToList();
+                            prefab = enemies[Random.Range(0, enemies.Count)].prefab;
+                        }
+                        else if (tile.dynamicIndex == -2) {
+                            var collectibles = roomController.dungeonType.spawnableEntities
+                                .Where(entity => entity.HasTag(GameManager.collectibleTag.nameKey)).ToList();
+                            prefab = collectibles[Random.Range(0, collectibles.Count)].prefab;
+                        }
+                        else if (tile.dynamicIndex == -3) {
+                            var collectibles = roomController.dungeonType.spawnableEntities
+                                .Where(entity => entity.HasTag(GameManager.lootableTag.nameKey)).ToList();
+                            prefab = collectibles[Random.Range(0, collectibles.Count)].prefab;
+                        }
+                        else {
+                            prefab = roomController.dungeonType.spawnableEntities[tile.dynamicIndex].prefab;
+                        }
+                    }
+                    
                     Vector2 position = new Vector2Int(-Mathf.FloorToInt(areaSize.x/2) + x, 
                         -Mathf.FloorToInt(areaSize.y/2) + y) + new Vector2(0.5f, 0.5f) + centerPos;
                     //Vector2 position = new Vector2(x + 0.5f, y + 0.5f) + centerPos;

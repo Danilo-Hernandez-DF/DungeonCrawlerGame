@@ -9,6 +9,7 @@ namespace ProcGen {
     public class RoomController :  MonoBehaviour { 
         [Header("Room Settings")]
         public Vector2Int roomSize;
+        public DungeonType dungeonType;
         [SerializeField] List<RoomBehaviour> roomBehaviours;
         [SerializeField] List<EnemySpawnManager> enemySpawners;
         [SerializeField] List<Lootable> lootables;
@@ -17,6 +18,7 @@ namespace ProcGen {
         [Header("Tilemap Settings")]
         [SerializeField] Tilemap[] tilemaps;
         [SerializeField] bool replaceTiles = true;
+        [Header("EnemySettings")]
         readonly List<TilemapBuilder> tilemapBuilders = new List<TilemapBuilder>();
         List<Door> doors;
         BoxCollider2D col;

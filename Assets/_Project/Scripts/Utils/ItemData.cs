@@ -10,6 +10,7 @@ namespace UtilsModule {
         public string nameKey;
         [TextArea] public string description;
         public int maxCount;
+        public int rarity;
         [SerializeField] Sprite sprite;
         public List<TagDefault> inherentTags;
         public Sprite DisplaySprite {get => sprite;}

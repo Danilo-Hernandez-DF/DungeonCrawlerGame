@@ -131,6 +131,18 @@ PrefabInstance:
       propertyPath: isEntrance
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4455323518439058597, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
+      propertyPath: potentialDungeons.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4455323518439058597, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
+      propertyPath: 'potentialDungeons.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 7bae821f2f8c0994db3408320e63e706, type: 2}
+    - target: {fileID: 4455323518439058597, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
+      propertyPath: 'potentialDungeons.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2395cc8d22e56c941aa9d684c5fea47f, type: 2}
     - target: {fileID: 7860659464388313199, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
       propertyPath: m_Name
       value: DungeonExit
@@ -249,6 +261,10 @@ PrefabInstance:
     - target: {fileID: 7860659464388313199, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
       propertyPath: m_Name
       value: DungeonExit (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860659464388313199, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9086668160694281134, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
       propertyPath: m_LocalPosition.x
@@ -450,6 +466,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -471,6 +489,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -4134,6 +4153,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4155,6 +4176,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1

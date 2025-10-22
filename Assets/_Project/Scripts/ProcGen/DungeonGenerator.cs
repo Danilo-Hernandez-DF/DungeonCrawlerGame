@@ -17,7 +17,9 @@ namespace ProcGen {
 
         public void Configure(DungeonData dungeonData) {
             targetRooms = dungeonData.roomCount;
-            specialRoomRequirements = dungeonData.roomsPerLevel.ToList();
+            specialRoomRequirements = dungeonData.RoomRequirements();
+            startRoomPrefab = dungeonData.dungeonType.startRoomPrefab;
+            roomPrefabs = dungeonData.dungeonType.roomPrefabs;
         }
 
         public void Generate(out RoomController initialRoom) {
@@ -144,5 +146,24 @@ namespace ProcGen {
         public GOLootTable roomPrefabs;
         public RoomType type;
         public int count;
+        
+        public RoomRequirements(GOLootTable roomPrefabs, RoomType type, int count) {
+            this.roomPrefabs = roomPrefabs;
+            this.type = type;
+            this.count = count;
+        }
+    }
+    
+    [System.Serializable] 
+    public class AdditionalRoomRequirements
+    {
+        public RoomType type;
+        public int count;
+    }
+    
+    [System.Serializable]
+    public class o {
+        public string name;
+        public int weight;
     }
 }

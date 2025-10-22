@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e20b803948c0fb4a9b29d0fb0b26b46, type: 3}
+  m_Name: Basic_ClayDungeon
+  m_EditorClassIdentifier: 
+  sceneName: DevScene
+  icon: {fileID: 21300000, guid: d29757a44a82747479e4cd4d266c261a, type: 3}
+  nameKey: clay_halls
+  dungeonType: {fileID: 11400000, guid: 7bae821f2f8c0994db3408320e63e706, type: 2}
+  modifiers: []
+  roomCount: 12
+  completionQuest: {fileID: 11400000, guid: f6cb1edcdd3db0941b533ee880b53514, type: 2}
+  roomsPerLevel: []
+  lootSettings:
+  - lootType: 0
+    lootTable: {fileID: 11400000, guid: ad0a43bc70e9f734cb0394afb1eefed6, type: 2}
+    rolls: 10
+  nextLevel: {fileID: 0}

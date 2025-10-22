@@ -5,7 +5,7 @@ using UtilsModule;
 namespace Game {
     public class EnemySpawnManager : EntitySpawnManager {
         [SerializeField] int targetEnemies;
-        [SerializeField] EntityData[] enemyData;
+        public EntityData[] enemyData;
         [SerializeField] int enemiesPerWave;
         [SerializeField] int maxEnemies;
         [SerializeField] float spawnInterval;

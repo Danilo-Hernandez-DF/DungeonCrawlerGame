@@ -1,65 +1,106 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UtilsModule;
 
-public class DungeonSelectionUI : UIBase {
-    [SerializeField] private Button[] objectiveButtons;
-    [SerializeField] private DungeonDataEventChannel startChannel;
-    private List<TextMeshProUGUI> objectiveText;
-    private DungeonData[] dungeons;
-    private List<Image> objectiveImages;
-    private bool isEntrance = false;
+public class DungeonSelectionUI : UIBase
+{
+    [SerializeField] private GameObject buttonHolder;
+    [SerializeField] TextMeshProUGUI selectedElementText;
+    
+    [Header("Prefabs")]
+    [SerializeField] private GameObject dungeonButtonPrefab;
+    [SerializeField] private GameObject modifierButtonPrefab;
+    [SerializeField] private GameObject displaySlotPrefab;
+    
+    [Header("Tabs")]
+    [SerializeField] private Transform monsterTab;
+    [SerializeField] private Transform itemTab;
+    [SerializeField] private Transform modifierTab;
+    
+    private DungeonType[] data;
+    private DungeonModifier[] modifiers;
 
-    new void Awake() {
-        base.Awake();
-        objectiveText = new List<TextMeshProUGUI>();
-        objectiveImages = new List<Image>();
+    public void UpdateUI(DungeonType[] data, DungeonModifier[] modifiers) {
+        this.data = data;
+        this.modifiers = modifiers;
+    }
+    
+    public void UpdateDisplay(DungeonType diaplayData) {
+        selectedElementText.text = diaplayData.name;
+        var entities = GetEntities(diaplayData);
 
-        foreach(var button in objectiveButtons) {
-            var text = button.GetComponentInChildren<TextMeshProUGUI>();
-            if(text != null) {
-                objectiveText.Add(text);
+        if (monsterTab.childCount < entities.Count) {
+            for (int i = monsterTab.childCount; i < entities.Count; i++) {
+                Instantiate(displaySlotPrefab, monsterTab);
             }
-
-            var image = button.transform.GetChild(1).GetComponent<Image>();
-            if(image != null) {
-                objectiveImages.Add(image);
+        } 
+        
+        for (int i = 0; i < monsterTab.childCount; i++) {
+            if (i < entities.Count) { 
+                monsterTab.GetChild(i).gameObject.SetActive(true);
+            }
+            else { 
+                monsterTab.GetChild(i).gameObject.SetActive(false);
             }
         }
-    }
 
-    public void RecieveEvent(bool isEntrance, DungeonData[] dungeons) {
-        this.dungeons = dungeons;
-        this.isEntrance = isEntrance;
-        Open();
+        for (int i = 0; i < entities.Count; i++) {
+            monsterTab.GetChild(i).GetChild(0).GetComponent<Image>().sprite = entities[i].sprite;
+        }
     }
+    
+    private List<EntityData> GetEntities(DungeonType diaplayData) {
+        var eligible = diaplayData.spawnableEntities.Where(entity => entity.HasTag(GameManager.spawnerTag.nameKey)).ToList();
+        List<EntityData> entities = diaplayData.spawnableEntities.Where(entity => entity.HasTag(GameManager.enemyTag.nameKey)).ToList();
+        
+        foreach (var entity in eligible) {
+            var spawnables = entity.prefab.GetComponent<EnemySpawnManager>().enemyData
+                .Where(spawnable => spawnable.HasTag(GameManager.enemyTag.nameKey)).ToList();
 
+            foreach (var spwn in spawnables) {
+                if(entities.Contains(spwn)) continue; 
+                entities.Add(spwn);
+            }
+        }
+        
+        return entities;
+    }
+    
     protected override void OnOpen() {
-        if(!isEntrance) {
-            foreach(var button in objectiveButtons) {
-                button.gameObject.SetActive(true);
-            }
+        StartCoroutine(SelectDungeon());
+    }
 
-            for(int i = 0; i < objectiveButtons.Length; i++) {
-                objectiveButtons[i].onClick.RemoveAllListeners();
-                int index = i;
-                objectiveButtons[i].onClick.AddListener(() => startChannel.Invoke(dungeons[index]));
-                objectiveText[i].text = dungeons[i].dungeonName;
-                objectiveImages[i].sprite = dungeons[i].dungeonType.sprite;
-            }
-        } else {
-            foreach(var button in objectiveButtons) {
-                button.gameObject.SetActive(false);
-            }
+    private IEnumerator SelectDungeon() {
+        CleanButtons();
+        
+        foreach(DungeonType diaplayData in data) {
+            DungeonSelectionButton button = Instantiate(dungeonButtonPrefab, buttonHolder.transform).GetComponent<DungeonSelectionButton>();
+            button.Init(diaplayData, this);
+        }
 
-            objectiveButtons[0].gameObject.SetActive(true);
-            objectiveButtons[0].onClick.RemoveAllListeners();    
-            objectiveButtons[0].onClick.AddListener(() => startChannel.Invoke(dungeons[0]));
-            objectiveText[0].text = dungeons[0].dungeonName;
-            objectiveImages[0].sprite = dungeons[0].dungeonType.sprite;
+        yield return null;
+        
+        GameManager.Instance.eventSystem.SetSelectedGameObject(buttonHolder.transform.GetChild(0).gameObject);
+    }
+    
+    /*private void SelectModifiers() {
+        CleanButtons();
+        
+        foreach(DungeonModifier modifier in modifiers) {
+            GameObject button = Instantiate(modifierButtonPrefab, buttonHolder.transform);
+            button.GetComponentInChildren<TextMeshProUGUI>().text = modifier.name;
+            button.GetComponent<Button>().onClick.AddListener();
+        }
+    } */
+    
+    private void CleanButtons() {
+        for (int i = buttonHolder.transform.childCount; i > 0; i--) {
+            Destroy(buttonHolder.transform.GetChild(i-1).gameObject);
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,6 +10,9 @@ namespace UtilsModule {
         public TileBaseLootTable replaceTiles;
         public TileType tileType;
         public int placementWeight = 1;
+        [Header("Dynamic Tile")]
+        public bool dynamicTile = false;
+        public int dynamicIndex = 0;
         [Header("POI")]
         public GOLootTable poiTilemaps;
         public Vector2Int poiSize; //min 3x3, both values must be odd

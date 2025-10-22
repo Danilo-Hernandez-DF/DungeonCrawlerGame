@@ -16,10 +16,6 @@ MonoBehaviour:
   items:
   - Item: {fileID: 11400000, guid: 92d866f0e66cbbf45902bb2359439c29, type: 2}
     Weight: 10
-  - Item: {fileID: 11400000, guid: 6ddb5ce07853f4347bca3efd94be90c6, type: 2}
-    Weight: 10
   - Item: {fileID: 11400000, guid: c39a21d6c92e3064bb5c23f17516954c, type: 2}
-    Weight: 10
-  - Item: {fileID: 11400000, guid: c610fbfb6daf4d54db87422f2bbd9cc7, type: 2}
-    Weight: 10
+    Weight: 1
   secondaryTables: []

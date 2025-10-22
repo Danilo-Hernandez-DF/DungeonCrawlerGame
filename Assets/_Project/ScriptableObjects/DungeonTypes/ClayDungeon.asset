@@ -12,6 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb33eeebdd6e894ea7fd996032aed2e, type: 3}
   m_Name: ClayDungeon
   m_EditorClassIdentifier: 
-  dungeonName: Clay Halls
+  icon: {fileID: -211520193, guid: dc5a01173063fb94081c08293f75c091, type: 3}
+  sceneName: DevScene
+  dungeonName: clay_halls
   sprite: {fileID: -1694191915, guid: 7463a4335b4744d4cbefcdb27662ca5f, type: 3}
   difficultyLevel: 1
+  startRoomPrefab: {fileID: 11400000, guid: c1152255bd8456d46b821edc81cfa5f3, type: 2}
+  roomPrefabs: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
+  tilePrefabs: {fileID: 11400000, guid: d85b6035215d1eb418fa3dbbb5b7aa19, type: 2}
+  spawnableEntities:
+  - {fileID: 11400000, guid: a83aeed1090af2645a1c70e6912e0187, type: 2}
+  - {fileID: 11400000, guid: b4d190b8e281dc346918ae84a0842091, type: 2}
+  - {fileID: 11400000, guid: e67e877cf30ee034f82fd2795ab23ec9, type: 2}
+  - {fileID: 11400000, guid: 830e63ff0522faa4c8139c93392c3f11, type: 2}
+  roomRequirements:
+  - roomPrefabs: {fileID: 11400000, guid: 03e853ccc46aa4c48a4df33450dae5f8, type: 2}
+    type: 8
+    count: 1
+  - roomPrefabs: {fileID: 11400000, guid: 48e49d3b73b165041b24b4ddc84279f4, type: 2}
+    type: 5
+    count: 2
+  variants: {fileID: 11400000, guid: 1556fc9ac71bad84da626d21ecc847cc, type: 2}
