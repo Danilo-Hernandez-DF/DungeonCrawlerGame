@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Project.Scripts.Utils;
 using Game;
@@ -11,6 +12,10 @@ public class DungeonEntrance : MonoBehaviour, IInteractable {
     [SerializeField] private DungeonType[] potentialDungeons;
     [SerializeField] private DungeonModifier[] modifiers;
     [SerializeField] private DungeonSelectionUI selectionUI;
+
+    private void Awake() {
+        modifiers = GameManager.GetDungeonModifiers();
+    }
 
     public void OnInteract() {
         if(InRange()) {

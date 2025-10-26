@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace UtilsModule {
     public class StatsMediator { 
         readonly LinkedList<StatModifier> modifiers = new();
-
         public event EventHandler<Query> Queries;
         public void PerformQuery(object sender, Query query) => Queries?.Invoke(sender, query);
 

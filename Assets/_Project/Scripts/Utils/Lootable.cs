@@ -13,7 +13,7 @@ namespace UtilsModule {
         
         bool InRange() => IInteractable.InRange(transform.position);
 
-        protected override void Awake() {
+        protected void Awake() {
             LootSetting lootSetting = DungeonController.Instance.GetLootTable(lootType);
             if(lootSetting == null) {
                 lootSetting = defaultLootSetting;

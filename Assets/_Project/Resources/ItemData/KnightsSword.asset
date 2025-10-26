@@ -15,6 +15,7 @@ MonoBehaviour:
   nameKey: knight_sword
   description: 
   maxCount: 1
+  rarity: 1
   sprite: {fileID: 21300000, guid: 9319ab13db0593040aa0c14ffdcb48b9, type: 3}
   inherentTags:
   - data: {fileID: 11400000, guid: f21ebf7095669ab4e83f3415fd7f7bcd, type: 2}

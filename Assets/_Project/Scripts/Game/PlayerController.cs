@@ -59,8 +59,8 @@ namespace Game {
             this.data.Id = Id;
         }
 
-        new protected void Awake() {
-            base.Awake();
+        protected void Awake() {
+            Init();
             mainCam = CameraManager.Instance.camera.transform;
             vCam.Follow = transform;
             vCam.LookAt = transform;
@@ -245,7 +245,7 @@ namespace Game {
                 Invoke(nameof(ResetMaterial), 0.1f);
             }
 
-            DungeonController.Instance.OnPlayerHit();
+            DungeonController.Instance.OnPlayerHit(dmgSource);
             GameManager.Instance.TrackStat(StatisticsTracker.TrackedStat.DamageTaken, damage);
             Entity sourceEntity = dmgSource.entity;
             if(sourceEntity) {

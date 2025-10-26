@@ -258,13 +258,21 @@ PrefabInstance:
       propertyPath: potentialDungeons
       value: 
       objectReference: {fileID: 11400000, guid: 8743b44fcf10738448fd9ef48140362b, type: 2}
+    - target: {fileID: 4455323518439058597, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
+      propertyPath: potentialDungeons.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4455323518439058597, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
+      propertyPath: 'potentialDungeons.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 65227492910b77a48b27c46901f09806, type: 2}
     - target: {fileID: 7860659464388313199, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
       propertyPath: m_Name
       value: DungeonExit (1)
       objectReference: {fileID: 0}
     - target: {fileID: 7860659464388313199, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9086668160694281134, guid: c8d2f7d7d34bef34ea726ae5ae991425, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3978,16 +3986,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.28627452
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.6156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0
+      value: 0.20677084
       objectReference: {fileID: 0}
     - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 0.35000002
       objectReference: {fileID: 0}
     - target: {fileID: 5726716302230216337, guid: 54920b4216cede6458faaa90ae72eccd, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

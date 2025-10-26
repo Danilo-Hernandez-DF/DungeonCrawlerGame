@@ -15,7 +15,6 @@ MonoBehaviour:
   icon: {fileID: -211520193, guid: dc5a01173063fb94081c08293f75c091, type: 3}
   sceneName: DevScene
   dungeonName: clay_halls
-  sprite: {fileID: -1694191915, guid: 7463a4335b4744d4cbefcdb27662ca5f, type: 3}
   difficultyLevel: 1
   startRoomPrefab: {fileID: 11400000, guid: c1152255bd8456d46b821edc81cfa5f3, type: 2}
   roomPrefabs: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
@@ -33,3 +32,5 @@ MonoBehaviour:
     type: 5
     count: 2
   variants: {fileID: 11400000, guid: 1556fc9ac71bad84da626d21ecc847cc, type: 2}
+  modifiers:
+  - {fileID: 11400000, guid: c2e6348812277b745a3876ad6d57c633, type: 2}

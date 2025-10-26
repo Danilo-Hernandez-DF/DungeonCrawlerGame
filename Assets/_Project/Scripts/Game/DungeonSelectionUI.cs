@@ -24,33 +24,101 @@ public class DungeonSelectionUI : UIBase
     
     private DungeonType[] data;
     private DungeonModifier[] modifiers;
+    public List<DungeonModifier> activeModifiers;
 
     public void UpdateUI(DungeonType[] data, DungeonModifier[] modifiers) {
         this.data = data;
         this.modifiers = modifiers;
     }
     
-    public void UpdateDisplay(DungeonType diaplayData) {
-        selectedElementText.text = diaplayData.name;
-        var entities = GetEntities(diaplayData);
+    public List<DungeonModifier> GetModifiers(DungeonType dType) {
+        var mods = modifiers.ToList();
+        mods.AddRange(dType.modifiers);
 
-        if (monsterTab.childCount < entities.Count) {
-            for (int i = monsterTab.childCount; i < entities.Count; i++) {
-                Instantiate(displaySlotPrefab, monsterTab);
-            }
-        } 
+        return mods;
+    }
+    
+    public void UpdateDisplay(DungeonType displayData) {
+        selectedElementText.text = displayData.name;
+        UpdateEntities(displayData);
+        UpdateItems(displayData);
+        UpdateModifiers(displayData);
+    }
+
+    private List<GameObject> GetDisplaySlots(Transform tab) {
+        var displaySlots = new List<GameObject>();
         
-        for (int i = 0; i < monsterTab.childCount; i++) {
-            if (i < entities.Count) { 
-                monsterTab.GetChild(i).gameObject.SetActive(true);
-            }
-            else { 
-                monsterTab.GetChild(i).gameObject.SetActive(false);
+        for (int i = 0; i < tab.childCount; i++) {
+            var child = tab.GetChild(i).gameObject;
+            if (child.CompareTag("Display")) {  
+                displaySlots.Add(child);
             }
         }
 
+        return displaySlots;
+    }
+    
+    private void PopulateDisplaySlots(Transform tab, int count) {
+        var displaySlots = GetDisplaySlots(tab);
+        
+        if (displaySlots.Count < count) {
+            for (int i = displaySlots.Count; i < count; i++) {
+                var newChild = Instantiate(displaySlotPrefab, tab);
+                displaySlots.Add(newChild);
+            }
+        } 
+        
+        for (int i = 0; i < displaySlots.Count; i++) {
+            if (i < count) { 
+                displaySlots[i].SetActive(true);
+            }
+            else { 
+                displaySlots[i].SetActive(false);
+            }
+        }
+    }
+
+    private void UpdateItems(DungeonType displayData) {
+        var items = displayData.GetItems().Sort(ItemSortType.Rarity, false);
+        
+        PopulateDisplaySlots(itemTab, items.Count);
+        var displaySlots = GetDisplaySlots(itemTab);
+        
+        for (int i = 0; i < items.Count; i++) {
+            displaySlots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].DisplaySprite;
+        }
+    }
+
+    private void UpdateEntities(DungeonType displayData) {
+        var entities = GetEntities(displayData);
+
+        PopulateDisplaySlots(monsterTab, entities.Count);
+        var displaySlots = GetDisplaySlots(monsterTab);
+        
         for (int i = 0; i < entities.Count; i++) {
-            monsterTab.GetChild(i).GetChild(0).GetComponent<Image>().sprite = entities[i].sprite;
+            displaySlots[i].transform.GetChild(0).GetComponent<Image>().sprite = entities[i].sprite;
+        }
+    }
+    
+    private void UpdateModifiers(DungeonType displayData) {
+        var mods = displayData.modifiers;
+
+        for (int i = 0; i < modifierTab.childCount; i++) {
+            var child = modifierTab.GetChild(i).gameObject.GetComponent<ModifierButton>();
+            
+            if(mods.Contains(child.dungeonModifier)) {
+                child.Lock();
+            }
+            else {
+                child.Unlock();
+            }
+        }
+    }
+    
+    public void PopulateModifiers() {
+        foreach(DungeonModifier modifier in modifiers) {
+            ModifierButton button = Instantiate(modifierButtonPrefab, modifierTab).GetComponent<ModifierButton>();
+            button.Init(modifier, this);
         }
     }
     
@@ -73,6 +141,17 @@ public class DungeonSelectionUI : UIBase
     
     protected override void OnOpen() {
         StartCoroutine(SelectDungeon());
+        PopulateModifiers();
+    }
+
+    public void SelectModifier(bool selected, DungeonModifier modifier) {
+        if(selected) {
+            if(activeModifiers.Contains(modifier)) return;
+            activeModifiers.Add(modifier);
+        } else {
+            if(!activeModifiers.Contains(modifier)) return;
+            activeModifiers.Remove(modifier);
+        }
     }
 
     private IEnumerator SelectDungeon() {

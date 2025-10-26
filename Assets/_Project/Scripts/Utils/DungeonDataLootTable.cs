@@ -18,6 +18,19 @@ namespace UtilsModule {
 
             return toReturn;
         }
+        
+        public List<ItemData> GetItems() {
+            var allItems = new List<ItemData>();
+            
+            foreach (var data in items) {
+                foreach (var item in data.Item.AvailableItems()) {
+                    if (allItems.Contains(item)) continue;
+                    allItems.Add(item);
+                }
+            }
+
+            return allItems;
+        }
 
         public override DungeonData GetWeightedItem(int lowerLimit = 0, uint upperLimit = int.MaxValue) {
             if(items?.Count == 0 && secondaryTables?.Count == 0) return null;

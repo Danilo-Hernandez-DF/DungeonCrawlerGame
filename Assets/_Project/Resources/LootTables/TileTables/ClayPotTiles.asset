@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970d9db638e4b004995d5550b7e41344, type: 3}
   m_Name: ClayPotTiles
   m_EditorClassIdentifier: 
-  weight: 0
+  weight: 10
   items:
   - Item: {fileID: 11400000, guid: bf37cd8d6ca34e94eb0f574318f189c7, type: 2}
     Weight: 10

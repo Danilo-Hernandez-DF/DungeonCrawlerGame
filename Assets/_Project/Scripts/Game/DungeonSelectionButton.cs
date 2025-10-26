@@ -23,7 +23,7 @@ public class DungeonSelectionButton : MonoBehaviour, ISelectHandler, IDeselectHa
         
         button.GetComponent<Button>().onClick.AddListener((() => {
             GetComponent<Animator>().SetTrigger(Pressed);
-            GameManager.Instance.LoadScene(data.sceneName, data, true);
+            GameManager.Instance.LoadScene(data.sceneName, data, true, ui.GetModifiers(data));
         }));
     }
     

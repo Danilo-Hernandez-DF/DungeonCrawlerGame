@@ -30,7 +30,7 @@ namespace UtilsModule {
                 }
             }
 
-            return null;
+            return items[0].Item;
         }
     }
 }

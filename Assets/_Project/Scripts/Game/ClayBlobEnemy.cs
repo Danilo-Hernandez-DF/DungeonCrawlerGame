@@ -7,6 +7,7 @@ namespace Game  {
         // Animation Hashes
         public static int ChaseHash = Animator.StringToHash("ClayBlobChase");
         public static int WanderHash = Animator.StringToHash("ClayBlobWander");
+        public static int SpawnHash = Animator.StringToHash("ClayBlobSpawn");
 
         //------------------------
 
@@ -23,12 +24,14 @@ namespace Game  {
             patrolPoint = transform.position;
             SetTarget(PlayerDetector.GetPlayerComponent());
 
+            var spawnState = new SpawnState(this, 0.34f, SpawnHash);
             var wanderState = new EnemyWanderState(this, patrolPoint, wanderRadius, WanderHash);
             var chaseState = new EnemyChaseState(this, target.transform, ChaseHash);
             var attackState = new EnemyAttackState(this, target.transform);
             var stunnedState = new EnemyStunnedState(this);
             var deathState = new EnemyDeathState(this);
-
+    
+            At(spawnState, wanderState, new FuncPredicate(() => spawned));
             At(wanderState, chaseState, new FuncPredicate(() => CanDetectTarget(Stats.DetectionRange)));
             At(chaseState, wanderState, new FuncPredicate(() => !CanDetectTarget(Stats.DetectionRange) && GetDistanceToTarget(lastTargetPosition) < 0.1f));
             At(chaseState, attackState, new FuncPredicate(() => GetDistanceToTarget() < Stats.AttackRange && !attackTimer.IsRunning));
@@ -38,7 +41,7 @@ namespace Game  {
             Any(stunnedState, new FuncPredicate(() => wasStunned));
             Any(deathState, new FuncPredicate(() => hasDied));
 
-            stateMachine.SetState(wanderState);
+            stateMachine.SetState(spawnState);
         }
 
         public override void Attack()

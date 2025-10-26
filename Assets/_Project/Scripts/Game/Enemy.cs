@@ -17,7 +17,8 @@ namespace Game {
         [Header("Debug")]
         [SerializeField] private TMP_Text stateViewer;
         [SerializeField] private bool doDebug = false;
-        protected GameObject LastDamageSource { get; set; }
+        protected DamageSource LastDamageSource { get; set; }
+        public bool spawned = false;
 
         protected float TimeBetweenAttacks => Stats.AttackCooldown;
         protected int AttackDamage => Stats.Attack;
@@ -35,14 +36,16 @@ namespace Game {
 
         void Start()
         {
+            stateMachine = new StateMachine();
+            if (Collider is CircleCollider2D circle) coliderRadius = circle.radius;
+            DungeonController.Instance.OnEnemySpawn(this);
+        }
+        
+        public override void Init() {
+            base.Init();
             attackTimer = new CountdownTimer(TimeBetweenAttacks);
             attackTimer.OnTimerStop += () => attackTimer.Reset(TimeBetweenAttacks);
-            stateMachine = new StateMachine();
-
-            if (Collider is CircleCollider2D circle) coliderRadius = circle.radius;
-
             InitStates();
-            DungeonController.Instance.OnEnemySpawn(this);
         }
         
         public void NoAI() { noAI = true; }
@@ -122,8 +125,8 @@ namespace Game {
             return !Physics2D.OverlapCircle(target, coliderRadius, LayerMask.GetMask("Wall"));
         }
 
-        new void Update()
-        {
+        new void Update() {
+            if (!init) return;
             base.Update();
 
             if (!GameManager.Instance.Paused)
@@ -153,6 +156,7 @@ namespace Game {
 
         void FixedUpdate()
         {
+            if (!init) return;
             if(GameManager.Instance.Paused) return;
             if(!noAI) stateMachine.FixedUpdate();
             FacingDirection = MovementDirection;
@@ -161,7 +165,7 @@ namespace Game {
         protected override void OnDeath()
         {
             GameManager.Instance.TrackEntity(entityData, new() { timesKilled = 1 });
-            DungeonController.Instance.OnEnemyDeath(this);
+            DungeonController.Instance.OnEnemyDeath(this, LastDamageSource);
 
             if(deathSound.clip) SoundManager.Instance.CreateSound().WithSoundData(deathSound).Play();
             
@@ -177,17 +181,17 @@ namespace Game {
         protected override void OnDamage(int damage, DamageSource dmgSource, bool ignoreKnockback = false)
         {
             base.OnDamage(damage, dmgSource, ignoreKnockback);
-            DungeonController.Instance.OnEnemyHit(this);
+            DungeonController.Instance.OnEnemyHit(this, LastDamageSource);
 
             if(hitSound.clip) SoundManager.Instance.CreateSound().WithSoundData(hitSound).Play();
 
-            LastDamageSource = dmgSource.source ? dmgSource.source : null;
+            LastDamageSource = dmgSource;
             if (!ignoreKnockback)
             {
                 Vector2 knockbackDirection;
-                if (LastDamageSource)
+                if (LastDamageSource.source)
                 {
-                    knockbackDirection = (transform.position - LastDamageSource.transform.position).normalized * 2f;
+                    knockbackDirection = (transform.position - LastDamageSource.source.transform.position).normalized * 2f;
                     ApplyForce(knockbackDirection * Stats.Knockback);
                     wasStunned = true;
                 }

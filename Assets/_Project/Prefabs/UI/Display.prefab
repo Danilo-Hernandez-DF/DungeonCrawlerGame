@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3328497817944104541}
   - component: {fileID: 3402389117194200735}
   m_Layer: 5
-  m_Name: DisplayTemp
-  m_TagString: Untagged
+  m_Name: Display
+  m_TagString: Display
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

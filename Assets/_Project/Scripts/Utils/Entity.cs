@@ -12,7 +12,7 @@ namespace UtilsModule {
         public Health health;
         protected Rigidbody2D Rb {get; private set;}
         protected Collider2D Collider {get; private set;}
-        public Stats Stats { get; private set; }
+        public Stats Stats {get; private set;}
         public Status Status {get; private set;}
         public Vector2 FacingDirection {get; protected set;}
         public GameObject Renderer;
@@ -23,8 +23,9 @@ namespace UtilsModule {
         public float zPos {get; protected set;}
         public bool Grounded => zPos == 0;
         Material defaultMaterial;
+        protected bool init;
 
-        protected void Init()
+        public virtual void Init()
         {
             if (entityData) Stats = new Stats(new StatsMediator(), baseStats);
             Status = new Status(this);
@@ -39,13 +40,11 @@ namespace UtilsModule {
             anim = GetComponent<Animator>();
             health?.Init(Stats.Health);
             FacingDirection = Vector2.right;
-        }
-
-        protected virtual void Awake() {
-            Init();
+            init = true;
         }
 
         public void Update() {
+            if (!init) return;
             if(isTileEntity) return;
             Stats.Mediator.Update(Time.deltaTime);
             Status.Update(Time.deltaTime);
@@ -133,8 +132,8 @@ namespace UtilsModule {
     }
     
     public struct DamageSource {
-        public GameObject source;
-        public Entity entity => source.GetComponent<Entity>();
+        public readonly GameObject source;
+        public Entity entity => source?.GetComponent<Entity>();
         public StatusEffectData statusEffect;
         public Color color => statusEffect?.dmgColor ?? _color;
         private Color _color;

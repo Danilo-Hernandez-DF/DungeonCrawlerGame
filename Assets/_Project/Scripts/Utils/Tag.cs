@@ -1,5 +1,6 @@
 using System;
 using Localisation;
+using UnityEngine;
 
 namespace UtilsModule {
     [Serializable]
@@ -16,7 +17,12 @@ namespace UtilsModule {
         }
 
         public virtual bool Matches(Tag tag) {
-            return tag.data == data;
+            if (tag.data != data) return false;
+            if (tag.data.type != TagData.TagType.None) {
+                return Mathf.Approximately(tag.value, value);
+            }
+
+            return true;
         }
 
         public Tag SetValue(float value) {
@@ -26,6 +32,10 @@ namespace UtilsModule {
 
         public virtual float GetValue() {
             return value;
+        }
+
+        public Tag Copy() {
+            return new Tag(data, inherent, value);
         }
 
         public override string ToString() {

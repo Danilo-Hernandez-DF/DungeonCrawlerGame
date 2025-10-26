@@ -22,10 +22,10 @@ namespace Game {
             modifiers = new List<DungeonModifier>();
         }
 
-        public void StartFloor(DungeonData dungeonData)
+        public void StartFloor(DungeonData dungeonData, List<DungeonModifier> mods = null)
         {
             this.dungeonData = dungeonData;
-            modifiers = dungeonData.modifiers?.ToList() ?? new List<DungeonModifier>();
+            modifiers = mods ?? new List<DungeonModifier>();
             lootSettings = dungeonData.lootSettings;
             completionQuest = dungeonData.completionQuest;
             dungeonGenerator.Configure(dungeonData);
@@ -92,27 +92,29 @@ namespace Game {
             }
         }
 
-        public virtual void OnEnemyHit(Enemy enemy) {
+        public virtual void OnEnemyHit(Enemy enemy, DamageSource source) {
             foreach(DungeonModifier mod in modifiers) {
-                mod.OnEnemyHit(enemy);
+                mod.OnEnemyHit(enemy, source);
             }
         }
 
         public virtual void OnEnemySpawn(Enemy enemy) {
+            enemy.Init();
+            
             foreach(DungeonModifier mod in modifiers) {
                 mod.OnEnemySpawn(enemy);
             }
         }
 
-        public virtual void OnEnemyDeath(Enemy enemy) {
+        public virtual void OnEnemyDeath(Enemy enemy, DamageSource source) {
             foreach(DungeonModifier mod in modifiers) {
-                mod.OnEnemyDeath(enemy);
+                mod.OnEnemyDeath(enemy, source);
             }
         }
 
-        public virtual void OnPlayerHit() {
+        public virtual void OnPlayerHit(DamageSource source) {
             foreach(DungeonModifier mod in modifiers) {
-                mod.OnPlayerHit();
+                mod.OnPlayerHit(source);
             }
         }
 

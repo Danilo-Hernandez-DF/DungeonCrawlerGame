@@ -29,7 +29,7 @@ namespace UtilsModule {
             return inherentTags.Exists(x => x.data.nameKey == tag && x.value == value);
         }
     }
-
+    
     [Serializable]
     public struct TagDefault {
         public TagData data;

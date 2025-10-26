@@ -14,7 +14,6 @@ namespace Game {
         public string sceneName;
         public string dungeonName;
         public new string name => LocalisationSystem.GetLocalisedValue(dungeonName);
-        public Sprite sprite;
         public int difficultyLevel;
         public GOLootTable startRoomPrefab;
         public GOLootTable roomPrefabs;
@@ -22,9 +21,14 @@ namespace Game {
         public List<EntityData> spawnableEntities;
         public List<RoomRequirements> roomRequirements;
         public DungeonDataLootTable variants;
+        public List<DungeonModifier> modifiers;
         
         public TileBase GetTile() {
             return tilePrefabs.GetWeightedItem();
+        }
+        
+        public List<ItemData> GetItems() {
+            return variants.GetItems();
         }
     }
 }

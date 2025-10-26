@@ -12,6 +12,10 @@ namespace UtilsModule {
         public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
         [SerializeField] private List<WeightedItem> items;
         [SerializeField] private List<ItemLootTable> secondaryTables;
+        
+        public List<ItemLootTable> GetTables() {
+            return secondaryTables;
+        }
 
         public override Item GetWeightedItem(int lowerLimit = 0, uint upperLimit = int.MaxValue) {
             if(items?.Count == 0 && secondaryTables?.Count == 0) return GameManager.emptyItem.GetItem();
@@ -49,6 +53,11 @@ namespace UtilsModule {
             foreach(var item in items) {
                 allItems.Add(item.GetItem(1));
             }
+
+            foreach (var table in secondaryTables) {
+                allItems.AddRange(table.GetAllItems());
+            }
+            
             return allItems;
         }
     }

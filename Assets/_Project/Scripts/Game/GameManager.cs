@@ -32,6 +32,7 @@ namespace Game
         public EventSystem eventSystem;
         private ItemDatabase ItemDatabase;
         private EntityDatabase EntityDatabase;
+        private DungeonModifierDatabase DungeonModifierDatabase;
         private TagDatabase TagDatabase;
         private QuestDatabase QuestDatabase;
         private StatusEffectDatabase StatusEffectDatabase;
@@ -57,24 +58,24 @@ namespace Game
         //Methods
         //------------------------------------------------
 
-        public IEnumerator StartGame(DungeonType dungeonType)
+        public IEnumerator StartGame(DungeonType dungeonType, List<DungeonModifier> mods = null)
         {
             yield return null;
-            DungeonController.Instance.StartFloor(dungeonType.variants.GetWeightedItem());
+            DungeonController.Instance.StartFloor(dungeonType.variants.GetWeightedItem(), mods);
         }
 
-        public IEnumerator FreshGame(DungeonType dungeonType)
+        public IEnumerator FreshGame(DungeonType dungeonType, List<DungeonModifier> mods = null)
         {
             yield return null;
             currentLevel = 0;
-            StartCoroutine(StartGame(dungeonType));
+            StartCoroutine(StartGame(dungeonType, mods));
         }
 
-        public void LoadScene(string sceneName,DungeonType dungeonType, bool resetLevel)
+        public void LoadScene(string sceneName,DungeonType dungeonType, bool resetLevel, List<DungeonModifier> mods = null)
         {
             SceneManager.LoadScene(sceneName);
-            if (resetLevel) StartCoroutine(FreshGame(dungeonType));
-            else StartCoroutine(StartGame(dungeonType));
+            if (resetLevel) StartCoroutine(FreshGame(dungeonType, mods));
+            else StartCoroutine(StartGame(dungeonType, mods));
         }
 
         public static ItemData GetItem(string name)
@@ -90,6 +91,11 @@ namespace Game
         public static EntityData GetEntity(string name)
         {
             return Instance.EntityDatabase.GetData(name);
+        }
+        
+        public static DungeonModifier GetDungeonModifier(string name)
+        {
+            return Instance.DungeonModifierDatabase.GetData(name);
         }
 
         public static TagData GetTag(string name)
@@ -110,6 +116,41 @@ namespace Game
         public static ItemLootTable GetItemLootTable(string name)
         {
             return Instance.ItemLootTableDatabase.GetData(name);
+        }
+
+        public static DungeonModifier[] GetDungeonModifiers()
+        {
+            return Instance.DungeonModifierDatabase.GetAll();
+        }
+        
+        public static TagData[] GetTags()
+        {
+            return Instance.TagDatabase.GetAll();
+        }
+        
+        public static Quest[] GetQuests()
+        {
+            return Instance.QuestDatabase.GetAll();
+        }
+        
+        public static StatusEffectData[] GetStatusEffects()
+        {
+            return Instance.StatusEffectDatabase.GetAll();
+        }
+        
+        public static ItemLootTable[] GetItemLootTables()
+        {
+            return Instance.ItemLootTableDatabase.GetAll();
+        }
+        
+        public static EntityData[] GetEntities()
+        {
+            return Instance.EntityDatabase.GetAll();
+        }
+        
+        public static ItemData[] GetItems()
+        {
+            return Instance.ItemDatabase.GetAll();
         }
 
         protected override void Awake()
@@ -156,6 +197,13 @@ namespace Game
             foreach (ItemLootTable data in Resources.LoadAll<ItemLootTable>("LootTables/ItemTables"))
             {
                 ItemLootTableDatabase.AddItem(data);
+            }
+            
+            DungeonModifierDatabase = new DungeonModifierDatabase();
+
+            foreach (DungeonModifier data in Resources.LoadAll<DungeonModifier>("DungeonModifiers"))
+            {
+                DungeonModifierDatabase.AddItem(data);
             }
         }
 

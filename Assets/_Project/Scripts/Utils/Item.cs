@@ -16,27 +16,39 @@ namespace UtilsModule {
             return data.rarity;
         }
 
-        public Item(ItemData data, int count = 1, List<Tag> tags = null) {
+        public Item(ItemData data, int count = 1, List<Tag> addTags = null) {
             this.data = data;
             this.count = count;
             
-            tags ??= new List<Tag>();
             if (!data) {
+                this.data = GameManager.emptyItem;
+                this.count = 0;
+                tags = new List<Tag>();
                 return;
             }
+            
+            tags = new List<Tag>();
+            
             foreach(var tag in data.inherentTags) {
                 if(tag.data.type != TagData.TagType.None) {
-                    if (tags.Exists(x => x.data == tag.data)) {
-                        tags.Find(x => x.data == tag.data).inherent = true;
-                        continue;
-                    }
                     tags.Add(tag.data.GetTag(tag.value, true));
-                    continue;
                 }
-                
-                tags.Add(tag.data.GetTag(0, true));
+                else {
+                    tags.Add(tag.data.GetTag(0, true));
+                }
             }
-            this.tags = tags;
+            
+            addTags ??= new List<Tag>();
+            foreach(var tag in addTags) {
+                if (!tags.Exists(x => x.data == tag.data)) {
+                    tags.Add(tag);
+                } else {
+                    var found = tags.Find(x => x.data == tag.data);
+                    if (found.data.type != TagData.TagType.None) {
+                        found.value = tag.value;
+                    }
+                }
+            }
         }
 
         public bool HasTag(TagData tag) {
@@ -78,9 +90,12 @@ namespace UtilsModule {
         }
 
         public Item Copy() {
-            var copy = new Item(data, count) {
-                tags = tags == null ? new List<Tag>() : new List<Tag>(tags)
-            };
+            var copyTags = new List<Tag>();
+            foreach(var tag in tags) {
+                copyTags.Add(tag.Copy());
+            }
+            
+            var copy = new Item(data, count, copyTags);
 
             return copy;
         }

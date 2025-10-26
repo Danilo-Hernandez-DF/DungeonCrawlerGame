@@ -15,8 +15,7 @@ namespace UtilsModule {
         [Header("Loot Generation")]
         [SerializeField] protected bool generateOnAwake = true;
 
-        protected override void Awake() {
-            base.Awake();
+        protected void Awake() {
             Inventory = new Inventory(inventorySize, inventoryChannel);
 
             if(targetEntity) {

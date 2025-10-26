@@ -9,7 +9,7 @@ namespace UtilsModule {
         
         [SerializeField] protected Entity targetEntity;
 
-        protected override void Awake() {
+        protected void Awake() {
             Inventory = new FilteredInventory(slotFilters, inventoryChannel);
             if(targetEntity) {
                 Inventory.targetEntity = targetEntity;

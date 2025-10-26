@@ -15,6 +15,7 @@ MonoBehaviour:
   nameKey: crystal_vitality
   description: 
   maxCount: 15
+  rarity: 1
   sprite: {fileID: 21300000, guid: 2f7c85969bb7c194c89dd45bbdacdd71, type: 3}
   inherentTags:
   - data: {fileID: 11400000, guid: 0a33ce0a74e808c4881abe1d19c37947, type: 2}

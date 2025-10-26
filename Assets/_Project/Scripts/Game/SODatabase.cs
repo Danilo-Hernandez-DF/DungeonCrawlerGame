@@ -12,6 +12,10 @@ namespace Game {
         public virtual T GetData(SerializableGuid id) {
             return default;
         }
+        
+        public T[] GetAll() {
+            return Items.ToArray();
+        }
 
         public void AddItem(T item) {
             Items.Add(item);

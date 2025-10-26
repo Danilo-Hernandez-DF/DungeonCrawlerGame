@@ -9,17 +9,28 @@ namespace Game {
     [CreateAssetMenu(fileName = "DungeonData", menuName = "Data/Dungeon Data")]
     public class DungeonData : ScriptableObject {
         public string dungeonName => LocalisationSystem.GetLocalisedValue(nameKey);
-        public string sceneName;
-        public Sprite icon;
         public string nameKey;
         public DungeonType dungeonType;
-        public DungeonModifier[] modifiers;
+        //public DungeonModifier[] modifiers;
         public int roomCount;
         public Quest completionQuest;
         //public Quest[] additionalQuests;
         public List<AdditionalRoomRequirements> roomsPerLevel;
         public LootSetting[] lootSettings; 
         public DungeonData nextLevel;
+        
+        public List<ItemData> AvailableItems() {
+            List<ItemData> items = new List<ItemData>();
+            
+            foreach(var setting in lootSettings) {
+                foreach (var item in setting.lootTable.GetAllItems()) {
+                    if(items.Exists(x => x == item.data)) continue;
+                    items.Add(item.data);
+                }
+            }
+            
+            return items;
+        }
 
         public List<RoomRequirements> RoomRequirements() {
             List<RoomRequirements> requirements = new List<RoomRequirements>();
@@ -41,15 +52,13 @@ namespace Game {
             int lootLevel = 0;
             int count = 0;
             
-            List<Item> includedItems = new List<Item>();
+            List<ItemData> includedItems = new List<ItemData>();
             
-            foreach (var setting in lootSettings) {
-                foreach (var item in setting.lootTable.GetAllItems()) {
-                    if(includedItems.Exists(x => x.Matches(item))) continue;
-                    includedItems.Add(item);
-                    lootLevel += item.GetRarity();
-                    count++;
-                }
+            foreach (var item in AvailableItems()) {
+                if(includedItems.Contains(item)) continue;
+                includedItems.Add(item);
+                lootLevel += item.rarity;
+                count++;
             }
 
             if (count == 0) return 0;

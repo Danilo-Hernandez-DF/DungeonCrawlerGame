@@ -77,7 +77,7 @@ namespace Game
                     if (args.Length > 1) int.TryParse(args[1], out slot);
                     if (args.Length > 2) int.TryParse(args[2], out cloneCount);
 
-                    Item cloned = inventoryHolder.Inventory.GetItem(slot);
+                    Item cloned = inventoryHolder.Inventory.GetItem(slot).Copy();
 
                     inventoryHolder.Inventory.TryAdd(cloned, cloneCount);
                     break;
@@ -159,6 +159,9 @@ namespace Game
                 }
             }
             spawnedObject = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+
+            var enemy = spawnedObject.GetComponent<Enemy>();
+            if(enemy) DungeonController.Instance.OnEnemySpawn(spawnedObject.GetComponent<Enemy>());
         }
 
         public void OnInteract()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970d9db638e4b004995d5550b7e41344, type: 3}
   m_Name: ClayTiles
   m_EditorClassIdentifier: 
-  weight: 0
+  weight: 10
   items:
   - Item: {fileID: 11400000, guid: 895dc947940369646a64653f23b13101, type: 2}
     Weight: 20

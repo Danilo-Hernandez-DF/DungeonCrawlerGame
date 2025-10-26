@@ -7,7 +7,7 @@ namespace Game {
         [SerializeField] int maxHealth = 100;
         [SerializeField] FloatEventChannel healthChannel;
 
-        int currentHealth;
+        public int currentHealth { get; private set; }
 
         public bool IsDead => currentHealth <= 0;
 
@@ -38,6 +38,18 @@ namespace Game {
         public void Init(int health) {
             maxHealth = health;
             currentHealth = health;
+            PublishHealthPercentage();
+        }
+        
+        public void AddHealth(int health) {
+            maxHealth += health;
+            currentHealth += health;
+            PublishHealthPercentage();
+        }
+        
+        public void RemoveHealth(int health) {
+            maxHealth -= health;
+            if(currentHealth > maxHealth) currentHealth = maxHealth;
             PublishHealthPercentage();
         }
 

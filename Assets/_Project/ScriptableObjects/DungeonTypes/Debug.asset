@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb33eeebdd6e894ea7fd996032aed2e, type: 3}
   m_Name: Debug
   m_EditorClassIdentifier: 
+  icon: {fileID: 219490635, guid: 7b505071f2d5f74469d127d21333cc45, type: 3}
+  sceneName: DebugScene
   dungeonName: debug
-  sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   difficultyLevel: 0
+  startRoomPrefab: {fileID: 11400000, guid: e3c1ed20235679e48844765d544283e1, type: 2}
+  roomPrefabs: {fileID: 11400000, guid: 8e2c641f6fab4e64285b51011d6360d9, type: 2}
+  tilePrefabs: {fileID: 11400000, guid: d85b6035215d1eb418fa3dbbb5b7aa19, type: 2}
+  spawnableEntities: []
+  roomRequirements: []
+  variants: {fileID: 11400000, guid: 8743b44fcf10738448fd9ef48140362b, type: 2}
