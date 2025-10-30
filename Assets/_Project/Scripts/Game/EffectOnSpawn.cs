@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Localisation;
 using UnityEngine;
 using UtilsModule;
 using Random = UnityEngine.Random;
@@ -12,12 +13,61 @@ namespace Game
         [SerializeField] private ModifierEffect effect;
         [SerializeField] private StatusEffectData status;
         [SerializeField] private float chance;
-        [SerializeField] private List<EntityData> eligibleEnemies;
-        [SerializeField] private List<TagData> eligibleTags;
+        [SerializeField] private EntityData eligibleEnemy;
+        [SerializeField] private TagData eligibleTag;
+        [SerializeField] private Color specialTextColor;
+        private readonly string noEnemyKey = "no_enemy";
+        
+        
+        public override string Description() {
+            var description = LocalisationSystem.GetLocalisedValue(descriptionKey);
+            
+            var enemyStr = LocalisationSystem.GetLocalisedValue(noEnemyKey);// an enemy // un enemigo
+            if(eligibleEnemy) {
+                enemyStr = eligibleEnemy.nameKey;
+            }
+            else if(eligibleTag) {
+                enemyStr = enemyStr.Replace("{}", eligibleTag.name);
+                enemyStr = enemyStr.TrimEnd(' ');
+            }
+            else {
+                enemyStr = enemyStr.Replace("{}", "");
+                enemyStr = enemyStr.TrimEnd(' ');
+            }
+            //{} enemy
+            //un enemigo {}
+
+            string hexColor = ColorUtility.ToHtmlStringRGBA(specialTextColor);
+            var text0 = $"<color=#{hexColor}>{enemyStr}</color>";
+            
+            var statusStr = "";
+            if(status) {
+                statusStr = status.name;
+            }
+            else {
+                statusStr = effect.ToString();
+            }
+            
+            var text1 = $"<color=#{hexColor}>{statusStr}</color>";
+            
+            description = description.Replace("{0}", text0);
+            description = description.Replace("{1}", text1);
+            if (chance < 100) {
+                description = description.Replace("{2}", $"<color=#{hexColor}>{chance}%</color>");
+                description = description.Replace("~", "");
+            }
+            else {
+                description = description.Split("~")[0];
+            }
+            //Whenever {0} spawns, it gains {1}~, {2} of the times.
+            //Cuando {0} aparece, gana {1}~, el {2} de las veces.
+            
+            return description;
+        }
 
         public override void OnEnemySpawn(Enemy enemy) {
-            var matchesEnemy = eligibleEnemies?.Count == 0 || (eligibleEnemies?.Exists(x => x == enemy.entityData) ?? true);
-            var matchesTag = (eligibleTags?.Exists(x => enemy.entityData.tags.Exists(y => y.data == x)) ?? false);
+            var matchesEnemy = eligibleEnemy == enemy.entityData;
+            var matchesTag = enemy.entityData.tags.Exists(x => x.data == eligibleTag);
 
             if (!matchesEnemy && !matchesTag) return;
             if (Random.Range(0f, 100f) > chance) return;

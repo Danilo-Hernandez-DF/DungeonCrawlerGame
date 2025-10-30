@@ -337,6 +337,9 @@ MonoBehaviour:
   itemTab: {fileID: 1809405952277224170}
   modifierTab: {fileID: 366200306374429960}
   activeModifiers: []
+  excludedTags:
+  - {fileID: 11400000, guid: 432826399ccf78c4c8131039900689b1, type: 2}
+  - {fileID: 11400000, guid: 1938c5ee7542fff40bc3148a5d6a093e, type: 2}
 --- !u!1 &5888608354713044854
 GameObject:
   m_ObjectHideFlags: 0

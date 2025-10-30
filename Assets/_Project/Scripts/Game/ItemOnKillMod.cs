@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Localisation;
 using UnityEngine;
 using UtilsModule;
 
@@ -8,35 +9,90 @@ namespace Game {
     public class ItemOnKillMod : DungeonModifier {
         [SerializeField] private Item item;
         [SerializeField] private float chance;
-        [SerializeField] private int minCount;
-        [SerializeField] private int maxCount;
-        [SerializeField] private List<EntityData> eligibleEnemies;
-        [SerializeField] private List<TagData> eligibleTags;
+        [SerializeField] private int count;
+        [SerializeField] private EntityData eligibleEnemy;
+        [SerializeField] private TagData eligibleTag;
         
-        [SerializeField] private List<StatusEffectData> eligibleStatusSource;
-        [SerializeField] private List<EntityData> eligibleEntitySource;
+        [SerializeField] private StatusEffectData eligibleStatusSource;
+        [SerializeField] private EntityData eligibleEntitySource;
         
-        public override void OnEnemyDeath(Enemy enemy, DamageSource source) {
-            if (eligibleEntitySource.Count != 0) {
-                if (!eligibleEntitySource.Exists(x => x == source.entity?.entityData)) return;
+        [SerializeField] private Color specialTextColor;
+        private readonly string noEnemyKey = "no_enemy";
+        private readonly string anything = "anything";
+
+        public override string Description() {
+            var descriptionKey = "description_item_on_kill";
+            var description = LocalisationSystem.GetLocalisedValue(descriptionKey);
+            
+            var enemyStr = LocalisationSystem.GetLocalisedValue(noEnemyKey);
+            if(eligibleEnemy) {
+                enemyStr = eligibleEnemy.nameKey;
+            }
+            else if(eligibleTag) {
+                enemyStr = enemyStr.Replace("{}", eligibleTag.name);
+                enemyStr = enemyStr.TrimEnd(' ');
+            }
+            else {
+                enemyStr = enemyStr.Replace("{}", "");
+                enemyStr = enemyStr.TrimEnd(' ');
+            }
+            //{} enemy
+            //un enemigo {}
+
+            string hexColor = ColorUtility.ToHtmlStringRGBA(specialTextColor);
+            var text0 = $"<color=#{hexColor}>{enemyStr}</color>";
+            
+            string sourceStr = "";
+            if(eligibleEntitySource) {
+                sourceStr = eligibleEntitySource.nameKey;
+            }
+            else if(eligibleStatusSource) {
+                sourceStr = eligibleStatusSource.nameKey;
+            }
+            else {
+                sourceStr = LocalisationSystem.GetLocalisedValue(anything);
+            }
+            var text1 = $"<color=#{hexColor}>{sourceStr}</color>";
+            
+            var text2 = $"<color=#{hexColor}>{item.data.name}</color>";
+            
+            description = description.Replace("{0}", text0);
+            description = description.Replace("{1}", text1);
+            description = description.Replace("{2}", text2);
+            description = description.Replace("{3}", $"<color=#{hexColor}>{count}</color>");
+            
+            if (chance < 100) {
+                description = description.Replace("{4}", $"<color=#{hexColor}>{chance}%</color>");
+                description = description.Replace("~", "");
+            }
+            else {
+                description = description.Split("~")[0];
             }
             
-            if (eligibleStatusSource.Count != 0) {
-                if (!eligibleStatusSource.Exists(x => x == source.statusEffect)) return;
-            }
+            //Whenever {0} is killed by {1}, the player obtains {2} x{3}~, {4}% of the time.
+            //Cuando {0} es derrotado por {1}, el jugador obtiene {2} x{3}~, {4}% de las veces.
+            
+            return description;
+        }
+        
+        public override List<ItemData> GetItems() {
+            return new List<ItemData> { item.data };
+        }
 
-            if (eligibleEnemies.Count != 0) {
-                if (!eligibleEnemies.Exists(x => x == enemy.entityData)) return;
-            }
+        public override void OnEnemyDeath(Enemy enemy, DamageSource source) {
+            var matchesSource = eligibleEntitySource == source.entity?.entityData;
+            var matchesStatusSource = eligibleStatusSource == source.statusEffect;
+            
+            if (!matchesSource && !matchesStatusSource) return;
 
-            if (eligibleTags.Count != 0) {
-                if (!eligibleTags.Exists(x => enemy.entityData.tags.Exists(y => y.data == x))) return;
-            }
+            var matchesEnemy = eligibleEnemy == enemy.entityData;
+            var matchesTag = enemy.entityData.tags.Exists(x => x.data == eligibleTag);
+
+            if (!matchesEnemy && !matchesTag) return;
             
             if (Random.Range(0f, 100f) > chance) return;
             
-            PlayerDetector.GetPlayerComponent().GiveItem(new Item(item.data, addTags: item.tags),
-                Random.Range(minCount, maxCount + 1));
+            PlayerDetector.GetPlayerComponent().GiveItem(new Item(item.data, addTags: item.tags), count);
         }
     }
 }

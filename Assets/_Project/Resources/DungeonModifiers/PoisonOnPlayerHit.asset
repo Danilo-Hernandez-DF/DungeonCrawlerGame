@@ -14,11 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.PlayerEffectOnHit
   icon: {fileID: -328371455, guid: 9655a9c65df01eb4685d49a2e001ade4, type: 3}
   nameKey: mod_poison_on_player_hit
-  eligibleStatusSource: []
-  eligibleEntitySource: []
+  descriptionKey: placeholder
+  eligibleStatusSource: {fileID: 0}
+  eligibleEntitySource: {fileID: 0}
+  eligibleSourceTag: {fileID: 0}
   statusEffect: {fileID: 11400000, guid: b03e25189cbcabd4b9479675b32e1990, type: 2}
   modifierEffect:
     operatorType: 0
     type: 0
     value: 0
     duration: 0
+  chance: 50
+  specialTextColor: {r: 1, g: 0.7764706, b: 0.1764706, a: 1}

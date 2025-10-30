@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Localisation;
 using ProcGen;
 using UnityEngine;
 using UtilsModule;
@@ -6,6 +8,17 @@ namespace Game {
     public class DungeonModifier : ScriptableObject {
         [SerializeField] public Sprite icon;
         [SerializeField] public string nameKey;
+        [SerializeField] public string descriptionKey;
+
+        public virtual string Description() {
+            return LocalisationSystem.GetLocalisedValue(descriptionKey);
+        } 
+        public virtual List<ItemData> GetItems() {
+            return new List<ItemData>();
+        } 
+        public virtual List<EntityData> GetEnemies() {
+            return new List<EntityData>();
+        } 
         public string Name => nameKey;
         public virtual void OnRoomGeneration(RoomController room) { }
         

@@ -1,5 +1,6 @@
 using System;
 using Game;
+using Localisation;
 
 namespace UtilsModule {
     [Serializable]
@@ -24,7 +25,11 @@ namespace UtilsModule {
         }
 
         public override string ToString() {
-            return $"{operatorType}, {type}, val:{value}, dur:{duration}";
+            var oper = "";
+            if (operatorType == OperatorType.Add) oper = "";
+            else oper = "%";
+            
+            return $"{LocalisationSystem.GetLocalisedValue(type.ToString())}: +{value}{oper}";
         }
     }
 }

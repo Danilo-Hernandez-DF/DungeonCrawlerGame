@@ -21,5 +21,4 @@ MonoBehaviour:
     countMax: 6
     additionalTags: []
   secondaryTables:
-  - {fileID: 11400000, guid: d9d51ec6d5694c5469f9630ab5a8a321, type: 2}
   - {fileID: 11400000, guid: 3a5a17de8eae50245b94c3388cadf283, type: 2}

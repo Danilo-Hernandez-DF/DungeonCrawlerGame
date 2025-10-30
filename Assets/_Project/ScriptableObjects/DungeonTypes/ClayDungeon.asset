@@ -32,5 +32,4 @@ MonoBehaviour:
     type: 5
     count: 2
   variants: {fileID: 11400000, guid: 1556fc9ac71bad84da626d21ecc847cc, type: 2}
-  modifiers:
-  - {fileID: 11400000, guid: c2e6348812277b745a3876ad6d57c633, type: 2}
+  modifiers: []

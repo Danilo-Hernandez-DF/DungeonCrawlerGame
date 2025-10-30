@@ -1,29 +1,82 @@
 using System;
 using System.Collections.Generic;
+using Localisation;
 using UnityEngine;
 using UtilsModule;
+using Random = UnityEngine.Random;
 
 namespace Game
 {
     [CreateAssetMenu(fileName = "DungeonModifier", menuName = "Dungeon Modifiers/PlayerEffectOnHit")]
     public class PlayerEffectOnHit: DungeonModifier
     {
-        [SerializeField] private List<StatusEffectData> eligibleStatusSource;
-        [SerializeField] private List<EntityData> eligibleEntitySource;
+        [SerializeField] private StatusEffectData eligibleStatusSource;
+        [SerializeField] private EntityData eligibleEntitySource;
+        [SerializeField] private TagData eligibleSourceTag;
         
         [SerializeField] private StatusEffectData statusEffect;
         [SerializeField] private ModifierEffect modifierEffect;
+        [SerializeField] private float chance;
         
-        public override void OnPlayerHit(DamageSource source) {
-            if (eligibleEntitySource.Count != 0) {
-                if (!eligibleEntitySource.Exists(x => x == source.entity?.entityData)) return;
+        [SerializeField] private Color specialTextColor;
+        private readonly string noEnemyKey = "no_enemy";
+        private readonly string anything = "anything";
+        
+        public override string Description() {
+            var descriptionKey = "description_player_effect_on_hit";//add
+            var description = LocalisationSystem.GetLocalisedValue(descriptionKey);
+            
+            var enemyStr = LocalisationSystem.GetLocalisedValue(noEnemyKey);// an enemy // un enemigo
+            if(eligibleEntitySource) {
+                enemyStr = eligibleEntitySource.nameKey;
+            }
+            else if(eligibleSourceTag) {
+                enemyStr = enemyStr.Replace("{}", eligibleSourceTag.name);
+                enemyStr = enemyStr.TrimEnd(' ');
+            }
+            else if (eligibleStatusSource) {
+                enemyStr = eligibleStatusSource.name;
+            } else {
+                enemyStr = enemyStr.Replace("{}", "");
+                enemyStr = enemyStr.TrimEnd(' ');
+            }
+            //{} enemy
+            //un enemigo {}
+
+            string hexColor = ColorUtility.ToHtmlStringRGBA(specialTextColor);
+            var text0 = $"<color=#{hexColor}>{enemyStr}</color>";
+            
+            var statusStr = "";
+            if(statusEffect) {
+                statusStr = statusEffect.name;
+            }
+            else {
+                statusStr = modifierEffect.ToString();
             }
             
-            if (eligibleStatusSource.Count != 0) {
-                if (!eligibleStatusSource.Exists(x => x == source.statusEffect)) return;
-            } else if (source.statusEffect) {
-                return;
+            var text1 = $"<color=#{hexColor}>{statusStr}</color>";
+            
+            description = description.Replace("{0}", text0);
+            description = description.Replace("{1}", text1);
+            if (chance < 100) {
+                description = description.Replace("{2}", $"<color=#{hexColor}>{chance}%</color>");
+                description = description.Replace("~", "");
             }
+            else {
+                description = description.Split("~")[0];
+            }
+            //Whenever Player is damaged by {0}, Player gains {1}~, {2} of the times.
+            //Cuando Jugador es dañado por {0}, Jugador gana {1}~, el {2} de las veces.
+            
+            return description;
+        }
+        
+        public override void OnPlayerHit(DamageSource source) {
+            if (eligibleEntitySource && eligibleEntitySource != source.entity?.entityData) return;
+            if (eligibleStatusSource && eligibleStatusSource != source.statusEffect) return;
+            if (eligibleSourceTag && !source.entity.entityData.tags.Exists(x => x.data == eligibleSourceTag)) return;
+            
+            if (Random.Range(0f, 100f) > chance) return;
             
             Visit(PlayerDetector.GetPlayerComponent());
         }

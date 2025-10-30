@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UtilsModule;
 
 namespace Game
 {
@@ -15,6 +18,10 @@ namespace Game
         private bool selected = false;
         private bool locked = false;
         Image bg;
+
+        [SerializeField] private GameObject infoPanel;
+        [SerializeField] private TextMeshProUGUI infoText;
+        [SerializeField] private TextMeshProUGUI nameText;
         
         public void Lock() {
             locked = true;
@@ -45,14 +52,20 @@ namespace Game
             
             if(!selected) bg.color = Color.white;
             else bg.color = Color.lightBlue;
+            
+            ui.UpdateItems();
         }
         
         public void OnSelect(BaseEventData eventData) {
             GetComponent<Animator>().SetBool(Selected, true);
+            infoText.text = dungeonModifier.Description();
+            nameText.text = $"-----{dungeonModifier.name}-----";
+            infoPanel.SetActive(true);
         }
     
         public void OnDeselect(BaseEventData eventData) {
             GetComponent<Animator>().SetBool(Selected, false);
+            infoPanel.SetActive(false);
         }
     }
 }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.EffectOnSpawn
   icon: {fileID: 21300000, guid: 5806229b9ac700a4ca5f97a0af495e68, type: 3}
   nameKey: mod_+20%_hp
+  descriptionKey: description_effect_on_spawn
   effect:
     operatorType: 1
     type: 2
@@ -21,5 +22,6 @@ MonoBehaviour:
     duration: 0
   status: {fileID: 0}
   chance: 100
-  eligibleEnemies: []
-  eligibleTags: []
+  eligibleEnemy: {fileID: 0}
+  eligibleTag: {fileID: 0}
+  specialTextColor: {r: 1, g: 0.77780557, b: 0.1745283, a: 1}
