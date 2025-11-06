@@ -364,6 +364,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -385,6 +387,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1231631307
   m_SortingLayer: -1
   m_SortingOrder: 0
@@ -1886,7 +1889,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0.23921569}
+  m_BackGroundColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1915,7 +1918,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 2056
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 9f711fa6a1748d841966af1c96d5acf4, type: 2}
   m_TargetDisplay: 0
@@ -1939,7 +1942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -1963,7 +1966,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -1971,6 +1973,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1612567913999332770
 GameObject:
   m_ObjectHideFlags: 0
@@ -2144,6 +2147,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2165,6 +2170,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2131658815
   m_SortingLayer: 1
   m_SortingOrder: 0
@@ -2967,6 +2973,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2988,6 +2996,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
@@ -3312,7 +3321,6 @@ MonoBehaviour:
   Renderer: {fileID: 3557919028972191143}
   shadow: {fileID: 114954459626825734}
   defaultZPos: 0
-  animationSpeed: 1
   vCam: {fileID: 6395942837014617038}
   smoothTime: 0.2
   data:
@@ -3844,6 +3852,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3865,6 +3875,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -273874925
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -4372,7 +4383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.50980395}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5383,7 +5394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 44048534322408842}
   - component: {fileID: 6986855605057835454}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: MapMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5425,6 +5436,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5446,6 +5459,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1231631307
   m_SortingLayer: -1
   m_SortingOrder: 1
@@ -6026,7 +6040,6 @@ MonoBehaviour:
   Renderer: {fileID: 0}
   shadow: {fileID: 0}
   defaultZPos: 0
-  animationSpeed: 1
   inventorySize: 42
   inventoryChannel: {fileID: 11400000, guid: aee78890e2549ca4eac0c399445d1bee, type: 2}
   lootUIChannel: {fileID: 11400000, guid: 331f92e68473c874db56d7e83cd863b7, type: 2}
@@ -6365,10 +6378,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.20781252
+    x: 0.20729168
     y: 0
-    width: 0.34814817
-    height: 0.34814814
+    width: 0.3490741
+    height: 0.34907407
   near clip plane: 0.1
   far clip plane: 5000
   field of view: 40
@@ -6425,7 +6438,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -6433,6 +6445,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!114 &8268582150417716536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6745,6 +6758,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6766,6 +6781,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -6987,7 +7003,6 @@ MonoBehaviour:
   Renderer: {fileID: 0}
   shadow: {fileID: 0}
   defaultZPos: 0
-  animationSpeed: 1
   inventorySize: 40
   inventoryChannel: {fileID: 11400000, guid: 894b88c4038223249873c391075b9077, type: 2}
   lootUIChannel: {fileID: 0}
@@ -7020,7 +7035,6 @@ MonoBehaviour:
   Renderer: {fileID: 0}
   shadow: {fileID: 0}
   defaultZPos: 0
-  animationSpeed: 1
   slotFilters:
   - {fileID: 11400000, guid: d57c5dac4d092c245b1138df161baab7, type: 2}
   - {fileID: 11400000, guid: 36cf68a1799bde84aa30ec7b623283f9, type: 2}
@@ -7315,11 +7329,16 @@ MonoBehaviour:
   handledUI: {fileID: 171008836221402218}
   startElement: {fileID: 4892966152693474206}
   children: []
-  objectiveButtons:
-  - {fileID: 7351845002691058232}
-  - {fileID: 2084093030576386785}
-  - {fileID: 1404297587242319826}
-  startChannel: {fileID: 11400000, guid: 09d60bc5c5e5793418c4d796e0adfa4b, type: 2}
+  buttonHolder: {fileID: 0}
+  selectedElementText: {fileID: 0}
+  dungeonButtonPrefab: {fileID: 0}
+  modifierButtonPrefab: {fileID: 0}
+  displaySlotPrefab: {fileID: 0}
+  monsterTab: {fileID: 0}
+  itemTab: {fileID: 0}
+  modifierTab: {fileID: 0}
+  activeModifiers: []
+  excludedTags: []
 --- !u!114 &7074049198692663660
 MonoBehaviour:
   m_ObjectHideFlags: 0

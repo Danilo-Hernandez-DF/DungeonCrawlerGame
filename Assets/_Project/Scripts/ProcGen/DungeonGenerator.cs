@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UtilsModule;
 
 namespace ProcGen {
@@ -159,11 +160,5 @@ namespace ProcGen {
     {
         public RoomType type;
         public int count;
-    }
-    
-    [System.Serializable]
-    public class o {
-        public string name;
-        public int weight;
     }
 }

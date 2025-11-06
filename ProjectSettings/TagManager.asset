@@ -12,7 +12,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Map
+  - 
   - Water
   - UI
   - RoomEntrance
@@ -20,7 +20,7 @@ TagManager:
   - Player
   - Wall
   - Entity
-  - 
+  - Map
   - 
   - 
   - 

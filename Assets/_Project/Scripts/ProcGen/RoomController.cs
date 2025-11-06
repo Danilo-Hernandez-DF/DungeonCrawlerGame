@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Game;
@@ -10,6 +11,8 @@ namespace ProcGen {
         [Header("Room Settings")]
         public Vector2Int roomSize;
         public DungeonType dungeonType;
+        public Color roomColor;
+        public RoomType roomType;
         [SerializeField] List<RoomBehaviour> roomBehaviours;
         [SerializeField] List<EnemySpawnManager> enemySpawners;
         [SerializeField] List<Lootable> lootables;
@@ -18,6 +21,7 @@ namespace ProcGen {
         [Header("Tilemap Settings")]
         [SerializeField] Tilemap[] tilemaps;
         [SerializeField] bool replaceTiles = true;
+        public Tilemap map;
         [Header("EnemySettings")]
         readonly List<TilemapBuilder> tilemapBuilders = new List<TilemapBuilder>();
         List<Door> doors;
@@ -60,14 +64,26 @@ namespace ProcGen {
         }
 
         public void Init() {
+            map.GetComponent<Renderer>().material.SetColor("_Color", roomColor);
+            
             foreach(RoomEntrance entrance in doorPositions) {
                 if(entrance.Active) {
-                    Instantiate(entrance.wallPrefab, entrance.transform.position, Quaternion.identity).transform.SetParent(this.transform);
+                    var wall = Instantiate(entrance.wallPrefab, entrance.transform.position, Quaternion.identity);
+                    wall.transform.SetParent(this.transform);
+
+                    var wallRender = wall.transform.GetChild(1).GetComponentInChildren<Tilemap>();
+
+                    wallRender.GetComponent<Renderer>().material.SetColor("_Color", roomColor);
+                    
                     continue;
                 }
 
-                doors.Add(Instantiate(entrance.doorPrefab, entrance.transform.position, Quaternion.identity)
-                    .GetComponent<Door>());
+                var door = Instantiate(entrance.doorPrefab, entrance.transform.position, Quaternion.identity)
+                    .GetComponent<Door>();
+                var doorRender = door.transform.GetChild(0).GetComponentInChildren<Tilemap>();
+                doorRender.GetComponent<Renderer>().material.SetColor("_Color", door.color);
+                
+                doors.Add(door);
             }
             
             foreach(Door door in doors) {
