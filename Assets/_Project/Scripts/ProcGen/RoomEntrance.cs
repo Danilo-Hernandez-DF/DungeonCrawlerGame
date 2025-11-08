@@ -9,6 +9,8 @@ namespace ProcGen {
         public GameObject doorPrefab;
         public GameObject wallPrefab;
         public Dir dir;
+        public RoomController room;
+        public RoomEntrance connectedEntrance;
         public bool Active { get; private set; } = true;
         public void DeActivate() => Active = false;
         public Orientation Orientation => dir.ToOrientation();
@@ -19,7 +21,7 @@ namespace ProcGen {
             col = GetComponent<Collider2D>();
         }
 
-        public List<RoomEntrance> GetOverlappingEntrances() {
+        public RoomEntrance GetOverlappingEntrance() {
             Collider2D[] overlaps = Physics2D.OverlapBoxAll(Pos, col.bounds.size, 0, entraceMask);
             List<RoomEntrance> result = new();
                 
@@ -29,7 +31,7 @@ namespace ProcGen {
                 if(entrance != this) result.Add(entrance);
             }
 
-            return result;
+            return result.Count > 0 ? result[0] : null;
         }
     }
 }

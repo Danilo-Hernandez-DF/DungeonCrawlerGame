@@ -21,8 +21,10 @@ namespace _Project.Scripts.Utils {
             questRewardInv = GetComponent<SaveableInventoryHolder>();
         }
 
-        public void AddQuest(Quest quest, NPC questGiver = null) {
-            statsTrackers.Add(new StatisticsTracker(quest.name, quest, questGiver));
+        public StatisticsTracker AddQuest(Quest quest, NPC questGiver = null) {
+            var tracker = new StatisticsTracker(quest.name, quest, questGiver);
+            statsTrackers.Add(tracker);
+            return tracker;
         }
         
         void Update() {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -7,14 +8,17 @@ namespace ProcGen {
     public class Door : MonoBehaviour, IInteractable {
         Collider2D col;
         SpriteRenderer sprite;
-        TilemapRenderer tilemapRenderer;
+        GameObject map;
         [SerializeField] bool isLocked = false;
         [SerializeField] ItemData key;
         public Color color;
+        public RoomController secondaryRoom;
+        public RoomController connectedRoom;
+        public RoomEntrance entrance;
         void Awake() {
             col = GetComponent<Collider2D>();
             sprite = GetComponent<SpriteRenderer>();
-            tilemapRenderer = transform.GetChild(0).GetComponentInChildren<TilemapRenderer>();
+            map = transform.GetChild(0).gameObject;
 
             if(!isLocked) Open();
             else Close();
@@ -22,12 +26,12 @@ namespace ProcGen {
         public void Open() { 
             col.enabled = false;
             sprite.enabled = false;
-            tilemapRenderer.enabled = false;
+            map.SetActive(false);
         }
         public void Close() { 
             col.enabled = true;
             sprite.enabled = true;
-            tilemapRenderer.enabled = true;
+            map.SetActive(true);
         }
         
         bool InRange() => IInteractable.InRange(transform.position);

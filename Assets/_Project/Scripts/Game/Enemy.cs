@@ -2,7 +2,6 @@ using AudioSystem;
 using StateMachines;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
 using UtilsModule;
 
 namespace Game {
@@ -33,6 +32,7 @@ namespace Game {
         protected StateMachine stateMachine;
         protected CountdownTimer attackTimer;
         protected bool noAI = false;
+        private bool offscreen = false;
 
         void Start()
         {
@@ -128,6 +128,34 @@ namespace Game {
         new void Update() {
             if (!init) return;
             base.Update();
+
+            if (!offscreen && !GetComponentInChildren<Renderer>().isVisible) {
+                var player = PlayerDetector.GetPlayer();
+                
+                var horizontalDistanceSigned = transform.position.x - player.transform.position.x;
+                var verticalDistanceSigned = transform.position.y - player.transform.position.y;
+                
+                var distance = new Vector2(horizontalDistanceSigned, verticalDistanceSigned);
+                if (Mathf.Abs(distance.x) > Mathf.Abs(distance.y)) {
+                    if (horizontalDistanceSigned > 0) {
+                        PlayerHUD.Instance.EnableEnemyMarker(this, Dir.Left);
+                    } else {
+                        PlayerHUD.Instance.EnableEnemyMarker(this, Dir.Right);
+                    }
+                } else {
+                    if (verticalDistanceSigned > 0) {
+                        PlayerHUD.Instance.EnableEnemyMarker(this, Dir.Up);
+                    } else {
+                        PlayerHUD.Instance.EnableEnemyMarker(this, Dir.Down);
+                    }
+                }
+                
+                offscreen = true;
+            }
+            else if (offscreen && GetComponentInChildren<Renderer>().isVisible) {
+                PlayerHUD.Instance.DisableEnemyMarker(this);
+                offscreen = false;
+            }
 
             if (!GameManager.Instance.Paused)
             {

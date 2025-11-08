@@ -4,7 +4,7 @@ using UtilsModule;
 namespace Game {
     public class Health : MonoBehaviour {
 
-        [SerializeField] int maxHealth = 100;
+        public int maxHealth { get; private set;}
         [SerializeField] FloatEventChannel healthChannel;
 
         public int currentHealth { get; private set; }

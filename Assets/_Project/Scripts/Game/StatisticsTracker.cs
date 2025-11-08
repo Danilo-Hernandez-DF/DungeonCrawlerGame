@@ -90,6 +90,7 @@ namespace Game {
         }
 
         public int GetTracked(ItemData stat) {
+            if(trackedItems == null) return 0;
             return trackedItems.GetValueOrDefault(stat, 0);
         }
         

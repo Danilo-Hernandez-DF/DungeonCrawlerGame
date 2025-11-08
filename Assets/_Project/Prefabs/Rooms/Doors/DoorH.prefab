@@ -206,7 +206,7 @@ TilemapRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -370,6 +370,9 @@ MonoBehaviour:
   isLocked: 0
   key: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
   color: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
+  secondaryRoom: {fileID: 0}
+  connectedRoom: {fileID: 0}
+  entrance: {fileID: 0}
 --- !u!114 &-6168155254494166371
 MonoBehaviour:
   m_ObjectHideFlags: 0

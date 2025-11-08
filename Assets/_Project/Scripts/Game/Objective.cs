@@ -7,5 +7,9 @@ namespace Game {
         public virtual int GetProgress(StatisticsTracker tracker) {
             return 0;
         }
+        
+        public float GetPercentage(StatisticsTracker tracker) {
+            return (float)GetProgress(tracker) / target;
+        }
     }
 }

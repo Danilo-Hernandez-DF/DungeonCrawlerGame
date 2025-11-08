@@ -18,13 +18,19 @@ namespace ProcGen {
         [SerializeField] List<Lootable> lootables;
         [SerializeField] List<Collectible> collectibles;
         public List<RoomEntrance> doorPositions;
+        public List<RoomController> connectedRooms;
+        public bool visited;
+        
         [Header("Tilemap Settings")]
         [SerializeField] Tilemap[] tilemaps;
         [SerializeField] bool replaceTiles = true;
         public Tilemap map;
+        
         [Header("EnemySettings")]
         readonly List<TilemapBuilder> tilemapBuilders = new List<TilemapBuilder>();
+        
         List<Door> doors;
+        List<GameObject> walls;
         BoxCollider2D col;
         bool active = false;
         bool cleared = false;
@@ -61,6 +67,10 @@ namespace ProcGen {
         void Awake() {
             col = GetComponent<BoxCollider2D>();
             doors = new List<Door>();
+            walls = new List<GameObject>();
+            map.GetComponent<Renderer>().enabled = false;
+            connectedRooms = new List<RoomController>();
+            doorPositions.ForEach(entrance => entrance.room = this);
         }
 
         public void Init() {
@@ -71,17 +81,24 @@ namespace ProcGen {
                     var wall = Instantiate(entrance.wallPrefab, entrance.transform.position, Quaternion.identity);
                     wall.transform.SetParent(this.transform);
 
-                    var wallRender = wall.transform.GetChild(1).GetComponentInChildren<Tilemap>();
+                    var wallRender = wall.transform.GetChild(1).GetComponentInChildren<Renderer>();
 
-                    wallRender.GetComponent<Renderer>().material.SetColor("_Color", roomColor);
+                    wallRender.material.SetColor("_Color", roomColor);
+                    wallRender.enabled = false;
+
+                    walls.Add(wall);
                     
                     continue;
                 }
 
                 var door = Instantiate(entrance.doorPrefab, entrance.transform.position, Quaternion.identity)
                     .GetComponent<Door>();
-                var doorRender = door.transform.GetChild(0).GetComponentInChildren<Tilemap>();
-                doorRender.GetComponent<Renderer>().material.SetColor("_Color", door.color);
+                door.entrance = entrance;
+                door.connectedRoom = this;
+                door.secondaryRoom = entrance.connectedEntrance.room;
+                var doorRender = door.transform.GetChild(0).GetComponentInChildren<Renderer>();
+                doorRender.material.SetColor("_Color", door.color);
+                doorRender.enabled = false;
                 
                 doors.Add(door);
             }
@@ -123,6 +140,8 @@ namespace ProcGen {
         public void OpenDoors() => doors.ForEach(door => door.Open());
 
         protected virtual void OnPlayerEnter() {
+            if(!visited) Visit();
+            
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnPlayerEnter(this);
             }
@@ -131,6 +150,22 @@ namespace ProcGen {
         protected virtual void OnPlayerExit() {
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnPlayerExit(this);
+            }
+        }
+        
+        private void Visit() {
+            visited = true;
+
+            map.GetComponent<Renderer>().enabled = true;
+            doors.ForEach(door => door.transform.GetChild(0).GetComponentInChildren<Renderer>().enabled = true);
+            walls.ForEach(wall => wall.transform.GetChild(1).GetComponentInChildren<Renderer>().enabled = true);
+
+            foreach (var room in connectedRooms) {
+                foreach (var door in room.doors) {
+                    if (door.secondaryRoom == this) {
+                        door.transform.GetChild(0).GetComponentInChildren<Renderer>().enabled = true;
+                    }
+                }
             }
         }
 

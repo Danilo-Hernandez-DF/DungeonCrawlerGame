@@ -111,19 +111,26 @@ namespace ProcGen {
 
             var newRoom = Instantiate(room.gameObject, roomPos, Quaternion.identity).GetComponent<RoomController>();
             targetEntrance = newRoom.GetNextEntrance(entrance.dir.GetOpposite());
+            targetEntrance.connectedEntrance = entrance;
+            entrance.connectedEntrance = targetEntrance;
             targetEntrance.DeActivate();
 
             foreach(RoomEntrance otherEntrance in newRoom.doorPositions) {
-                var foundEntrances = otherEntrance.GetOverlappingEntrances();
-                if(foundEntrances.Count > 0) {
-                    otherEntrance.DeActivate();
-                    if(roomEntrances.Contains(otherEntrance)) roomEntrances.Remove(otherEntrance);
-                }
+                var foundEntrance = otherEntrance.GetOverlappingEntrance();
+                if (!foundEntrance || room.doorPositions.Contains(foundEntrance)) continue;
+                
+                otherEntrance.DeActivate();
+                if (roomEntrances.Contains(otherEntrance)) roomEntrances.Remove(otherEntrance);
 
-                foreach(RoomEntrance foundEntrance in foundEntrances) {
-                    foundEntrance.DeActivate();
-                    if(roomEntrances.Contains(foundEntrance)) roomEntrances.Remove(foundEntrance);
-                }
+                foundEntrance.DeActivate();
+
+                if (!newRoom.connectedRooms.Contains(foundEntrance.room)) newRoom.connectedRooms.Add(foundEntrance.room);
+                if (!foundEntrance.room.connectedRooms.Contains(newRoom)) foundEntrance.room.connectedRooms.Add(newRoom);
+
+                foundEntrance.connectedEntrance = otherEntrance;
+                otherEntrance.connectedEntrance = foundEntrance;
+
+                if (roomEntrances.Contains(foundEntrance)) roomEntrances.Remove(foundEntrance);
             }
 
             AddRoom(newRoom, addEntrances);

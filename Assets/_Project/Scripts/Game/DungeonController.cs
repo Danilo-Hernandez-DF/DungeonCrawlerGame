@@ -21,6 +21,8 @@ namespace Game {
             base.Awake();
             modifiers = new List<DungeonModifier>();
         }
+        
+        public float objectivePercentage => completionQuest?.GetPercentage() ?? 0;
 
         public void StartFloor(DungeonData dungeonData, List<DungeonModifier> mods = null)
         {
@@ -38,8 +40,10 @@ namespace Game {
             }
             else
             {
-                GameSettings.Instance.AddQuest(completionQuest);
+                completionQuest.tracker = GameSettings.Instance.AddQuest(completionQuest);
             }
+            
+            PlayerHUD.Instance.Init();
         }
 
         public LootSetting GetLootTable(LootType lootType) {
