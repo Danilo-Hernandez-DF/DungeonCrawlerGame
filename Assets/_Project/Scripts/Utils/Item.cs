@@ -52,7 +52,7 @@ namespace UtilsModule {
         }
 
         public bool HasTag(TagData tag) {
-            return tags.Contains(tags.Find(x => x.data == tag));
+            return tags.Exists(x => x.data == tag);
         }
 
         public bool HasTag(string tag) {

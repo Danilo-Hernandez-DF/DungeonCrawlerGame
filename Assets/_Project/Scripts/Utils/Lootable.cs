@@ -20,6 +20,7 @@ namespace UtilsModule {
             }
             inventoryGenrator?.Init(lootSetting.lootTable, lootSetting.rolls);
             base.Awake();
+            DungeonController.Instance.OnLootGenerated(this);
         }
         
         public void OnInteract() {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31433ed36a09d8c4fa769cd219e49556, type: 3}
   m_Name: AllEquipmentTable
   m_EditorClassIdentifier: 
-  weight: 2
+  weight: 5
   nameKey: all_equipment
   items: []
   secondaryTables:

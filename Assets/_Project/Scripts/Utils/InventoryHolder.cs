@@ -10,7 +10,7 @@ namespace UtilsModule {
         public Inventory Inventory;
         
         [SerializeField] protected Entity targetEntity;
-        [SerializeField] protected InventoryGenerator inventoryGenrator;
+        public InventoryGenerator inventoryGenrator;
 
         [Header("Loot Generation")]
         [SerializeField] protected bool generateOnAwake = true;

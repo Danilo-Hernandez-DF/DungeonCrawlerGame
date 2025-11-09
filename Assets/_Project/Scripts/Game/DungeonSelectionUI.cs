@@ -34,7 +34,7 @@ public class DungeonSelectionUI : UIBase
     }
     
     public List<DungeonModifier> GetModifiers(DungeonType dType) {
-        var mods = modifiers.ToList();
+        var mods = activeModifiers.ToList();
         mods.AddRange(dType.modifiers);
 
         return mods;
@@ -141,6 +141,8 @@ public class DungeonSelectionUI : UIBase
     }
     
     public void PopulateModifiers() {
+        if (modifierTab.childCount > 0) return;
+        
         foreach(DungeonModifier modifier in modifiers) {
             ModifierButton button = Instantiate(modifierButtonPrefab, modifierTab).GetComponent<ModifierButton>();
             button.Init(modifier, this);
@@ -169,6 +171,12 @@ public class DungeonSelectionUI : UIBase
     protected override void OnOpen() {
         StartCoroutine(SelectDungeon());
         PopulateModifiers();
+    }
+    
+    protected override void OnClose() {
+        for (int i = 0; i < modifierTab.childCount; i++) {
+            modifierTab.GetChild(i).GetComponent<ModifierButton>().OnDeselect(null);
+        }
     }
 
     public void SelectModifier(bool selected, DungeonModifier modifier) {

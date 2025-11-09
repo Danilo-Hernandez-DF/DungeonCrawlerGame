@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UtilsModule {
     public class InventoryGenerator : MonoBehaviour {
         [SerializeField] InventoryHolder inventoryHolder;
-        [SerializeField] LootTable<Item> lootTable;
+        public ItemLootTable lootTable;
         [SerializeField] int rolls = 2;
         [SerializeField] bool isSeeded;
         [SerializeField] bool prioritizeEmpty;
@@ -54,7 +54,7 @@ namespace UtilsModule {
             inventoryHolder.OnGenerate();
         }
 
-        public void Init(LootTable<Item> lootTable, int rolls) {
+        public void Init(ItemLootTable lootTable, int rolls) {
             this.lootTable = lootTable;
             this.rolls = rolls;
         }

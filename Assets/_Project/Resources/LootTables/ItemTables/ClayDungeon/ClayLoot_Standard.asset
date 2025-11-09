@@ -16,9 +16,14 @@ MonoBehaviour:
   nameKey: clay_loot_standard
   items:
   - Item: {fileID: 11400000, guid: 9258d25f0975fd649a43e565c83e732d, type: 2}
-    Weight: 5
+    Weight: 10
     countMin: 2
     countMax: 6
+    additionalTags: []
+  - Item: {fileID: 11400000, guid: ed344b39639be2a498859de44f2a7440, type: 2}
+    Weight: 1
+    countMin: 1
+    countMax: 1
     additionalTags: []
   secondaryTables:
   - {fileID: 11400000, guid: 3a5a17de8eae50245b94c3388cadf283, type: 2}

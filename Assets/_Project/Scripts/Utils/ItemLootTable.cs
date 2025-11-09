@@ -17,17 +17,60 @@ namespace UtilsModule {
             return secondaryTables;
         }
 
-        public override Item GetWeightedItem(int lowerLimit = 0, uint upperLimit = int.MaxValue) {
+        public Item GetBiasedItem(ItemData item, int rolls = 10) {
+            int attempts = 0;
+            while (attempts < rolls) {
+                var result = GetWeightedItem();
+                if (result.data == item) {
+                    //Debug.Log("found biased item");
+                    return result;
+                }
+                attempts++;
+            }
+            
+            //Debug.Log("did not find biased item");
+            return GetWeightedItem();
+        }
+        
+        public Item GetBiasedItem(TagData tag, int rolls = 10) {
+            int attempts = 0;
+            while (attempts < rolls) {
+                var result = GetWeightedItem();
+                if (result.HasTag(tag)) {
+                    //Debug.Log("found biased item");
+                    return result;
+                }
+                attempts++;
+            }
+            
+            //Debug.Log("did not find biased item");
+            return GetWeightedItem();
+        }
+        
+        public Item GetBiasedItem(int rarity, int rolls = 10) {
+            int attempts = 0;
+            while (attempts < rolls) {
+                var result = GetWeightedItem();
+                if (result.data.rarity >= rarity) {
+                    //Debug.Log("found biased item");
+                    return result;
+                }
+                attempts++;
+            }
+            
+            //Debug.Log("did not find biased item");
+            return GetWeightedItem();
+        }
+
+        public override Item GetWeightedItem() {
             if(items?.Count == 0 && secondaryTables?.Count == 0) return GameManager.emptyItem.GetItem();
 
-            int sumWeights = (from wItem in items where wItem.Weight >= lowerLimit where wItem.Weight <= upperLimit select wItem.Weight).Sum() + 
-                             (from lootTable in secondaryTables where lootTable.weight >= lowerLimit where lootTable.weight <= upperLimit select lootTable.weight).Sum();
+            int sumWeights = items.Select(x => x.Weight).Sum() + secondaryTables.Select(x => x.weight).Sum();
 
             int rand = Random.Range(0, sumWeights);
             int added = 0;
             if(items != null)
-                foreach (var wItem in items.Where(wItem => wItem.Weight >= lowerLimit)
-                             .Where(wItem => wItem.Weight <= upperLimit)) {
+                foreach (var wItem in items) {
                     added += wItem.Weight;
                     if (rand >= added) continue;
                     int randCount = Random.Range(wItem.countMin, wItem.countMax + 1);
@@ -36,12 +79,11 @@ namespace UtilsModule {
                 }
 
             if(secondaryTables == null) return GameManager.emptyItem.GetItem();
-            foreach (var lootTable in secondaryTables.Where(lootTable => lootTable.weight >= lowerLimit)
-                         .Where(lootTable => lootTable.weight <= upperLimit)) {
+            foreach (var lootTable in secondaryTables) {
                 added += lootTable.weight;
                 if (rand < added)
                 {
-                    return lootTable.GetWeightedItem(lowerLimit, upperLimit);
+                    return lootTable.GetWeightedItem();
                 }
             }
 
