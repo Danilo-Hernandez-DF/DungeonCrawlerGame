@@ -11,6 +11,7 @@ namespace Game
         
         public override void OnEnter() {
             base.OnEnter();
+            enemy.Die();
             enemy.gameObject.AddComponent<DestroyAfter>().time = deathTime;
         }
     }

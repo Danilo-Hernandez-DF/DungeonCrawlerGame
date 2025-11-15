@@ -59,14 +59,13 @@ namespace Game
             description = description.Replace("{0}", text0);
             description = description.Replace("{1}", text1);
             if (chance < 100) {
-                description = description.Replace("{2}", $"<color=#{hexColor}>{chance}%</color>");
                 description = description.Replace("~", "");
             }
             else {
                 description = description.Split("~")[0];
             }
-            //Whenever Player is damaged by {0}, Player gains {1}~, {2} of the times.
-            //Cuando Jugador es dañado por {0}, Jugador gana {1}~, el {2} de las veces.
+            //Whenever Player is damaged by {0}, Player gains {1}~, sometimes.
+            //Cuando Jugador es dañado por {0}, Jugador gana {1}~, algunas veces.
             
             return description;
         }

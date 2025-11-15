@@ -16,7 +16,7 @@ namespace Game
         [SerializeField] private EntityData eligibleEnemy;
         [SerializeField] private TagData eligibleTag;
         [SerializeField] private Color specialTextColor;
-        private readonly string noEnemyKey = "no_enemy";
+        private readonly string noEnemyKey = "tag_enemy";
         
         
         public override string Description() {
@@ -27,15 +27,8 @@ namespace Game
                 enemyStr = eligibleEnemy.nameKey;
             }
             else if(eligibleTag) {
-                enemyStr = enemyStr.Replace("{}", eligibleTag.name);
-                enemyStr = enemyStr.TrimEnd(' ');
+                enemyStr = eligibleTag.name + " " + LocalisationSystem.GetLocalisedValue(noEnemyKey);
             }
-            else {
-                enemyStr = enemyStr.Replace("{}", "");
-                enemyStr = enemyStr.TrimEnd(' ');
-            }
-            //{} enemy
-            //un enemigo {}
 
             string hexColor = ColorUtility.ToHtmlStringRGBA(specialTextColor);
             var text0 = $"<color=#{hexColor}>{enemyStr}</color>";
@@ -52,8 +45,8 @@ namespace Game
             
             description = description.Replace("{0}", text0);
             description = description.Replace("{1}", text1);
+            
             if (chance < 100) {
-                description = description.Replace("{2}", $"<color=#{hexColor}>{chance}%</color>");
                 description = description.Replace("~", "");
             }
             else {

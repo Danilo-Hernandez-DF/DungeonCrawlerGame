@@ -13,6 +13,7 @@ namespace Game
         
         public override void OnEnter() {
             base.OnEnter();
+            enemy.spawned = false;
             spawnTimer.OnTimerStop += () => enemy.spawned = true;
             spawnTimer.Start();
         }

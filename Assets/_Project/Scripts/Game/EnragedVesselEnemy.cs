@@ -17,13 +17,16 @@ namespace Game {
             
             patrolPoint = transform.position;
             SetTarget(PlayerDetector.GetPlayerComponent());
-
+            
+            var spawnState = new SpawnState(this, 0f);
             var wanderState = new EnemyWanderState(this, patrolPoint, wanderRadius);
             var attackState = new EnemyAttackState(this, target.transform);
             var stunnedState = new EnemyStunnedState(this);
             var focusedState = new EnemyChargingState(this);
             var chaseState = new EnemyChaseState(this, target.transform);
-            var deathState = new EnemyDeathState(this);
+            var deathState = new EnemyDeathState(this, 0f);
+            
+            At(spawnState, wanderState, new FuncPredicate(() => spawned));
             //var fleeState = new EnragedVesselFleeState(this, agent, playerDetector.Player);
 
             At(stunnedState, wanderState, new FuncPredicate(() => !wasStunned));
@@ -49,7 +52,7 @@ namespace Game {
             Any(deathState, new FuncPredicate(() => hasDied));
             //Any(fleeState, new FuncPredicate(TargetInFleeRange));
 
-            stateMachine.SetState(wanderState);
+            stateMachine.SetState(spawnState);
         }
 
         /*public bool InFleeRange() {   

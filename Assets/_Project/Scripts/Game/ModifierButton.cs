@@ -53,7 +53,7 @@ namespace Game
             if(!selected) bg.color = Color.white;
             else bg.color = Color.lightBlue;
             
-            ui.UpdateItems();
+            ui.UpdateDisplay(ui.selectedDungeon);
         }
         
         public void OnSelect(BaseEventData eventData) {

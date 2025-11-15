@@ -24,6 +24,7 @@ namespace UtilsModule {
         public bool Grounded => zPos == 0;
         Material defaultMaterial;
         protected bool init;
+        protected bool hasDied = false;
 
         public virtual void Init()
         {
@@ -108,15 +109,19 @@ namespace UtilsModule {
         protected void ResetMaterial() {
             RendererComponent.sharedMaterial = defaultMaterial;
         }
+        
+        public void Die() {
+            OnDeath();
+        }
 
         public void TakeDamage(int damage, DamageSource dmgSource, bool ignoreDefense = false, bool ignoreKnockback = false)
         {
             if (!health) return;
 
-            var isDead = !ignoreDefense ? health.TakeDamage(damage - Stats.Defense) : health.TakeDamage(damage);
+            var died = !ignoreDefense ? health.TakeDamage(damage - Stats.Defense) : health.TakeDamage(damage);
 
             OnDamage(damage, dmgSource);
-            if (isDead) OnDeath();
+            if (died) hasDied = true;
         }
 
         public void Heal(int amount) {

@@ -17,7 +17,6 @@ namespace Game {
         [SerializeField] private TMP_Text stateViewer;
         [SerializeField] private bool doDebug = false;
         protected DamageSource LastDamageSource { get; set; }
-        public bool spawned = false;
 
         protected float TimeBetweenAttacks => Stats.AttackCooldown;
         protected int AttackDamage => Stats.Attack;
@@ -26,13 +25,14 @@ namespace Game {
         protected Entity target;
         public Vector3 lastTargetPosition;
         public bool charged = false;
-        protected bool hasDied = false;
         protected float coliderRadius = 0;
 
         protected StateMachine stateMachine;
         protected CountdownTimer attackTimer;
         protected bool noAI = false;
         private bool offscreen = false;
+        public bool spawned;
+        public bool waited;
 
         void Start()
         {

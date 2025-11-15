@@ -62,7 +62,6 @@ namespace Game {
             description = description.Replace("{3}", $"<color=#{hexColor}>{count}</color>");
             
             if (chance < 100) {
-                description = description.Replace("{4}", $"<color=#{hexColor}>{chance}%</color>");
                 description = description.Replace("~", "");
             }
             else {

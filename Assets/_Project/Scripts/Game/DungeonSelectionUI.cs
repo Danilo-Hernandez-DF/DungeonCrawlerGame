@@ -26,7 +26,7 @@ public class DungeonSelectionUI : UIBase
     private DungeonModifier[] modifiers;
     public List<DungeonModifier> activeModifiers;
     [SerializeField] private List<TagData> excludedTags;
-    private DungeonType selectedDungeon;
+    public DungeonType selectedDungeon;
 
     public void UpdateUI(DungeonType[] data, DungeonModifier[] modifiers) {
         this.data = data;
@@ -116,12 +116,31 @@ public class DungeonSelectionUI : UIBase
 
     private void UpdateEntities(DungeonType displayData) {
         var entities = GetEntities(displayData);
+        var addEntities = new List<EntityData>();
+        
+        foreach (var mod in activeModifiers) {
+            foreach (var entity in mod.GetEnemies()) {
+                if(addEntities.Contains(entity)) continue;
+                addEntities.Add(entity);
+            }
+        }
+        
+        addEntities = addEntities.Where(item => !entities.Contains(item)).ToList();
+        Debug.Log(addEntities.Count);
 
-        PopulateDisplaySlots(monsterTab, entities.Count);
+        PopulateDisplaySlots(monsterTab, entities.Count + addEntities.Count);
         var displaySlots = GetDisplaySlots(monsterTab);
         
         for (int i = 0; i < entities.Count; i++) {
             displaySlots[i].transform.GetChild(0).GetComponent<Image>().sprite = entities[i].sprite;
+            displaySlots[i].GetComponent<Image>().color = Color.white;
+        }
+
+        if (entities.Count + addEntities.Count > entities.Count) {
+            for (int i = entities.Count; i < entities.Count + addEntities.Count; i++) {
+                displaySlots[i].transform.GetChild(0).GetComponent<Image>().sprite = addEntities[i - entities.Count].sprite;
+                displaySlots[i].GetComponent<Image>().color = Color.darkSalmon;
+            }
         }
     }
     
