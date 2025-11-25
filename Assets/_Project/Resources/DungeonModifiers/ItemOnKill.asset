@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4ed984d696d417288fa688a0600a4e7, type: 3}
-  m_Name: DungeonModifier
+  m_Name: ItemOnKill
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 37090f8e183054d4fb6b71711602f646, type: 3}
   nameKey: mod_token_on_kill
@@ -19,10 +19,11 @@ MonoBehaviour:
     data: {fileID: 11400000, guid: af6f05d02542adc4da8a9807ab41e1bb, type: 2}
     count: 1
     tags: []
-  chance: 25
+  chance: 100
   count: 1
   eligibleEnemy: {fileID: 0}
   eligibleTag: {fileID: 0}
+  maxItems: 1
   eligibleStatusSource: {fileID: 0}
   eligibleEntitySource: {fileID: 0}
   specialTextColor: {r: 1, g: 0.7764706, b: 0.1764706, a: 1}

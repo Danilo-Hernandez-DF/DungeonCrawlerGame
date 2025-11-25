@@ -46,7 +46,6 @@ namespace Game {
         CountdownTimer dashTimer;
         CountdownTimer dashCooldownTimer;
         CountdownTimer attackTimer;
-        
 
         public FilteredInventory equipmentInv { get; private set; }
         public Inventory playerInv { get; private set; }

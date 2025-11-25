@@ -59,7 +59,7 @@ namespace Game
         public void OnSelect(BaseEventData eventData) {
             GetComponent<Animator>().SetBool(Selected, true);
             infoText.text = dungeonModifier.Description();
-            nameText.text = $"-----{dungeonModifier.name}-----";
+            nameText.text = $"---{dungeonModifier.name}---";
             infoPanel.SetActive(true);
         }
     

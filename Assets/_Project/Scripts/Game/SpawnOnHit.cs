@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Localisation;
+using ProcGen;
 using UnityEngine;
 using UtilsModule;
 
@@ -18,8 +19,21 @@ namespace Game
         [SerializeField] private EntityData eligibleEntitySource;
         
         [SerializeField] private Color specialTextColor;
+        [SerializeField] private Counter counter;
+        
+        [SerializeField] private int maxSpawns = 5;
+        
+        public override void Reset() {
+            if (counter == null) counter = new Counter(maxSpawns);
+            else counter.Reset();
+        }
+        
+        public override void OnRoomEntered(RoomController room) {
+            counter.Reset();
+        }
         
         public override void OnPlayerHit(DamageSource source) {
+            if (counter.ReachedMax()) return;
             var matchesSource = eligibleEntitySource == source.entity?.entityData;
             var matchesStatusSource = eligibleStatusSource == source.statusEffect;
             var matchesTagSource = source.entity?.entityData.tags.Exists(x => x.data == eligibleTag) ?? true;
@@ -32,6 +46,7 @@ namespace Game
             spawnPosition += Random.insideUnitCircle * Random.Range(innerRadius, radius);
             
             var spawn = Instantiate(spawnEntity.prefab, spawnPosition, Quaternion.identity);
+            counter.Count();
         }
         
         public override string Description() {

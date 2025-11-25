@@ -20,7 +20,7 @@ namespace Game
             var chaseState = new EnemyChaseState(this, target.transform, ChaseHash);
             var attackState = new EnemyAttackState(this, target.transform);
             var stunnedState = new EnemyStunnedState(this);
-            var deathState = new EnemyDeathState(this, 0f);
+            var deathState = new EnemyDeathState(this, .5f);
     
             At(spawnState, chaseState, new FuncPredicate(() => spawned));
             At(chaseState, waitState, new FuncPredicate(() => !CanDetectTarget(Stats.DetectionRange) && GetDistanceToTarget(lastTargetPosition) < 0.1f));

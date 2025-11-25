@@ -25,6 +25,8 @@ namespace UtilsModule {
         Material defaultMaterial;
         protected bool init;
         protected bool hasDied = false;
+        
+        public bool invulnerable = false;
 
         public virtual void Init()
         {
@@ -117,6 +119,7 @@ namespace UtilsModule {
         public void TakeDamage(int damage, DamageSource dmgSource, bool ignoreDefense = false, bool ignoreKnockback = false)
         {
             if (!health) return;
+            if (invulnerable) return;
 
             var died = !ignoreDefense ? health.TakeDamage(damage - Stats.Defense) : health.TakeDamage(damage);
 

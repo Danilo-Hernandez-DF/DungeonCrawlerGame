@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Localisation;
+using ProcGen;
 using UnityEngine;
 using UtilsModule;
 
@@ -12,6 +13,8 @@ namespace Game {
         [SerializeField] private int count;
         [SerializeField] private EntityData eligibleEnemy;
         [SerializeField] private TagData eligibleTag;
+        private Counter counter;
+        [SerializeField] private int maxItems = 1;
         
         [SerializeField] private StatusEffectData eligibleStatusSource;
         [SerializeField] private EntityData eligibleEntitySource;
@@ -19,6 +22,11 @@ namespace Game {
         [SerializeField] private Color specialTextColor;
         private readonly string noEnemyKey = "no_enemy";
         private readonly string anything = "anything";
+        
+        public override void Reset() {
+            if (counter == null) counter = new Counter(maxItems);
+            else counter.Reset();
+        }
 
         public override string Description() {
             var descriptionKey = "description_item_on_kill";
@@ -78,20 +86,28 @@ namespace Game {
             return new List<ItemData> { item.data };
         }
 
+        public override void OnRoomEntered(RoomController room) {
+            counter.Reset();
+        }
+
         public override void OnEnemyDeath(Enemy enemy, DamageSource source) {
-            var matchesSource = eligibleEntitySource == source.entity?.entityData;
-            var matchesStatusSource = eligibleStatusSource == source.statusEffect;
+            if (counter.ReachedMax()) return;
+            
+            var matchesSource = eligibleEntitySource == source.entity?.entityData || eligibleEntitySource == null;
+            var matchesStatusSource = eligibleStatusSource == source.statusEffect || eligibleStatusSource == null;
             
             if (!matchesSource && !matchesStatusSource) return;
 
-            var matchesEnemy = eligibleEnemy == enemy.entityData;
-            var matchesTag = enemy.entityData.tags.Exists(x => x.data == eligibleTag);
+            var matchesEnemy = eligibleEnemy == enemy.entityData || eligibleEnemy == null;
+            var matchesTag = enemy.entityData.tags.Exists(x => x.data == eligibleTag) || eligibleTag == null;
 
             if (!matchesEnemy && !matchesTag) return;
             
             if (Random.Range(0f, 100f) > chance) return;
             
             PlayerDetector.GetPlayerComponent().GiveItem(new Item(item.data, addTags: item.tags), count);
+            counter.Count();
+            Debug.Log("Item given");
         }
     }
 }

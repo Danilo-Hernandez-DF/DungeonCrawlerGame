@@ -14,6 +14,7 @@ namespace Game {
         public Quest completionQuest;
         private RoomController startRoom;
         [SerializeField] GameObject floorExit;
+        private bool requirementsCompleted;
         private int currentLevel => GameManager.Instance.currentLevel;
         LootSetting[] lootSettings;
 
@@ -24,15 +25,19 @@ namespace Game {
         
         public float objectivePercentage => completionQuest?.GetPercentage() ?? 0;
 
-        public void StartFloor(DungeonData dungeonData, List<DungeonModifier> mods = null)
-        {
+        public void StartFloor(DungeonData dungeonData, List<DungeonModifier> mods = null) {
             this.dungeonData = dungeonData;
+            
             modifiers = mods ?? new List<DungeonModifier>();
             lootSettings = dungeonData.lootSettings;
             completionQuest = dungeonData.completionQuest;
-            dungeonGenerator.Configure(dungeonData);
+            dungeonGenerator?.Configure(dungeonData);
             
-            dungeonGenerator.Generate(out startRoom);
+            foreach(DungeonModifier mod in modifiers) {
+                mod.Reset();
+            }
+            
+            dungeonGenerator?.Generate(out startRoom);
 
             if (completionQuest == null)
             {
@@ -42,6 +47,7 @@ namespace Game {
             {
                 completionQuest.tracker = GameSettings.Instance.AddQuest(completionQuest);
             }
+            
             
             PlayerHUD.Instance.Init();
         }
@@ -69,10 +75,13 @@ namespace Game {
         }
         
         public void CompleteRequirements() {
-            if(floorExit == null) return;
+            if(floorExit == null || requirementsCompleted) return;
+            requirementsCompleted = true;
             var exit = Instantiate(floorExit);
             exit.transform.SetParent(startRoom.transform);
             exit.transform.localPosition = Vector2.zero;
+            var exitComp = exit.GetComponent<DungeonExit>();
+            exitComp.Init(dungeonData?.NextLevel(), dungeonData.dungeonType);
         }
         
         // Modifier methods
@@ -81,6 +90,12 @@ namespace Game {
         public virtual void OnRoomGeneration(RoomController room) {
             foreach(DungeonModifier mod in modifiers) {
                 mod.OnRoomGeneration(room);
+            }
+        }
+
+        public virtual void OnRoomEntered(RoomController room) {
+            foreach(DungeonModifier mod in modifiers) {
+                mod.OnRoomEntered(room);
             }
         }
 
