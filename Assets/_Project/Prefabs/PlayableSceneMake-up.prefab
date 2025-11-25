@@ -3272,6 +3272,7 @@ Transform:
   - {fileID: 6313871315681301358}
   - {fileID: 739418412265864887}
   - {fileID: 44048534322408842}
+  - {fileID: 6488196919605360345}
   m_Father: {fileID: 2619916766270004507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3118096595683975921
@@ -3292,6 +3293,7 @@ MonoBehaviour:
   Renderer: {fileID: 3557919028972191143}
   shadow: {fileID: 114954459626825734}
   defaultZPos: 0
+  invulnerable: 0
   vCam: {fileID: 6395942837014617038}
   smoothTime: 0.2
   data:
@@ -6311,6 +6313,7 @@ MonoBehaviour:
   Renderer: {fileID: 0}
   shadow: {fileID: 0}
   defaultZPos: 0
+  invulnerable: 0
   inventorySize: 42
   inventoryChannel: {fileID: 11400000, guid: aee78890e2549ca4eac0c399445d1bee, type: 2}
   lootUIChannel: {fileID: 11400000, guid: 331f92e68473c874db56d7e83cd863b7, type: 2}
@@ -7349,6 +7352,7 @@ MonoBehaviour:
   Renderer: {fileID: 0}
   shadow: {fileID: 0}
   defaultZPos: 0
+  invulnerable: 0
   inventorySize: 40
   inventoryChannel: {fileID: 11400000, guid: 894b88c4038223249873c391075b9077, type: 2}
   lootUIChannel: {fileID: 0}
@@ -7381,6 +7385,7 @@ MonoBehaviour:
   Renderer: {fileID: 0}
   shadow: {fileID: 0}
   defaultZPos: 0
+  invulnerable: 0
   slotFilters:
   - {fileID: 11400000, guid: d57c5dac4d092c245b1138df161baab7, type: 2}
   - {fileID: 11400000, guid: 36cf68a1799bde84aa30ec7b623283f9, type: 2}
@@ -7395,6 +7400,75 @@ MonoBehaviour:
     part2: 1268669130
     part3: 1529083830
     part4: 4070531313
+--- !u!1 &8161668849197701547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6488196919605360345}
+  - component: {fileID: 6918632755793946069}
+  m_Layer: 8
+  m_Name: SecondaryCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6488196919605360345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8161668849197701547}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 98412219716904630}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &6918632755793946069
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8161668849197701547}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 3575
+  m_LayerOverridePriority: 1
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.015000001, y: -0.08801684}
+  m_Size: {x: 0.3936594, y: 0.5025988}
+  m_Direction: 0
 --- !u!1 &8490996089842025139
 GameObject:
   m_ObjectHideFlags: 0
@@ -7685,6 +7759,7 @@ MonoBehaviour:
   modifierTab: {fileID: 0}
   activeModifiers: []
   excludedTags: []
+  selectedDungeon: {fileID: 0}
 --- !u!114 &7074049198692663660
 MonoBehaviour:
   m_ObjectHideFlags: 0

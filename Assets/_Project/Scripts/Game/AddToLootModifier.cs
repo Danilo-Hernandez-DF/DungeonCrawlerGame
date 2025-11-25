@@ -17,20 +17,34 @@ namespace Game
         [SerializeField] private string dataKey; // Items // Objetos
         [SerializeField] private string tagKey; // Items containing // Objetos conteniendo
         [SerializeField] private string higherThanKey; // Higher than // Mayor que
+        [SerializeField] private Counter counter;
+        
+        public override void Reset() {
+            if (counter == null) counter = new Counter(rolls);
+            else counter.Reset();
+        }
         
         public override void OnLootGenerated(Lootable loot) {
-            var table = loot.inventoryGenrator.lootTable;
-            Item item = null;
+            if (counter.ReachedMax()) return;
+            var table = loot?.inventoryGenrator?.lootTable;
+            if (table == null) return;
+            Item item;
+
+            int remainingRolls = rolls - counter.current;
 
             if (data) {
-                item = table.GetBiasedItem(data, rolls);
+                item = table.GetBiasedItem(data, out remainingRolls, remainingRolls);
             } else if (tag) {
-                item = table.GetBiasedItem(tag, rolls);
+                item = table.GetBiasedItem(tag, out remainingRolls, remainingRolls);
             } else {
-                item = table.GetBiasedItem(rarity, rolls);
+                item = table.GetBiasedItem(rarity, out remainingRolls, remainingRolls);
             }
             
-            loot.Inventory.SetAtRandom(item); 
+            loot.Inventory.SetAtRandom(item);
+
+            for (int i = 0; i < rolls - remainingRolls; i++) {
+                counter.Count();
+            }
         }
 
         public override string Description() {

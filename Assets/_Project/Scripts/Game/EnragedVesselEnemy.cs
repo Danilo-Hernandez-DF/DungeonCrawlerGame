@@ -24,7 +24,7 @@ namespace Game {
             var stunnedState = new EnemyStunnedState(this);
             var focusedState = new EnemyChargingState(this);
             var chaseState = new EnemyChaseState(this, target.transform);
-            var deathState = new EnemyDeathState(this, 0f);
+            var deathState = new EnemyDeathState(this, .5f);
             
             At(spawnState, wanderState, new FuncPredicate(() => spawned));
             //var fleeState = new EnragedVesselFleeState(this, agent, playerDetector.Player);

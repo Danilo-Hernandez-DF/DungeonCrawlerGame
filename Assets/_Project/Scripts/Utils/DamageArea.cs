@@ -18,6 +18,21 @@ namespace UtilsModule {
         [SerializeField] bool isFiltered = false;
         [SerializeField] bool isWhiteList = false;
         [SerializeField] bool ignorePlayer = false;
+        
+        [SerializeField] float duration;
+        CountdownTimer timer;
+
+        private void Start() {
+            timer = new CountdownTimer(duration);
+            timer.OnTimerStop += () => {
+                enabled = false;
+            };
+            timer.Start();
+        }
+        
+        private void Update() {
+            timer.Tick(Time.deltaTime);
+        }
 
         public void ApplyEffect(Entity entity, ModifierEffect modifierEffect) {
             foreach(var modifier in hitEffects.Select(hitEffect => hitEffect.operatorType switch {

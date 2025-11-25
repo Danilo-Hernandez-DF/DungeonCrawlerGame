@@ -88,3 +88,6 @@
 "spawn_on_hit_description","Cuando Jugador toma daño por {0}, {1} aparece alrededor del Jugador~ algunas veces.",
 "spawn_on_hit","infestación de arcilla",
 "porcelain_drop,"gota de porcelana",
+"dungeon_level","nivel",
+"exit_dungeon","Escapar",
+"next_level","Siguiente Nivel",

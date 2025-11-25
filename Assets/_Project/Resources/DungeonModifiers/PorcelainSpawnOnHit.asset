@@ -23,3 +23,4 @@ MonoBehaviour:
   eligibleStatusSource: {fileID: 0}
   eligibleEntitySource: {fileID: 0}
   specialTextColor: {r: 1, g: 0.7764706, b: 0.1764706, a: 1}
+  maxSpawns: 3

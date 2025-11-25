@@ -89,3 +89,6 @@
 "spawn_on_hit_description","Whenever Player takes damage from {0}, {1} spawn around Player~ sometimes.",
 "spawn_on_hit","porcelain infestation",
 "porcelain_drop,"porcelain drop",
+"dungeon_level","level",
+"exit_dungeon","Escape Dungeon",
+"next_level","Next Level",

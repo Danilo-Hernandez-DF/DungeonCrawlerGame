@@ -17,7 +17,9 @@ namespace Game {
         //public Quest[] additionalQuests;
         public List<AdditionalRoomRequirements> roomsPerLevel;
         public LootSetting[] lootSettings; 
-        public DungeonData nextLevel;
+        [SerializeField] private DungeonDataLootTable nextLevel;
+        
+        public DungeonData NextLevel() => nextLevel?.GetWeightedItem();
         
         public List<ItemData> AvailableItems() {
             List<ItemData> items = new List<ItemData>();

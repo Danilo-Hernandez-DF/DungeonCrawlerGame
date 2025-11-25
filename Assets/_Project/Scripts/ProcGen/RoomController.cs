@@ -145,6 +145,8 @@ namespace ProcGen {
             foreach(RoomBehaviour behaviour in roomBehaviours) {
                 behaviour.OnPlayerEnter(this);
             }
+            
+            DungeonController.Instance.OnRoomEntered(this);
         }
 
         protected virtual void OnPlayerExit() {

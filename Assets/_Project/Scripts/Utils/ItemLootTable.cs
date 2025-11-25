@@ -17,48 +17,54 @@ namespace UtilsModule {
             return secondaryTables;
         }
 
-        public Item GetBiasedItem(ItemData item, int rolls = 10) {
+        public Item GetBiasedItem(ItemData item, out int remainingRolls, int rolls = 10) {
             int attempts = 0;
             while (attempts < rolls) {
                 var result = GetWeightedItem();
                 if (result.data == item) {
                     //Debug.Log("found biased item");
+                    remainingRolls = rolls - attempts;
                     return result;
                 }
                 attempts++;
             }
             
             //Debug.Log("did not find biased item");
+            remainingRolls = 0;
             return GetWeightedItem();
         }
         
-        public Item GetBiasedItem(TagData tag, int rolls = 10) {
+        public Item GetBiasedItem(TagData tag, out int remainingRolls, int rolls = 10) {
             int attempts = 0;
             while (attempts < rolls) {
                 var result = GetWeightedItem();
                 if (result.HasTag(tag)) {
                     //Debug.Log("found biased item");
+                    remainingRolls = rolls - attempts;
                     return result;
                 }
                 attempts++;
             }
             
             //Debug.Log("did not find biased item");
+            remainingRolls = 0;
             return GetWeightedItem();
         }
         
-        public Item GetBiasedItem(int rarity, int rolls = 10) {
+        public Item GetBiasedItem(int rarity, out int remainingRolls, int rolls = 10) {
             int attempts = 0;
             while (attempts < rolls) {
                 var result = GetWeightedItem();
                 if (result.data.rarity >= rarity) {
                     //Debug.Log("found biased item");
+                    remainingRolls = rolls - attempts;
                     return result;
                 }
                 attempts++;
             }
             
             //Debug.Log("did not find biased item");
+            remainingRolls = 0;
             return GetWeightedItem();
         }
 

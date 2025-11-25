@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Localisation;
 using ProcGen;
@@ -22,6 +23,8 @@ namespace Game {
         public string Name => nameKey;
         public virtual void OnRoomGeneration(RoomController room) { }
         
+        public virtual void OnRoomEntered(RoomController room) { }
+        
         public virtual void OnRoomStart(RoomController room) { }
         
         public virtual void OnRoomClear(RoomController room) { }
@@ -35,5 +38,7 @@ namespace Game {
         public virtual void OnPlayerHit(DamageSource source) { }
         
         public virtual void OnLootGenerated(Lootable loot) { }
+
+        public virtual void Reset() { }
     }
 }

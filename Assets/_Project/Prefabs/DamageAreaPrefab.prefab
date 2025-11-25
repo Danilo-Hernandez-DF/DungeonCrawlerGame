@@ -56,6 +56,7 @@ MonoBehaviour:
   isFiltered: 0
   isWhiteList: 0
   ignorePlayer: 1
+  duration: 0.13
 --- !u!61 &9203042818267401244
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -114,4 +115,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bc2c114bad78446a40e7044a0895a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 0.13
+  time: 1

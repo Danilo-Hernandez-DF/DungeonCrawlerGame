@@ -61,7 +61,16 @@ namespace Game
         public IEnumerator StartGame(DungeonType dungeonType, List<DungeonModifier> mods = null)
         {
             yield return null;
-            DungeonController.Instance.StartFloor(dungeonType.variants.GetWeightedItem(), mods);
+            if (dungeonType.variants) {
+                DungeonController.Instance.StartFloor(dungeonType.variants.GetWeightedItem(), mods);
+            }
+        }
+        
+        public IEnumerator StartGame(DungeonData nextlevel, List<DungeonModifier> mods = null)
+        {
+            yield return null;
+            currentLevel++;
+            DungeonController.Instance.StartFloor(nextlevel, mods);
         }
 
         public IEnumerator FreshGame(DungeonType dungeonType, List<DungeonModifier> mods = null)
@@ -71,11 +80,17 @@ namespace Game
             StartCoroutine(StartGame(dungeonType, mods));
         }
 
-        public void LoadScene(string sceneName,DungeonType dungeonType, bool resetLevel, List<DungeonModifier> mods = null)
+        public void LoadScene(string sceneName, DungeonType dungeonType, bool resetLevel, List<DungeonModifier> mods = null)
         {
             SceneManager.LoadScene(sceneName);
             if (resetLevel) StartCoroutine(FreshGame(dungeonType, mods));
             else StartCoroutine(StartGame(dungeonType, mods));
+        }
+        
+        public void LoadDungeonScene(DungeonData nextlevel, List<DungeonModifier> mods = null)
+        {
+            SceneManager.LoadScene("DevScene");
+            StartCoroutine(StartGame(nextlevel, mods));
         }
 
         public static ItemData GetItem(string name)
