@@ -22,11 +22,11 @@ namespace UtilsModule {
 
         public void Update(float deltaTime) => timer.Tick(deltaTime);
 
-        public void Add(StatusEffect effect, DamageSource source, string id = "") { 
+        public void Add(StatusEffect effect, DamageSource source, int duration, string id = "") { 
             if(Effects.Exists(x => x.Data == effect.Data)) return;
             effect.id = id;
             Effects.Add(effect);
-            effect.Data.OnApply(Entity, source);
+            effect.Data.OnApply(Entity, source, duration);
         }
 
         public void RemoveStatus(string id)

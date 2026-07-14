@@ -187,7 +187,7 @@ namespace Game
 
         public void ApplyStatus(Entity entity, StatusEffect statusEffect)
         {
-            entity.Status.Add(statusEffect, statusEffect.source);
+            entity.Status.Add(statusEffect, statusEffect.source, statusEffect.duration);
         }
 
         public void Visit<T>(T visitable) where T : Component, IVisitable

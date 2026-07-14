@@ -13,6 +13,8 @@ namespace UtilsModule {
         Dictionary<ItemData, AdditionalItemData> dataFromItem;
         private ModifierEffect modifierEffect;
         private List<ModifierEffect> queuedEffects;
+        private List<StatusEffectData> queuedStatusEffects;
+        private StatusEffect statusEffect;
         private string id;
 
         protected override void Awake()
@@ -53,14 +55,19 @@ namespace UtilsModule {
             entity.Stats.Mediator.AddModifier(modifier, id);
         }
 
-        public void ApplyStatus(Entity entity, StatusEffect statusEffect)
-        {
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect) {
             return;
+        }
+
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect, int duration)
+        {
+            entity.Status.Add(statusEffect, new DamageSource(), duration, id);
         }
 
         private void RemoveEffects(Entity entity)
         {
             entity.Stats.Mediator.RemoveModifiers(id);
+            entity.Status.RemoveStatus(id);
         }
 
         void ApplyQueuedEffects(Entity entity)
@@ -70,12 +77,30 @@ namespace UtilsModule {
                 ApplyEffect(entity, modifierEffect);
             }
         }
+        
+        void ApplyQueuedStatus(Entity entity, bool isEquip)
+        {
+            if (isEquip) {
+                foreach (var status in queuedStatusEffects)
+                {
+                    ApplyStatus(entity, status.GetStatusEffect(new DamageSource()), 0);
+                }
+
+                return;
+            }
+            
+            foreach (var status in queuedStatusEffects) {
+                var newStatus = status.GetStatusEffect(new DamageSource());
+                ApplyStatus(entity, newStatus, newStatus.duration);
+            }
+        }
 
         public void Visit<T>(T visitable) where T : Component, IVisitable
         {
             if (visitable is Entity entity)
             {
                 ApplyQueuedEffects(entity);
+                ApplyQueuedStatus(entity, false);
             }
         }
 
@@ -84,6 +109,10 @@ namespace UtilsModule {
             id = item.data.name;
             queuedEffects = GetEffectsFromItem(item);
             ApplyQueuedEffects(entity);
+            
+            queuedStatusEffects = GetStatusFromItem(item);
+            ApplyQueuedStatus(entity, true);
+            
 
             //foreach(ModifierEffect effect in queuedEffects) Debug.Log(effect.ToString());
         }

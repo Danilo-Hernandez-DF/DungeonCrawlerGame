@@ -4,6 +4,7 @@ namespace UtilsModule {
         private int Ticks = 0;
         public string id;
         public DamageSource source;
+        public int duration;
         public StatusEffectData Data { get; private set; }
         public StatusEffect(StatusEffectData data, DamageSource source) { 
             this.Data = data; 
@@ -12,7 +13,7 @@ namespace UtilsModule {
 
         public void OnTick(Entity entity) {
             Ticks++;
-            if(Ticks >= Data.duration) OnExpire(entity);
+            if(Ticks >= duration && duration != 0) OnExpire(entity);
 
             Data.OnTick(entity, Ticks, source);
         }

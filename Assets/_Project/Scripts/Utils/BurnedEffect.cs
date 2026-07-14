@@ -8,7 +8,7 @@ namespace UtilsModule
         [SerializeField] int damage = 1;
         [SerializeField] float speedDecreaseMult = -10;
         
-        public override void OnApply(Entity entity, DamageSource source) {
+        public override void OnApply(Entity entity, DamageSource source, int duration) {
             ApplyEffect(entity, new ModifierEffect(OperatorType.Multiply, StatType.Speed, speedDecreaseMult, duration));
         }
         

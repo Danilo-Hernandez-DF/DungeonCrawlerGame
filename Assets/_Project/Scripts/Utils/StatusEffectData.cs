@@ -5,14 +5,13 @@ using UnityEngine;
 
 namespace UtilsModule {
     public abstract class StatusEffectData : ScriptableObject {
-        public int duration = 0;
         public string nameKey;
         public Color dmgColor;
         public Sprite icon;
         public new string name => LocalisationSystem.GetLocalisedValue(nameKey);
 
         public virtual void OnTick(Entity entity, int tickCount, DamageSource source) { }
-        public virtual void OnApply(Entity entity, DamageSource source) { }
+        public virtual void OnApply(Entity entity, DamageSource source, int duration) { }
         protected virtual void OnRemove(Entity entity, DamageSource source) { }
         public void OnExpire(Entity entity, DamageSource source) {
             OnRemove(entity, source); 

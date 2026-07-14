@@ -49,7 +49,8 @@ namespace UtilsModule {
                 DamageSource source = playerDamage
                     ? new DamageSource(PlayerDetector.GetPlayer().gameObject)
                     : new DamageSource(gameObject);
-                entity.Status.Add(new StatusEffect(hitEffect, source), source);
+                var status = new StatusEffect(hitEffect, source);
+                entity.Status.Add(status, source, status.duration);
             }
         }
 

@@ -10,14 +10,15 @@ namespace UtilsModule
         [SerializeField] private float atkMult = 20;
         [SerializeField] private float defMod = -5;
         [SerializeField] private float speedMult = 10;
-        public override void OnApply(Entity entity, DamageSource source) { 
+        [SerializeField] private float speedDecreaseDur = 10;
+        public override void OnApply(Entity entity, DamageSource source, int duration) { 
             ApplyEffect(entity, new ModifierEffect(OperatorType.Multiply, StatType.Attack, atkMult, duration));
             ApplyEffect(entity, new ModifierEffect(OperatorType.Add, StatType.Defense, defMod, duration));
             ApplyEffect(entity, new ModifierEffect(OperatorType.Multiply, StatType.Speed, speedMult, duration));
         }
         
         protected override void OnRemove(Entity entity, DamageSource source) { 
-            ApplyEffect(entity, new ModifierEffect(OperatorType.Multiply, StatType.Speed, -speedMult, duration));
+            ApplyEffect(entity, new ModifierEffect(OperatorType.Multiply, StatType.Speed, -speedMult, speedDecreaseDur));
         }
     }
 }
