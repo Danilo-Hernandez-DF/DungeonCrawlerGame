@@ -18,4 +18,6 @@ MonoBehaviour:
   additionalEffects: []
   statusEffects: []
   additionalStatusEffects:
-  - {fileID: 11400000, guid: b03e25189cbcabd4b9479675b32e1990, type: 2}
+  - id: 
+    duration: 12
+    Data: {fileID: 11400000, guid: b03e25189cbcabd4b9479675b32e1990, type: 2}

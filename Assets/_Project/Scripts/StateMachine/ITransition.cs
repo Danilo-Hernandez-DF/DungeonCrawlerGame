@@ -1,4 +1,4 @@
-using UtilsModule;
+using Utils;
 
 namespace StateMachines {
     public interface ITransition {

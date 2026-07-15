@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace ProcGen {
     public abstract class RoomBehaviour : ScriptableObject{ 
         public virtual void OnPlayerEnter(RoomController room) { }

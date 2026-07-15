@@ -1,9 +1,7 @@
-using UtilsModule;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Audio;
 using Game;
+using Utils;
 
 namespace AudioSystem
 {
@@ -36,8 +34,8 @@ namespace AudioSystem
             InitializePool();
         }
 
-        public int ToSoundRange(int value) => MyUtils.LinearMapping(value, 0, 100, -20, -5);
-        public int FromSoundRange(int value) => MyUtils.LinearMapping(value, -20, -5, 0, 100);
+        public int ToSoundRange(int value) => Mapping.LinearMapping(value, 0, 100, -20, -5);
+        public int FromSoundRange(int value) => Mapping.LinearMapping(value, -20, -5, 0, 100);
 
         public SoundBuilder CreateSound() => new SoundBuilder(this);
 

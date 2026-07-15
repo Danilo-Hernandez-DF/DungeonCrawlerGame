@@ -1,8 +1,6 @@
-using UnityEngine;
-using UtilsModule;
 using UnityEngine.UI;
-using System;
 using TMPro;
+using Utils;
 
 namespace Game
 {
@@ -92,7 +90,7 @@ namespace Game
                     if (args.Length < 2) return;
                     int rolls = 1;
                     if (args.Length > 2) int.TryParse(args[2], out rolls);
-                    ItemLootTable lootTable = GameManager.GetItemLootTable(args[1]);
+                    ItemWeightedList lootTable = GameManager.GetItemLootTable(args[1]);
 
                     inventoryHolder.Generate(lootTable, rolls);
                     break;
@@ -172,23 +170,10 @@ namespace Game
         }
 
         bool InRange() => IInteractable.InRange(transform.position);
-
-        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect)
-        {
-            var modifier = modifierEffect.operatorType switch
-            {
-                OperatorType.Add => new BasicStatModifier(modifierEffect.type, v => v + modifierEffect.value, modifierEffect.duration),
-                OperatorType.Multiply => new BasicStatModifier(modifierEffect.type, v => v, modifierEffect.duration, modifierEffect.value),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            entity.Stats.Mediator.AddModifier(modifier);
-        }
-
-        public void ApplyStatus(Entity entity, StatusEffect statusEffect)
-        {
-            entity.Status.Add(statusEffect, statusEffect.source, statusEffect.duration);
-        }
+        
+        public void ApplyEffect(Entity entity, ModifierEffect modifierEffect) => ((IEffector)this).ApplyEffect(entity, modifierEffect);
+        
+        public void ApplyStatus(Entity entity, StatusEffect statusEffect) => ((IEffector)this).ApplyStatus(entity, statusEffect);
 
         public void Visit<T>(T visitable) where T : Component, IVisitable
         {
