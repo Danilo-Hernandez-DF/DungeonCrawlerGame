@@ -1,8 +1,4 @@
-using System.Collections.Generic;
 using Game;
-using UnityEngine;
-using UnityEngine.Tilemaps;
-using UtilsModule;
 
 namespace ProcGen {
     public class Door : MonoBehaviour, IInteractable {

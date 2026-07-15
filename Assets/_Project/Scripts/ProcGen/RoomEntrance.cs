@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UtilsModule;
-
 namespace ProcGen {
     public class RoomEntrance : MonoBehaviour { 
         [SerializeField] LayerMask entraceMask;

@@ -1,6 +1,3 @@
-using UnityEditor.Experimental.GraphView;
-using UtilsModule;
-
 namespace ProcGen {
     public static class ProcGenUtils {
         public static Dir GetOpposite(this Dir dir) {
@@ -16,7 +13,6 @@ namespace ProcGen {
         public static Orientation ToOrientation(this Dir dir) {
             return dir switch {
                 Dir.Up or Dir.Down => Orientation.Horizontal,
-                Dir.Left or Dir.Right => Orientation.Vertical,
                 _ => Orientation.Vertical,
             };
         }

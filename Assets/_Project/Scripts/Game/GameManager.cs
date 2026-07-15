@@ -1,12 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using Systems.Persistence;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using static Localisation.LocalisationSystem;
-using UtilsModule;
+using Utils;
 
 namespace Game
 {
@@ -128,7 +125,7 @@ namespace Game
             return Instance.StatusEffectDatabase.GetData(name);
         }
 
-        public static ItemLootTable GetItemLootTable(string name)
+        public static ItemWeightedList GetItemLootTable(string name)
         {
             return Instance.ItemLootTableDatabase.GetData(name);
         }
@@ -153,7 +150,7 @@ namespace Game
             return Instance.StatusEffectDatabase.GetAll();
         }
         
-        public static ItemLootTable[] GetItemLootTables()
+        public static ItemWeightedList[] GetItemLootTables()
         {
             return Instance.ItemLootTableDatabase.GetAll();
         }
@@ -209,7 +206,7 @@ namespace Game
 
             ItemLootTableDatabase = new ItemLootTableDatabase();
 
-            foreach (ItemLootTable data in Resources.LoadAll<ItemLootTable>("LootTables/ItemTables"))
+            foreach (ItemWeightedList data in Resources.LoadAll<ItemWeightedList>("LootTables/ItemTables"))
             {
                 ItemLootTableDatabase.AddItem(data);
             }

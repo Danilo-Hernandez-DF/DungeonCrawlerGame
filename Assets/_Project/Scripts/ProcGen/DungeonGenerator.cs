@@ -1,16 +1,13 @@
-using System.Collections.Generic;
 using System.Linq;
 using Game;
-using UnityEngine;
-using UnityEngine.Tilemaps;
-using UtilsModule;
+using Utils;
 
 namespace ProcGen {
     public class DungeonGenerator : MonoBehaviour { 
         int targetRooms = 10;
         List<RoomRequirements> specialRoomRequirements;
-        [SerializeField] GOLootTable startRoomPrefab;
-        [SerializeField] GOLootTable roomPrefabs;
+        [SerializeField] GoWeightedList startRoomPrefab;
+        [SerializeField] GoWeightedList roomPrefabs;
         [SerializeField] LayerMask roomMask;
         public List<RoomController> rooms { get; private set; }
         List<RoomEntrance> entrances;
@@ -61,7 +58,7 @@ namespace ProcGen {
             }
         }
 
-        bool TryGenerateRoom(GOLootTable prefabs, Vector2 roomPos, List<RoomEntrance> roomEntrances, bool addEntrances = true) {
+        bool TryGenerateRoom(GoWeightedList prefabs, Vector2 roomPos, List<RoomEntrance> roomEntrances, bool addEntrances = true) {
             bool validEntrance = false;
 
             RoomController room = null;
@@ -151,11 +148,11 @@ namespace ProcGen {
 
     [System.Serializable]
     public class RoomRequirements {
-        public GOLootTable roomPrefabs;
+        public GoWeightedList roomPrefabs;
         public RoomType type;
         public int count;
         
-        public RoomRequirements(GOLootTable roomPrefabs, RoomType type, int count) {
+        public RoomRequirements(GoWeightedList roomPrefabs, RoomType type, int count) {
             this.roomPrefabs = roomPrefabs;
             this.type = type;
             this.count = count;
